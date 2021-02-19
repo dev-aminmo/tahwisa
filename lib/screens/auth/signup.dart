@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tahwisa/style/my_colors.dart';
-import 'package:tahwisa/widgets/auth_button.dart';
-import 'package:tahwisa/widgets/auth_input.dart';
+import './widgets/auth_button.dart';
+import './widgets/auth_input.dart';
 
 class SignUPScreen extends StatefulWidget {
   @override
@@ -12,6 +12,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyColors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

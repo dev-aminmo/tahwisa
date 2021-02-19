@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:tahwisa/style/my_colors.dart';
-import 'package:tahwisa/widgets/auth_button.dart';
+import 'auth/widgets/auth_button.dart';
 
 class WelcomeScreen extends StatelessWidget {
   @override
