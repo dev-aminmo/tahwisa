@@ -18,7 +18,10 @@ class AuthButton extends StatelessWidget {
             ),
             side: BorderSide(color: MyColors.greenBorder, width: 2)),
         onPressed: onTap,
-        child: Text(title),
+        child: Text(
+          title,
+          style: TextStyle(color: MyColors.greenBorder),
+        ),
         color: MyColors.white,
       ),
     );

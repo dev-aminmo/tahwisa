@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tahwisa/screens/auth/login.dart';
 import 'package:tahwisa/screens/welcome.dart';
+import 'package:tahwisa/style/my_colors.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,8 +16,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: 'Lato',
+        backgroundColor: MyColors.white,
       ),
-      home: WelcomeScreen(),
+      home: LoginScreen(),
     );
   }
 }
