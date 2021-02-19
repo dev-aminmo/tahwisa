@@ -3,6 +3,8 @@ import 'package:tahwisa/screens/auth/login.dart';
 import 'package:tahwisa/screens/welcome.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
+import 'screens/auth/signup.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Lato',
         backgroundColor: MyColors.white,
       ),
-      home: LoginScreen(),
+      home: SignUPScreen(),
     );
   }
 }

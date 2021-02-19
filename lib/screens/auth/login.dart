@@ -18,7 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
           SizedBox(height: 100),
           AuthInput(
               hint: "email",
-              suffix: Icon(Icons.person, color: MyColors.lightGreen)),
+              suffix: Icon(Icons.person_outline, color: MyColors.lightGreen)),
           AuthInput(
             hint: "password",
             suffix:
