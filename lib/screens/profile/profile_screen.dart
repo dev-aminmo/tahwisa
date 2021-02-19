@@ -9,7 +9,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   int _currentIndex = 0;
   List<Widget> children = [
-    Container(color: Colors.lightGreen),
+    Container(color: Colors.white),
     Container(color: Colors.red),
     Container(),
     Container(color: Colors.yellow),
@@ -34,14 +34,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.yellow,
-        shape: CircularNotchedRectangle(),
+        color: Colors.white,
+        //   shape: CircularNotchedRectangle(),
         notchMargin: 6,
         clipBehavior: Clip.antiAlias,
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(32),
-            topLeft: Radius.circular(32),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(top: BorderSide(width: 2, color: MyColors.darkBlue)),
           ),
           child: BottomNavigationBar(
             currentIndex: _currentIndex,
