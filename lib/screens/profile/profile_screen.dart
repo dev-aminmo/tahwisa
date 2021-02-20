@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
+import 'views/explore.dart';
+
 class ProfileScreen extends StatefulWidget {
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -9,7 +11,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   int _currentIndex = 0;
   List<Widget> children = [
-    Container(color: Colors.white),
+    Explore(),
     Container(color: Colors.red),
     Container(),
     Container(color: Colors.yellow),
