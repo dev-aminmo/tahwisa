@@ -10,8 +10,12 @@ class Explore extends StatelessWidget {
 
     return ListView.builder(
       itemCount: 20,
-      itemBuilder: (ctx, position) {
-        return PlaceCard(height: height, width: width);
+      itemBuilder: (ctx, index) {
+        return PlaceCard(
+          height: height,
+          width: width,
+          index: index,
+        );
       },
     );
   }
