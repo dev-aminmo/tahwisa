@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tahwisa/screens/profile/views/wish_list.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 import 'views/explore.dart';
@@ -14,7 +15,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Explore(),
     Container(color: Colors.red),
     Container(),
-    Container(color: Colors.yellow),
+    WishList(),
     Container(color: Colors.pink),
   ];
   @override

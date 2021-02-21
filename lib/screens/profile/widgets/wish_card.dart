@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tahwisa/style/my_colors.dart';
 import 'package:rating_bar/rating_bar.dart';
 
-class PlaceCard extends StatelessWidget {
-  const PlaceCard({
+class WishCard extends StatelessWidget {
+  const WishCard({
     Key key,
     @required this.height,
     @required this.width,
@@ -15,7 +15,7 @@ class PlaceCard extends StatelessWidget {
   final int index;
 
   @override
-  Widget build(BuildContext context) {
+  /*Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(25)),
@@ -27,7 +27,7 @@ class PlaceCard extends StatelessWidget {
                 spreadRadius: 2)
           ]),
       margin: EdgeInsets.symmetric(
-          horizontal: width * 0.025, vertical: height * 0.015),
+          horizontal: width * 0.025, vertical: height * 0.03),
       child: Stack(
         children: [
           Container(
@@ -73,9 +73,7 @@ class PlaceCard extends StatelessWidget {
               Transform.translate(
                 offset: Offset(0, -5),
                 child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(25),
-                        topLeft: Radius.circular(25)),
+                    borderRadius: BorderRadius.all(Radius.circular(25)),
                     child: Stack(
                       children: [
                         Container(
@@ -98,6 +96,78 @@ class PlaceCard extends StatelessWidget {
         ],
       ),
     );
+  }*/
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.symmetric(
+            horizontal: width * 0.025, vertical: height * 0.012),
+        child: Stack(
+            //alignment: Alignment.center,
+            children: [
+              ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(25)),
+                  child: Stack(
+                    children: [
+                      Container(
+                        color: Colors.grey.shade400,
+                        width: width * 0.96,
+                        height: height * 0.3,
+                      ),
+                      Image.network(
+                        "https://source.unsplash.com/random/${(width * 0.96).round()}x${(height * 0.3).round()}?nature?sig=$index",
+                        height: height * 0.3,
+                        fit: BoxFit.cover,
+                        width: width * 0.97,
+                      ),
+                    ],
+                  )),
+              Positioned(
+                top: 20,
+                left: 20,
+                child: Row(children: [
+                  Icon(Icons.location_on, color: MyColors.white),
+                  Text(
+                    'Algiers, Algeria',
+                    style: TextStyle(color: MyColors.white, fontSize: 16),
+                  ),
+                ]),
+              ),
+              Positioned(
+                  bottom: 20,
+                  left: 20,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "- jardin d'essai",
+                        style: TextStyle(color: MyColors.white, fontSize: 16),
+                      ),
+                      SizedBox(height: height * 0.003),
+                      buildRating(3.2),
+                    ],
+                  )),
+              Positioned(
+                top: 20,
+                right: 20,
+                child: Stack(alignment: Alignment.center, children: [
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      height: width * 0.15,
+                      width: width * 0.15,
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.symmetric(
+                          vertical: width * 0.02, horizontal: width * 0.02),
+                      decoration: BoxDecoration(
+                          color: Colors.black12,
+                          borderRadius: BorderRadius.all(Radius.circular(52))),
+                      child: Icon(Icons.favorite,
+                          color: MyColors.white, size: width * 0.1),
+                    ),
+                  ),
+                ]),
+              ),
+            ]));
   }
 
   Widget buildRating(double x) {
