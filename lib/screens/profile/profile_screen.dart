@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tahwisa/screens/profile/views/wish_list.dart';
+import 'views/wish_list.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 import 'views/explore.dart';
+import 'views/search.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -13,7 +14,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int _currentIndex = 0;
   List<Widget> children = [
     Explore(),
-    Container(color: Colors.red),
+    SearchScreen(),
     Container(),
     WishList(),
     Container(color: Colors.pink),
