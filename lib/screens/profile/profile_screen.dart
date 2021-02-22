@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'views/notifications.dart';
 import 'views/wish_list.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
@@ -17,7 +18,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     SearchScreen(),
     Container(),
     WishList(),
-    Container(color: Colors.pink),
+    Notifications(),
   ];
   @override
   Widget build(BuildContext context) {
