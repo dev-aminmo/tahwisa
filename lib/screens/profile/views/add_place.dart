@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tahwisa/screens/auth/widgets/auth_input.dart';
 import 'package:tahwisa/style/my_colors.dart';
@@ -33,9 +34,9 @@ class _AddPlaceState extends State<AddPlace> {
         margin: EdgeInsets.symmetric(horizontal: width * 0.04),
         child: Column(
           children: [
-            SizedBox(height: height * 0.02),
+            SizedBox(height: height * 0.05),
             DropDowns(height, width),
-            SizedBox(height: height * 0.02),
+            SizedBox(height: height * 0.05),
             TextFormField(
               decoration: InputDecoration(
                   fillColor: Colors.white,
@@ -62,33 +63,87 @@ class _AddPlaceState extends State<AddPlace> {
                   color: MyColors.darkBlue,
                   fontSize: 20),
             ),
-            SizedBox(height: height * 0.02),
-            TextFormField(
-              maxLines: 7,
-              decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  hintText: "description",
-                  counterText: "",
-                  errorStyle: TextStyle(fontSize: 16),
-                  hintStyle: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xff8FA0B3),
-                      fontSize: 16),
-                  border: OutlineInputBorder(),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide:
-                          BorderSide(color: MyColors.greenBorder, width: 1.5)),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide:
-                          BorderSide(color: MyColors.greenBorder, width: 2.5))),
-              cursorColor: MyColors.lightGreen,
-              style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  color: MyColors.darkBlue,
-                  fontSize: 20),
+            SizedBox(height: height * 0.05),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 2,
+                    color: MyColors.greenBorder,
+                  ),
+                  borderRadius: BorderRadius.circular(width * 0.03),
+                  color: Colors.white),
+              child: Column(
+                children: [
+                  TextFormField(
+                    maxLines: 5,
+                    decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        hintText: "description",
+                        counterText: "",
+                        errorStyle: TextStyle(fontSize: 16),
+                        hintStyle: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xff8FA0B3),
+                            fontSize: 16),
+                        border: OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                                color: Colors.transparent, width: 1.5)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                                color: Colors.transparent, width: 2.5))),
+                    cursorColor: MyColors.lightGreen,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        color: MyColors.darkBlue,
+                        fontSize: 20),
+                  ),
+                  Divider(
+                    height: 2,
+                    color: MyColors.gray,
+                    indent: width * 0.05,
+                    endIndent: width * 0.05,
+                  ),
+                  SizedBox(height: height * 0.01),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 19, vertical: 12),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {},
+                          child: Row(
+                            children: [
+                              Icon(Icons.photo_library_rounded,
+                                  color: MyColors.darkBlue, size: 32),
+                              SizedBox(width: width * 0.02),
+                              Text("Pictures",
+                                  style: TextStyle(
+                                      color: MyColors.darkBlue, fontSize: 18)),
+                            ],
+                          ),
+                        ),
+                        Spacer(),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Row(
+                            children: [
+                              Icon(CupertinoIcons.location_solid,
+                                  color: MyColors.darkBlue, size: 32),
+                              SizedBox(width: width * 0.02),
+                              Text("Location",
+                                  style: TextStyle(
+                                      color: MyColors.darkBlue, fontSize: 18)),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ],
         ),
