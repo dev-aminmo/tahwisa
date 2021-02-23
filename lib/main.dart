@@ -5,6 +5,7 @@ import 'package:tahwisa/style/my_colors.dart';
 
 import 'screens/auth/signup.dart';
 import 'screens/profile/profile_screen.dart';
+import 'screens/profile/views/add_place.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,14 +16,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Tahwisa',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'Lato',
-        backgroundColor: MyColors.white,
-      ),
-      home: ProfileScreen(),
-    );
+        title: 'Tahwisa',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          fontFamily: 'Lato',
+          backgroundColor: MyColors.white,
+        ),
+        // home: ProfileScreen(),
+        routes: {
+          //'':
+          '/': (context) => ProfileScreen(),
+          '/add_place': (context) => AddPlace(),
+        });
   }
 }

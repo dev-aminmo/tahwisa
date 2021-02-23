@@ -31,7 +31,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         height: 58,
         child: FloatingActionButton(
           backgroundColor: MyColors.darkBlue,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed('/add_place');
+          },
           child: Icon(
             Icons.add,
             size: 28,
