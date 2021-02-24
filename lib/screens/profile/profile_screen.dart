@@ -88,6 +88,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
+      drawer: Drawer(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            UserAccountsDrawerHeader(
+              accountName: Text('Mohammed'),
+              accountEmail: Text("mostefaoui@gmail.com"),
+              decoration: BoxDecoration(color: MyColors.darkBlue),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: NetworkImage(
+                  "https://source.unsplash.com/random/50x50?profil",
+                ),
+                backgroundColor: Colors.grey,
+              ),
+            ),
+            LayoutBuilder(
+              builder: (ctx, constraints) {
+                print(constraints.maxWidth);
+                return GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    margin: EdgeInsets.symmetric(horizontal: 48, vertical: 12),
+                    decoration: BoxDecoration(
+                        color: MyColors.lightGreen,
+                        borderRadius: BorderRadius.all(Radius.circular(25))),
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        Text("Logout",
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 22)),
+                        Spacer(),
+                        Icon(Icons.logout, color: Colors.white),
+                        Spacer(),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 
