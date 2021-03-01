@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         // home: ProfileScreen(),
         routes: {
           //'':
-          '/': (context) => ProfileScreen(),
+          '/': (context) => WelcomeScreen(),
           '/add_place': (context) => AddPlace(),
         });
   }

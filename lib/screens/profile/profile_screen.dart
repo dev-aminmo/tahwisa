@@ -97,8 +97,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               accountEmail: Text("mostefaoui@gmail.com"),
               decoration: BoxDecoration(color: MyColors.darkBlue),
               currentAccountPicture: CircleAvatar(
+                radius: 152,
                 backgroundImage: NetworkImage(
-                  "https://source.unsplash.com/random/50x50?profil",
+                  "https://source.unsplash.com/random/100x100?profil",
                 ),
                 backgroundColor: Colors.grey,
               ),
