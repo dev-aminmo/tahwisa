@@ -9,14 +9,17 @@ class SignUPScreen extends StatefulWidget {
 }
 
 class _SignUPScreenState extends State<SignUPScreen> {
+  bool obscured = true;
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: MyColors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          SizedBox(height: 100),
+          SizedBox(height: height * 0.1),
           AuthInput(
               hint: "username",
               suffix: Icon(Icons.person_outline, color: MyColors.lightGreen)),
@@ -25,19 +28,43 @@ class _SignUPScreenState extends State<SignUPScreen> {
               suffix: Icon(Icons.mail_outlined, color: MyColors.lightGreen)),
           AuthInput(
             hint: "password",
-            suffix:
-                Icon(Icons.remove_red_eye_outlined, color: MyColors.lightGreen),
-            obscured: true,
+            suffix: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    obscured = !obscured;
+                  });
+                },
+                child: obscured
+                    ? Icon(Icons.remove_red_eye_outlined,
+                        color: MyColors.lightGreen)
+                    : Icon(Icons.visibility_off_outlined,
+                        color: MyColors.lightGreen)),
+            obscured: obscured,
+          ),
+          Spacer(
+            flex: 5,
           ),
           AuthButton(
             title: "Sign up",
+            withBackgroundColor: true,
             onTap: () {},
           ),
+          Spacer(),
           Text("-or-",
               style: TextStyle(
-                  fontStyle: FontStyle.italic, fontWeight: FontWeight.bold)),
-          AuthButton(title: "Sign up with Google", onTap: () {}),
-          SizedBox(height: 100),
+                  fontSize: 22,
+                  color: MyColors.darkBlue,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold)),
+          Spacer(),
+          AuthButton(
+            title: "Sign up with Google",
+            onTap: () {},
+            isGoogle: true,
+          ),
+          Spacer(
+            flex: 5,
+          )
         ],
       ),
     );

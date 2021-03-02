@@ -55,6 +55,7 @@ flutter:
     - assets/images/video_place_holder.jpg
     - assets/images/flame-no-messages.png
     - assets/images/send.svg
+    - assets/images/google.svg
     - assets/wilayas.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

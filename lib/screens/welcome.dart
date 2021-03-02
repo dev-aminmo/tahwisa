@@ -52,12 +52,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 Expanded(flex: 3, child: SizedBox()),
                 AuthButton(
                   title: "Sign in",
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pushNamed("/login");
+                  },
                 ),
                 SizedBox(height: height * 0.1),
                 AuthButton(
                   title: "Sign up",
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pushNamed("/sign_up");
+                  },
                   withBackgroundColor: true,
                 ),
                 Expanded(flex: 1, child: SizedBox()),
@@ -67,5 +71,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

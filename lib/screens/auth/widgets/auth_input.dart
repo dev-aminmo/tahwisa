@@ -10,11 +10,18 @@ class AuthInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Container(
         margin: EdgeInsets.all(15),
         child: TextFormField(
           obscureText: obscured,
           decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(
+                left: width * 0.05,
+                top: height * 0.03,
+                bottom: height * 0.03,
+              ),
               hintText: hint,
               suffixIcon: suffix,
               counterText: "",
@@ -22,7 +29,7 @@ class AuthInput extends StatelessWidget {
               hintStyle: TextStyle(
                   fontWeight: FontWeight.w400,
                   color: Color(0xff8FA0B3),
-                  fontSize: 20),
+                  fontSize: 18),
               border: OutlineInputBorder(),
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
