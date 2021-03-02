@@ -9,31 +9,59 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool obscured = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          SizedBox(height: 100),
+          Spacer(
+            flex: 5,
+          ),
           AuthInput(
               hint: "email",
               suffix: Icon(Icons.person_outline, color: MyColors.lightGreen)),
           AuthInput(
             hint: "password",
-            suffix:
-                Icon(Icons.remove_red_eye_outlined, color: MyColors.lightGreen),
-            obscured: true,
+            suffix: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    obscured = !obscured;
+                  });
+                },
+                child: obscured
+                    ? Icon(Icons.remove_red_eye_outlined,
+                        color: MyColors.lightGreen)
+                    : Icon(Icons.visibility_off_outlined,
+                        color: MyColors.lightGreen)),
+            obscured: obscured,
+          ),
+          Spacer(
+            flex: 5,
           ),
           AuthButton(
             title: "Login",
             onTap: () {},
+            withBackgroundColor: true,
           ),
+          Spacer(),
           Text("-or-",
               style: TextStyle(
-                  fontStyle: FontStyle.italic, fontWeight: FontWeight.bold)),
-          AuthButton(title: "Login with Google", onTap: () {}),
-          SizedBox(height: 100),
+                  fontSize: 22,
+                  color: MyColors.darkBlue,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold)),
+          Spacer(),
+          AuthButton(
+            title: "Login with Google",
+            onTap: () {},
+            isGoogle: true,
+          ),
+          Spacer(
+            flex: 5,
+          ),
         ],
       ),
     );
