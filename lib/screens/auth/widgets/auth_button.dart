@@ -15,14 +15,15 @@ class AuthButton extends StatelessWidget {
       child: RaisedButton(
         elevation: 7,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              MediaQuery.of(context).size.width * 0.1,
-            ),
-            side: BorderSide(
+          borderRadius: BorderRadius.circular(
+            MediaQuery.of(context).size.width * 0.1,
+          ),
+          /*side: BorderSide(
                 color: (withBackgroundColor)
                     ? Colors.transparent
                     : MyColors.greenBorder,
-                width: 2)),
+                width: 2)*/
+        ),
         onPressed: onTap,
         child: Text(
           title,
@@ -30,7 +31,8 @@ class AuthButton extends StatelessWidget {
               color:
                   (withBackgroundColor) ? MyColors.white : MyColors.greenBorder,
               fontSize: 22,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic,
               letterSpacing: 1.5),
         ),
         color: (withBackgroundColor) ? MyColors.greenBorder : MyColors.white,

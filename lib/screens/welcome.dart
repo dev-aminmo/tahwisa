@@ -14,13 +14,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset('assets/vid.mp4')
+    _controller = VideoPlayerController.network(
+        'https://res.cloudinary.com/dtvc2pr8i/video/upload/eo_21,so_0/v1614644723/vid_aq0vw7.mp4')
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
-        _controller.play();
-        _controller.setLooping(true);
       });
+    _controller.setLooping(true);
+    _controller.setVolume(0.0);
+    _controller.play();
   }
 
   @override
@@ -31,18 +33,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       body: Stack(
         children: [
           Center(
-            child: _controller.value.initialized
-                ? SizedBox.expand(
-                    //   aspectRatio: 16 / 9,
-                    child: FittedBox(
-                        fit: BoxFit.cover,
-                        child: SizedBox(
-                            height: height,
-                            width: width,
-                            child: VideoPlayer(_controller))),
-                  )
-                : Container(),
-          ),
+              child: SizedBox.expand(
+            //   aspectRatio: 16 / 9,
+            child: FittedBox(
+                fit: BoxFit.cover,
+                child: SizedBox(
+                  height: height,
+                  width: width,
+                  child: _controller.value.initialized
+                      ? VideoPlayer(_controller)
+                      : Image.asset('assets/images/video_place_holder.jpg'),
+                )),
+          )),
           SizedBox.expand(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
