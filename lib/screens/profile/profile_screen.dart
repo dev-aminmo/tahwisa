@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tahwisa/blocs/authentication_bloc/bloc.dart';
 import 'views/notifications.dart';
 import 'views/wish_list.dart';
 import 'package:tahwisa/style/my_colors.dart';
@@ -12,6 +14,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  AuthenticationBloc authenticationBloc;
   int _currentIndex = 0;
   List<Widget> children = [
     Explore(),
@@ -108,7 +111,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               builder: (ctx, constraints) {
                 print(constraints.maxWidth);
                 return GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    authenticationBloc.add(LoggedOut());
+                  },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     margin: EdgeInsets.symmetric(horizontal: 48, vertical: 12),
@@ -134,6 +139,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+  }
+
+  @override
+  void dispose() {
+    authenticationBloc.close();
+    super.dispose();
   }
 
   Widget _selectItem(int value) {

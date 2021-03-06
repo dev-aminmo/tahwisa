@@ -5,8 +5,15 @@ class AuthInput extends StatelessWidget {
   final hint;
   final suffix;
   bool obscured;
+  final controller;
+  final validator;
 
-  AuthInput({@required this.hint, this.suffix, this.obscured = false});
+  AuthInput(
+      {@required this.hint,
+      this.suffix,
+      this.obscured = false,
+      this.controller,
+      this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +22,8 @@ class AuthInput extends StatelessWidget {
     return Container(
         margin: EdgeInsets.all(15),
         child: TextFormField(
+          validator: validator,
+          controller: controller,
           obscureText: obscured,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.only(

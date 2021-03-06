@@ -4,6 +4,10 @@ import 'auth/widgets/auth_button.dart';
 import 'package:video_player/video_player.dart';
 
 class WelcomeScreen extends StatefulWidget {
+  final userRepository;
+
+  WelcomeScreen({@required this.userRepository});
+
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
@@ -53,7 +57,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 AuthButton(
                   title: "Sign in",
                   onTap: () {
-                    Navigator.of(context).pushNamed("/login");
+                    Navigator.of(context).pushNamed("/login",
+                        arguments: [widget.userRepository]);
                   },
                 ),
                 SizedBox(height: height * 0.1),

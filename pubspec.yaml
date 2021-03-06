@@ -29,10 +29,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
   rating_bar:  ^0.2.0
-  flutter_svg_provider: ^0.1.8
   video_player: ^1.0.1
   flutter_bloc: ^6.1.2
   equatable: ^1.2.6
+  queen_validators: ^0.2.0
 
 
 dev_dependencies:
