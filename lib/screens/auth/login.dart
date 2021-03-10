@@ -94,6 +94,7 @@ class _LoginFormState extends State<LoginForm> {
                 title: "Login",
                 onTap: state is! LoginLoading ? _onLoginButtonPressed : null,
                 withBackgroundColor: true,
+                isLoading: state is LoginLoading ? true : false,
               ),
               Spacer(),
               Text("-or-",

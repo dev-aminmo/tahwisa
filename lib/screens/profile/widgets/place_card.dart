@@ -27,7 +27,7 @@ class PlaceCard extends StatelessWidget {
                 spreadRadius: 2)
           ]),
       margin: EdgeInsets.symmetric(
-          horizontal: width * 0.025, vertical: height * 0.015),
+          horizontal: width * 0.025, vertical: height * 0.018),
       child: Stack(
         children: [
           Container(

@@ -33,6 +33,10 @@ dependencies:
   flutter_bloc: ^6.1.2
   equatable: ^1.2.6
   queen_validators: ^0.2.0
+  shared_preferences: ^2.0.3
+  dio: ^3.0.10
+
+
 
 
 dev_dependencies:

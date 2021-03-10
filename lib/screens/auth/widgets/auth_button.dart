@@ -8,11 +8,13 @@ class AuthButton extends StatelessWidget {
   final Function onTap;
   final bool withBackgroundColor;
   final bool isGoogle;
+  final bool isLoading;
   const AuthButton(
       {this.title,
       this.onTap,
       this.withBackgroundColor = false,
-      this.isGoogle = false});
+      this.isGoogle = false,
+      this.isLoading = false});
 
   @override
   Widget build(BuildContext context) {
@@ -56,17 +58,19 @@ class AuthButton extends StatelessWidget {
                   ),
                 ],
               )
-            : Text(
-                title,
-                style: TextStyle(
-                    color: (withBackgroundColor)
-                        ? MyColors.white
-                        : MyColors.greenBorder,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic,
-                    letterSpacing: 1.5),
-              ),
+            : (!isLoading)
+                ? Text(
+                    title,
+                    style: TextStyle(
+                        color: (withBackgroundColor)
+                            ? MyColors.white
+                            : MyColors.greenBorder,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                        letterSpacing: 1.5),
+                  )
+                : CircularProgressIndicator(),
         color: (withBackgroundColor) ? MyColors.greenBorder : MyColors.white,
       ),
     );

@@ -29,7 +29,7 @@ class _AddPlaceState extends State<AddPlace> {
       ),
       backgroundColor: MyColors.white,
       resizeToAvoidBottomInset: false,
-      resizeToAvoidBottomPadding: false,
+      //  resizeToAvoidBottomPadding: false,
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: width * 0.04),
         child: Column(
