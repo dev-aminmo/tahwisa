@@ -1,42 +1,41 @@
 import 'dart:async';
 
-import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
 import 'bloc.dart';
+
 import '../authentication_bloc/bloc.dart';
 
-class LoginBloc extends Bloc<LoginEvent, LoginState> {
+class SignupBloc extends Bloc<SignupEvent, SignupState> {
   final userRepository;
   final authenticationBloc;
 
-  LoginBloc({
+  SignupBloc({
     @required this.userRepository,
     @required this.authenticationBloc,
   })  : assert(userRepository != null),
         assert(authenticationBloc != null),
-        super(LoginInitial());
+        super(SignupInitial());
 
   @override
-  LoginState get initialState => LoginInitial();
+  SignupState get initialState => SignupInitial();
 
   @override
-  Stream<LoginState> mapEventToState(
-    LoginEvent event,
+  Stream<SignupState> mapEventToState(
+    SignupEvent event,
   ) async* {
-    if (event is LoginButtonPressed) {
-      yield LoginLoading();
+    if (event is SignupButtonPressed) {
+      yield SignupLoading();
       try {
-        final token = await userRepository.authenticate(
+        final token = await userRepository.register(
+          username: event.username,
           email: event.email,
           password: event.password,
         );
 
         authenticationBloc.add(LoggedIn(token: token));
-
-        // yield LoginInitial();
       } catch (error) {
-        yield LoginInitial();
-        yield LoginFailure(error: error.toString());
+        yield SignupFailure(error: error.toString());
       }
     }
   }

@@ -141,7 +141,8 @@ class _AppState extends State<App> {
         return MaterialPageRoute(builder: (context) => page);
         break;
       case '/sign_up':
-        return MaterialPageRoute(builder: (context) => SignUPScreen());
+        final page = SignUPScreen(settings.arguments);
+        return MaterialPageRoute(builder: (context) => page);
 
       case '/add_place':
         return MaterialPageRoute(builder: (context) => AddPlace());

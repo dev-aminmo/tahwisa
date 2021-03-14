@@ -25,7 +25,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   LoginBloc get _loginBloc => widget.loginBloc;
@@ -62,7 +62,7 @@ class _LoginFormState extends State<LoginForm> {
                 flex: 5,
               ),
               AuthInput(
-                  controller: _usernameController,
+                  controller: _emailController,
                   hint: "email",
                   validator: qValidator([
                     // IsRequired(msg: 'email is required'),
@@ -128,7 +128,7 @@ class _LoginFormState extends State<LoginForm> {
   _onLoginButtonPressed() {
     if (_formKey.currentState.validate())
       _loginBloc.add(LoginButtonPressed(
-        username: _usernameController.text,
+        email: _emailController.text,
         password: _passwordController.text,
       ));
     // Navigator.pop(context);
@@ -158,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
     _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     _loginBloc = LoginBloc(
       //  userRepository: _userRepository,
-      userRepository: UserRepository(),
+      userRepository: widget.data[0],
       authenticationBloc: _authenticationBloc,
     );
     super.initState();
@@ -178,30 +178,6 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     _loginBloc.close();
     super.dispose();
-  }
-}
-
-//**********************************************/
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final AuthenticationBloc authenticationBloc =
-        BlocProvider.of<AuthenticationBloc>(context);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home'),
-      ),
-      body: Container(
-        child: Center(
-            child: RaisedButton(
-          child: Text('logout'),
-          onPressed: () {
-            authenticationBloc.add(LoggedOut());
-          },
-        )),
-      ),
-    );
   }
 }
 

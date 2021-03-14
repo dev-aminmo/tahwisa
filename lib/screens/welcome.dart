@@ -65,7 +65,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 AuthButton(
                   title: "Sign up",
                   onTap: () {
-                    Navigator.of(context).pushNamed("/sign_up");
+                    Navigator.of(context).pushNamed("/sign_up",
+                        arguments: [widget.userRepository]);
                   },
                   withBackgroundColor: true,
                 ),
