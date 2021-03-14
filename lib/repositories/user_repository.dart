@@ -14,7 +14,7 @@ class UserRepository {
         Api.login,
         data: {"email": email, "password": password},
       );
-      print(response.data["token"]);
+      //print(response.data["token"]);
       return response.data["token"];
     } catch (e) {
       throw ("Incorrect email and password");
@@ -37,7 +37,6 @@ class UserRepository {
 
         throw ("verify  your data");
       }
-      print(response.data["token"]);
 
       return response.data["token"];
     } catch (e) {
