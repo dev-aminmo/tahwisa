@@ -35,6 +35,7 @@ dependencies:
   queen_validators: ^0.2.0
   shared_preferences: ^2.0.3
   dio: ^3.0.10
+  flutter_svg: ^0.19.3
 
 
 

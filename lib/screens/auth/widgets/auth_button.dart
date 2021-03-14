@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:tahwisa/style/my_colors.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AuthButton extends StatelessWidget {
   final String title;
@@ -38,10 +39,9 @@ class AuthButton extends StatelessWidget {
             ? Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  /*  Image(
-                      height: 24,
-                      width: 24,
-                      image: Svg("assets/images/google.svg")),*/
+                  Spacer(),
+                  SvgPicture.asset("assets/images/google.svg",
+                      width: 24, height: 24),
                   Spacer(),
                   FittedBox(
                     child: Text(
@@ -56,6 +56,7 @@ class AuthButton extends StatelessWidget {
                           letterSpacing: 1.5),
                     ),
                   ),
+                  Spacer(),
                 ],
               )
             : (!isLoading)
