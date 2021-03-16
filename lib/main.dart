@@ -70,6 +70,7 @@ class _AppState extends State<App> {
             primaryColor: MyColors.darkBlue,
             indicatorColor: MyColors.lightGreen,
             accentColor: MyColors.lightGreen,
+            scaffoldBackgroundColor: MyColors.white,
 
             fontFamily: 'Lato',
             backgroundColor: MyColors.white,

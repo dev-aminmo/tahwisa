@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tahwisa/style/my_colors.dart';
 import 'package:rating_bar/rating_bar.dart';
+import 'package:tahwisa/repositories/models/place.dart';
 
 class PlaceCard extends StatelessWidget {
   const PlaceCard({
@@ -8,11 +9,13 @@ class PlaceCard extends StatelessWidget {
     @required this.height,
     @required this.width,
     @required this.index,
+    this.place,
   }) : super(key: key);
 
   final double height;
   final double width;
   final int index;
+  final Place place;
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +46,11 @@ class PlaceCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Column(crossAxisAlignment: CrossAxisAlignment.start,
-                          //mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "  - jardin d'essai",
+                              place.title,
                               style: TextStyle(
                                   color: MyColors.lightGreen, fontSize: 16),
                             ),
@@ -84,7 +87,11 @@ class PlaceCard extends StatelessWidget {
                           height: height * 0.3,
                         ),
                         Image.network(
-                          "https://source.unsplash.com/random/${(width * 0.96).round()}x${(height * 0.3).round()}?nature?sig=$index",
+                          //"https://source.unsplash.com/random/${(width * 0.96).round()}x${(height * 0.3).round()}?nature?sig=$index",
+                          place.pictures[0].replaceFirstMapped(
+                              "image/upload/",
+                              (match) =>
+                                  "image/upload/w_${(width * 0.96).round()},h_${(height * 0.3).round()}/"),
                           height: height * 0.3,
                           fit: BoxFit.cover,
                           width: width * 0.97,

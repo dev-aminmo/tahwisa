@@ -37,10 +37,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           onPressed: () {
             Navigator.of(context).pushNamed('/add_place');
           },
-          child: Icon(
-            Icons.add,
-            size: 28,
-          ),
+          child: Icon(Icons.add,
+              size: 28, color: Theme.of(context).scaffoldBackgroundColor),
         ),
       ),
       bottomNavigationBar: BottomAppBar(

@@ -1,14 +1,22 @@
 import 'package:flutter/foundation.dart';
 
 class Place {
-  String id;
+  /* int id;
   String title;
   String description;
   double latitude;
   double longitude;
-  String municipal;
+  double municipal;
   String state;
-  double reviewsAverage;
+  double reviewsAverage;*/
+  var id;
+  var title;
+  var description;
+  var latitude;
+  var longitude;
+  var municipal;
+  var state;
+  var reviewsAverage;
   List<String> pictures;
 
   Place(
@@ -24,13 +32,20 @@ class Place {
 
   Place.fromJson(Map<String, dynamic> json) {
     this.id = json['id'];
-    this.title = json['username'];
-    this.description = json['email'];
-    this.latitude = json['profile_picture'];
-    this.longitude = json['profile_picture'];
-    this.municipal = json['profile_picture'];
-    this.state = json['profile_picture'];
-    this.reviewsAverage = json['profile_picture'];
-    this.pictures = json['profile_picture'];
+    this.title = json['title'];
+    this.description = json['description'];
+    this.latitude = json['latitude'];
+    this.longitude = json['longitude'];
+    this.municipal = json['municipal_id'];
+    //this.state = json['profile_picture'];
+    this.reviewsAverage = json['reviews_avg_vote'];
+
+    // this.pictures = json['pictures'];
+    if (json['pictures'] != null) {
+      pictures = [];
+      json['pictures'].forEach((p) {
+        pictures.add(p['path']);
+      });
+    }
   }
 }

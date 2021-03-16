@@ -24,22 +24,27 @@ class _ExploreState extends State<Explore> {
         ..add(PlaceFetched()),
       child: BlocBuilder<ExplorePlacesBloc, ExplorePlacesState>(
         builder: (context, state) {
-          return RefreshIndicator(
-            strokeWidth: 3,
-            onRefresh: () async {
-              getData(context.read<ExplorePlacesBloc>());
-            },
-            child: ListView.builder(
-              itemCount: 20,
-              itemBuilder: (ctx, index) {
-                return PlaceCard(
-                  height: height,
-                  width: width,
-                  index: index,
-                );
+          if (state is ExplorePlacesSuccess) {
+            return RefreshIndicator(
+              strokeWidth: 3,
+              onRefresh: () async {
+                getData(context.read<ExplorePlacesBloc>());
               },
-            ),
-          );
+              child: ListView.builder(
+                itemCount: state.places.length,
+                itemBuilder: (ctx, index) {
+                  return PlaceCard(
+                    height: height,
+                    width: width,
+                    index: index,
+                    place: state.places[index],
+                  );
+                },
+              ),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
         },
       ),
     );
