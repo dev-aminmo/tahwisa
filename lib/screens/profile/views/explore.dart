@@ -11,6 +11,10 @@ class Explore extends StatefulWidget {
 }
 
 class _ExploreState extends State<Explore> {
+  Future<void> getData(ExplorePlacesBloc bloc) async {
+    bloc.add(PlaceFetched());
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -20,15 +24,21 @@ class _ExploreState extends State<Explore> {
         ..add(PlaceFetched()),
       child: BlocBuilder<ExplorePlacesBloc, ExplorePlacesState>(
         builder: (context, state) {
-          return ListView.builder(
-            itemCount: 20,
-            itemBuilder: (ctx, index) {
-              return PlaceCard(
-                height: height,
-                width: width,
-                index: index,
-              );
+          return RefreshIndicator(
+            strokeWidth: 3,
+            onRefresh: () async {
+              getData(context.read<ExplorePlacesBloc>());
             },
+            child: ListView.builder(
+              itemCount: 20,
+              itemBuilder: (ctx, index) {
+                return PlaceCard(
+                  height: height,
+                  width: width,
+                  index: index,
+                );
+              },
+            ),
           );
         },
       ),

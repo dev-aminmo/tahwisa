@@ -66,7 +66,11 @@ class _AppState extends State<App> {
           title: 'Tahwisa',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            //primarySwatch: Colors.blue,
+            primaryColor: MyColors.darkBlue,
+            indicatorColor: MyColors.lightGreen,
+            accentColor: MyColors.lightGreen,
+
             fontFamily: 'Lato',
             backgroundColor: MyColors.white,
           ),
