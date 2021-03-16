@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:meta/meta.dart';
 import 'api/api_endpoints.dart';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRepository {
   Future<String> authenticate({
@@ -45,21 +46,21 @@ class UserRepository {
   }
 
   Future<void> deleteToken() async {
-    /// delete from keystore/keychain
-    await Future.delayed(Duration(milliseconds: 100));
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.remove("token");
     return;
   }
 
   Future<void> persistToken(String token) async {
-    /// write to keystore/keychain
-    await Future.delayed(Duration(milliseconds: 100));
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString("token", token);
     return;
   }
 
   Future<bool> hasToken() async {
-    /// read from keystore/keychain
-    await Future.delayed(Duration(milliseconds: 100));
-    return false;
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.containsKey("token");
+    // await Future.delayed(Duration(milliseconds: 100));
   }
 
   Future<dynamic> user() async {

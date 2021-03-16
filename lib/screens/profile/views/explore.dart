@@ -11,56 +11,27 @@ class Explore extends StatefulWidget {
 }
 
 class _ExploreState extends State<Explore> {
-  var _exploreBloc;
-
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return BlocBuilder<ExplorePlacesBloc, ExplorePlacesState>(
-      cubit: _exploreBloc,
-      builder: (context, state) {
-        return Column(
-          children: [
-            SizedBox(
-              height: 400,
-              child: ListView.builder(
-                itemCount: 20,
-                itemBuilder: (ctx, index) {
-                  return PlaceCard(
-                    height: height,
-                    width: width,
-                    index: index,
-                  );
-                },
-              ),
-            ),
-            MaterialButton(
-                onPressed: () {
-                  print("haw shaho");
-                  _exploreBloc.add(PlaceFetched());
-                },
-                color: Colors.pink,
-                child: Text("como esta"))
-          ],
-        );
-      },
+    return BlocProvider(
+      create: (_) => ExplorePlacesBloc(placeRepository: PlaceRepository())
+        ..add(PlaceFetched()),
+      child: BlocBuilder<ExplorePlacesBloc, ExplorePlacesState>(
+        builder: (context, state) {
+          return ListView.builder(
+            itemCount: 20,
+            itemBuilder: (ctx, index) {
+              return PlaceCard(
+                height: height,
+                width: width,
+                index: index,
+              );
+            },
+          );
+        },
+      ),
     );
-    return ListView.builder(
-      itemCount: 20,
-      itemBuilder: (ctx, index) {
-        return PlaceCard(
-          height: height,
-          width: width,
-          index: index,
-        );
-      },
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _exploreBloc = ExplorePlacesBloc(placeRepository: PlaceRepository());
   }
 }
