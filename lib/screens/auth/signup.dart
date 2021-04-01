@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tahwisa/repositories/user_repository.dart';
 import 'package:tahwisa/style/my_colors.dart';
 import './widgets/auth_button.dart';
 import './widgets/auth_input.dart';
@@ -7,8 +8,7 @@ import '../../blocs/signup_bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignUPScreen extends StatefulWidget {
-  final data;
-  SignUPScreen(this.data);
+
 
   @override
   _SignUPScreenState createState() => _SignUPScreenState();
@@ -17,6 +17,7 @@ class SignUPScreen extends StatefulWidget {
 class _SignUPScreenState extends State<SignUPScreen> {
   SignupBloc _signupBloc;
   AuthenticationBloc _authenticationBloc;
+  UserRepository  userRepository;
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -28,9 +29,11 @@ class _SignUPScreenState extends State<SignUPScreen> {
   @override
   void initState() {
     super.initState();
+    userRepository=RepositoryProvider.of<UserRepository>(context);
+
     _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     _signupBloc = SignupBloc(
-      userRepository: widget.data[0],
+      userRepository:userRepository,
       authenticationBloc: _authenticationBloc,
     );
   }
@@ -38,7 +41,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
   @override
   void dispose() {
     _signupBloc.close();
-//    _authenticationBloc.close();
+ //  _authenticationBloc.close();
     super.dispose();
   }
 

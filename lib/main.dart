@@ -117,12 +117,10 @@ class _AppState extends State<App> {
                 WelcomeScreen());
         break;
       case '/login':
-        //final page = LoginPage(settings.arguments);
         return MaterialPageRoute(builder: (context) => LoginPage());
         break;
       case '/sign_up':
-        final page = SignUPScreen(settings.arguments);
-        return MaterialPageRoute(builder: (context) => page);
+        return MaterialPageRoute(builder: (context) => SignUPScreen());
 
       case '/add_place':
         return MaterialPageRoute(builder: (context) => AddPlace());
