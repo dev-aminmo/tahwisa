@@ -14,13 +14,20 @@ class _ExploreState extends State<Explore> {
   Future<void> getData(ExplorePlacesBloc bloc) async {
     bloc.add(PlaceFetched());
   }
+PlaceRepository placeRepository;
+
+  @override
+  void initState() {
+    super.initState();
+    placeRepository=RepositoryProvider.of<PlaceRepository>(context);
+  }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return BlocProvider(
-      create: (_) => ExplorePlacesBloc(placeRepository: PlaceRepository())
+      create: (_) => ExplorePlacesBloc(placeRepository: placeRepository)
         ..add(PlaceFetched()),
       child: BlocBuilder<ExplorePlacesBloc, ExplorePlacesState>(
         builder: (context, state) {

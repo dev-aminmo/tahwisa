@@ -91,7 +91,7 @@ class PlaceCard extends StatelessWidget {
                           place.pictures[0].replaceFirstMapped(
                               "image/upload/",
                               (match) =>
-                                  "image/upload/w_${(width * 0.96).round()},h_${(height * 0.3).round()}/"),
+                                  "image/upload/w_${(width * 0.96).round()},f_auto/"),
                           height: height * 0.3,
                           fit: BoxFit.cover,
                           width: width * 0.97,

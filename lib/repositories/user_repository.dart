@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRepository {
+  
   Future<String> authenticate({
     @required String email,
     @required String password,
@@ -32,13 +33,10 @@ class UserRepository {
         Api.register,
         data: {"username": username, "email": email, "password": password},
       );
-      print("its goood****************************************");
       if (response.statusCode != 201) {
         print(response.toString());
-
         throw ("verify  your data");
       }
-
       return response.data["token"];
     } catch (e) {
       throw ("error occurred");
@@ -46,26 +44,19 @@ class UserRepository {
   }
 
   Future<void> deleteToken() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.remove("token");
-    return;
+   await SharedPreferences.getInstance()..remove("token");
   }
 
   Future<void> persistToken(String token) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString("token", token);
-    return;
+    await SharedPreferences.getInstance()..setString("token", token);
   }
 
   Future<bool> hasToken() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.containsKey("token");
-    // await Future.delayed(Duration(milliseconds: 100));
   }
 
   Future<dynamic> user() async {
-    /// read from keystore/keychain
-    await Future.delayed(Duration(milliseconds: 100));
     try {
       print(Api.user);
       Response response = await Dio().get(Api.user);

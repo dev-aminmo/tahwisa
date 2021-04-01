@@ -1,12 +1,11 @@
 import "package:flutter/material.dart";
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tahwisa/repositories/user_repository.dart';
 import 'package:tahwisa/style/my_colors.dart';
 import 'auth/widgets/auth_button.dart';
 import 'package:video_player/video_player.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  final userRepository;
-
-  WelcomeScreen({@required this.userRepository});
 
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
@@ -14,10 +13,14 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   VideoPlayerController _controller;
+  UserRepository userRepository;
 
+  var repo;
   @override
   void initState() {
     super.initState();
+    userRepository=RepositoryProvider.of<UserRepository>(context);
+
     _controller = VideoPlayerController.network(
         'https://res.cloudinary.com/dtvc2pr8i/video/upload/eo_21,so_0/v1614644723/vid_aq0vw7.mp4')
       ..initialize().then((_) {
@@ -58,7 +61,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   title: "Sign in",
                   onTap: () {
                     Navigator.of(context).pushNamed("/login",
-                        arguments: [widget.userRepository]);
+                        arguments: [userRepository]);
                   },
                 ),
                 SizedBox(height: height * 0.1),
@@ -66,7 +69,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   title: "Sign up",
                   onTap: () {
                     Navigator.of(context).pushNamed("/sign_up",
-                        arguments: [widget.userRepository]);
+                        arguments: [userRepository]);
                   },
                   withBackgroundColor: true,
                 ),
