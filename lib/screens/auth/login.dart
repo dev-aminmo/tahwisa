@@ -149,6 +149,8 @@ class _LoginPageState extends State<LoginPage> {
   UserRepository  userRepository;
   @override
   void initState() {
+    super.initState();
+
     userRepository=RepositoryProvider.of<UserRepository>(context);
 
     _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
@@ -156,7 +158,6 @@ class _LoginPageState extends State<LoginPage> {
       userRepository:userRepository,
       authenticationBloc: _authenticationBloc,
     );
-    super.initState();
   }
 
   @override

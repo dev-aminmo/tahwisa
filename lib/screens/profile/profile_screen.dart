@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tahwisa/blocs/authentication_bloc/bloc.dart';
-import 'views/notifications.dart';
-import 'views/wish_list.dart';
+import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 import 'views/explore.dart';
+import 'views/notifications.dart';
 import 'views/search.dart';
+import 'views/wish_list.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -15,6 +16,8 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   AuthenticationBloc authenticationBloc;
+  PlaceRepository placeRepository;
+
   int _currentIndex = 0;
   List<Widget> children = [
     Explore(),
@@ -142,6 +145,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+    placeRepository = RepositoryProvider.of<PlaceRepository>(context);
     authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
   }
 

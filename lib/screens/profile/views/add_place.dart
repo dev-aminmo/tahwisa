@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tahwisa/screens/auth/widgets/auth_input.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tahwisa/blocs/place_upload_bloc/bloc.dart';
+import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/style/my_colors.dart';
-import 'dart:convert';
 
 class AddPlace extends StatefulWidget {
   @override
@@ -10,17 +13,28 @@ class AddPlace extends StatefulWidget {
 }
 
 class _AddPlaceState extends State<AddPlace> {
+  PlaceUploadBloc _placeUploadBloc;
+  PlaceRepository placeRepository;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       floatingActionButton: SizedBox(
-        width: width * 0.2,
-        height: width * 0.2,
+        width: width * 0.18,
+        height: width * 0.18,
         child: FloatingActionButton(
-          backgroundColor: MyColors.darkBlue,
-          onPressed: () {},
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          onPressed: () {
+            _placeUploadBloc.add(UploadPlaceButtonPressed(
+              title: "hello",
+              description: "jardin desssai",
+              picture: "des tube qui font des tune ",
+              latitude: 4.6,
+              longitude: 6.7,
+              municipalID: 5,
+            ));
+          },
           child: Icon(
             Icons.send,
             size: 36,
@@ -149,6 +163,21 @@ class _AddPlaceState extends State<AddPlace> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    placeRepository = RepositoryProvider.of<PlaceRepository>(context);
+    _placeUploadBloc = PlaceUploadBloc(
+      placeRepository: placeRepository,
+    );
+  }
+
+  @override
+  void dispose() {
+    _placeUploadBloc.close();
+    super.dispose();
   }
 }
 
