@@ -3,7 +3,11 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tahwisa/blocs/dropdownsBloc/bloc.dart';
 import 'package:tahwisa/blocs/place_upload_bloc/bloc.dart';
+import 'package:tahwisa/repositories/dropdowns_repository.dart';
+import 'package:tahwisa/repositories/models/municipal.dart';
+import 'package:tahwisa/repositories/models/state.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
@@ -15,6 +19,9 @@ class AddPlace extends StatefulWidget {
 class _AddPlaceState extends State<AddPlace> {
   PlaceUploadBloc _placeUploadBloc;
   PlaceRepository placeRepository;
+  DropDownsRepository _dropDownsRepository;
+  DropDownStateBloc _dropDownStateBloc;
+  DropDownsMunicipalBloc _dropDownsMunicipalBloc;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -49,7 +56,313 @@ class _AddPlaceState extends State<AddPlace> {
         child: Column(
           children: [
             SizedBox(height: height * 0.05),
-            DropDowns(height, width),
+            /* DropDowns(height, width),
+           */
+            /*BlocBuilder<DropDownsBloc, DropDownsState>(
+              cubit: _dropDownsBloc..add(FetchStates()),
+              builder: (context, state) {
+                if (state is DropDownsStateLoading) {
+                  return CircularProgressIndicator();
+                }
+                if (state is DropDownsStatesSuccess) {
+                  return Container(
+                    height: 300,
+                    width: 300,
+                    child: Column(
+                      children: [
+                        StreamBuilder<MyState>(
+                            stream: _dropDownsBloc.selectedState,
+                            builder: (context, item) {
+                              return DropdownButton<MyState>(
+                                itemHeight: height * 0.1,
+                                isExpanded: true,
+                                hint: Text(
+                                  "State",
+                                  //  style: SharedUI.textStyle(SharedUI.gray).copyWith(fontSize: 22),
+                                ),
+                                value: item.data,
+                                icon: Icon(
+                                  Icons.expand_more,
+                                  color: MyColors.greenBorder,
+                                ),
+                                iconSize: 24,
+                                elevation: 16,
+                                //style: SharedUI.textStyle(Colors.black).copyWith(fontSize: 20),
+                                underline: Container(
+                                  height: 2,
+                                  color: MyColors.greenBorder,
+                                ),
+                                onChanged: (MyState newValue) {
+                                  _dropDownsBloc
+                                      .add(StateChosen(state: newValue));
+                                },
+                                items: state.states
+                                    .map<DropdownMenuItem<MyState>>(
+                                        (MyState val) {
+                                  return DropdownMenuItem<MyState>(
+                                    value: val,
+                                    child: Text(val.name),
+                                  );
+                                }).toList(),
+                              );
+                            }),
+                      ],
+                    ),
+                  );
+                }
+                if (state is DropDownsMunicipalLoading) {
+                  return Container(
+                    height: 300,
+                    width: 300,
+                    child: Column(
+                      children: [
+                        StreamBuilder<MyState>(
+                            stream: _dropDownsBloc.selectedState,
+                            builder: (context, item) {
+                              return DropdownButton<MyState>(
+                                itemHeight: height * 0.1,
+                                isExpanded: true,
+                                hint: Text(
+                                  "State",
+                                  //  style: SharedUI.textStyle(SharedUI.gray).copyWith(fontSize: 22),
+                                ),
+                                value: item.data,
+                                icon: Icon(
+                                  Icons.expand_more,
+                                  color: MyColors.greenBorder,
+                                ),
+                                iconSize: 24,
+                                elevation: 16,
+                                //style: SharedUI.textStyle(Colors.black).copyWith(fontSize: 20),
+                                underline: Container(
+                                  height: 2,
+                                  color: MyColors.greenBorder,
+                                ),
+                                onChanged: (MyState newValue) {
+                                  _dropDownsBloc
+                                      .add(StateChosen(state: newValue));
+                                },
+                                items: _dropDownsBloc.states
+                                    .map<DropdownMenuItem<MyState>>(
+                                        (MyState val) {
+                                  return DropdownMenuItem<MyState>(
+                                    value: val,
+                                    child: Text(val.name),
+                                  );
+                                }).toList(),
+                              );
+                            }),
+                        CircularProgressIndicator()
+                      ],
+                    ),
+                  );
+                }
+                if (state is DropDownsMunicipalesSuccess) {
+                  return Container(
+                    height: 300,
+                    width: 300,
+                    child: Column(
+                      children: [
+                        /*
+                        StreamBuilder<MyState>(
+                            stream: _dropDownsBloc.selectedState,
+                            builder: (context, item) {
+                              return DropdownButton<MyState>(
+                                itemHeight: height * 0.1,
+                                isExpanded: true,
+                                hint: Text(
+                                  "State",
+                                  //  style: SharedUI.textStyle(SharedUI.gray).copyWith(fontSize: 22),
+                                ),
+                                value: item.data,
+                                icon: Icon(
+                                  Icons.expand_more,
+                                  color: MyColors.greenBorder,
+                                ),
+                                iconSize: 24,
+                                elevation: 16,
+                                //style: SharedUI.textStyle(Colors.black).copyWith(fontSize: 20),
+                                underline: Container(
+                                  height: 2,
+                                  color: MyColors.greenBorder,
+                                ),
+                                onChanged: (MyState newValue) {
+                                  _dropDownsBloc
+                                      .add(StateChosen(state: newValue));
+                                },
+                                items: _dropDownsBloc.states
+                                    .map<DropdownMenuItem<MyState>>(
+                                        (MyState val) {
+                                  return DropdownMenuItem<MyState>(
+                                    value: val,
+                                    child: Text(val.name),
+                                  );
+                                }).toList(),
+                              );
+                            }),*/
+                        DropdownButton<Municipal>(
+                          itemHeight: height * 0.1,
+                          isExpanded: true,
+                          hint: Text(
+                            "State",
+                            //  style: SharedUI.textStyle(SharedUI.gray).copyWith(fontSize: 22),
+                          ),
+                          // value: item.data,
+                          icon: Icon(
+                            Icons.expand_more,
+                            color: MyColors.greenBorder,
+                          ),
+                          iconSize: 24,
+                          elevation: 16,
+                          //style: SharedUI.textStyle(Colors.black).copyWith(fontSize: 20),
+                          underline: Container(
+                            height: 2,
+                            color: MyColors.greenBorder,
+                          ),
+                          onChanged: (Municipal newValue) {
+                            // _dropDownsBloc.add(StateChosen(state: newValue));
+                          },
+                          items: state.municipales
+                              .map<DropdownMenuItem<Municipal>>(
+                                  (Municipal val) {
+                            return DropdownMenuItem<Municipal>(
+                              value: val,
+                              child: Text(val.name),
+                            );
+                          }).toList(),
+                        )
+                      ],
+                    ),
+                  );
+                }
+
+                return Text(";");
+              },
+            ),*/
+            BlocBuilder(
+                cubit: _dropDownStateBloc..add(FetchStates()),
+                builder: (context, state) {
+                  if (state is DropDownsStatesSuccess)
+                    return StreamBuilder<MyState>(
+                        stream: _dropDownStateBloc.selectedState,
+                        builder: (context, item) {
+                          return DropdownButton(
+                            itemHeight: height * 0.1,
+                            isExpanded: true,
+                            hint: Text(
+                              "State",
+                              //  style: SharedUI.textStyle(SharedUI.gray).copyWith(fontSize: 22),
+                            ),
+                            value: item.data,
+                            icon: Icon(
+                              Icons.expand_more,
+                              color: MyColors.greenBorder,
+                            ),
+                            iconSize: 24,
+                            elevation: 16,
+                            //style: SharedUI.textStyle(Colors.black).copyWith(fontSize: 20),
+                            underline: Container(
+                              height: 2,
+                              color: MyColors.greenBorder,
+                            ),
+                            onChanged: (state) => _dropDownStateBloc
+                                .add(StateChosen(state: state)),
+                            items: state.states
+                                ?.map<DropdownMenuItem<MyState>>((e) {
+                              return DropdownMenuItem<MyState>(
+                                value: e,
+                                child: Text(e.name),
+                              );
+                            })?.toList(),
+                          );
+                        });
+                  else {
+                    return CircularProgressIndicator();
+                  }
+                }),
+            BlocBuilder(
+                cubit: _dropDownsMunicipalBloc,
+                builder: (context, state) {
+                  if (state is DropDownsMunicipalSuccess) {
+                    return StreamBuilder<Municipal>(
+                        stream: _dropDownsMunicipalBloc.selectedMunicipal,
+                        builder: (context, item) {
+                          print(item.data?.name);
+                          return DropdownButton(
+                            itemHeight: height * 0.1,
+                            isExpanded: true,
+                            hint: Text(
+                              "Municipal",
+                              //  style: SharedUI.textStyle(SharedUI.gray).copyWith(fontSize: 22),
+                            ),
+                            value: item.data,
+                            icon: Icon(
+                              Icons.expand_more,
+                              color: MyColors.greenBorder,
+                            ),
+                            iconSize: 24,
+                            elevation: 16,
+                            //style: SharedUI.textStyle(Colors.black).copyWith(fontSize: 20),
+                            underline: Container(
+                              height: 2,
+                              color: MyColors.greenBorder,
+                            ),
+                            onChanged:
+                                _dropDownsMunicipalBloc.selectedStateEvent,
+                            items: state.municipales
+                                ?.map<DropdownMenuItem<Municipal>>((e) {
+                              return DropdownMenuItem<Municipal>(
+                                value: e,
+                                child: Text(e.name),
+                              );
+                            })?.toList(),
+                          );
+                        });
+                  } else if (state is DropDownMunicipalInitial) {
+                    return SizedBox();
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                }),
+            /*StreamBuilder<List<Municipal>>(
+                stream: _dropDownsBloc.municipales,
+                builder: (context, snapshot) {
+                  return StreamBuilder<Municipal>(
+                      stream: _dropDownsBloc.selectedMunicipal,
+                      builder: (context, item) {
+                        return DropdownButton(
+                          itemHeight: height * 0.1,
+                          isExpanded: true,
+                          hint: Text(
+                            "State",
+                            //  style: SharedUI.textStyle(SharedUI.gray).copyWith(fontSize: 22),
+                          ),
+                          value: item.data,
+                          icon: Icon(
+                            Icons.expand_more,
+                            color: MyColors.greenBorder,
+                          ),
+                          iconSize: 24,
+                          elevation: 16,
+                          //style: SharedUI.textStyle(Colors.black).copyWith(fontSize: 20),
+                          underline: Container(
+                            height: 2,
+                            color: MyColors.greenBorder,
+                          ),
+                          onChanged: _dropDownsBloc.selectedMunicipalEvent,
+                          items: snapshot?.data
+                              ?.map<DropdownMenuItem<Municipal>>((e) {
+                            return DropdownMenuItem<Municipal>(
+                              value: e,
+                              child: Text(e.name),
+                            );
+                          })?.toList(),
+                        );
+                      });
+                }),*/
+
+            /******************************
+
             SizedBox(height: height * 0.05),
             TextFormField(
               decoration: InputDecoration(
@@ -159,6 +472,7 @@ class _AddPlaceState extends State<AddPlace> {
                 ],
               ),
             ),
+                ***********/
           ],
         ),
       ),
@@ -168,6 +482,12 @@ class _AddPlaceState extends State<AddPlace> {
   @override
   void initState() {
     super.initState();
+    _dropDownsRepository = DropDownsRepository();
+    _dropDownsMunicipalBloc =
+        DropDownsMunicipalBloc(dropDownsRepository: _dropDownsRepository);
+    _dropDownStateBloc = DropDownStateBloc(
+        dropDownsRepository: _dropDownsRepository,
+        municipalBloc: _dropDownsMunicipalBloc);
     placeRepository = RepositoryProvider.of<PlaceRepository>(context);
     _placeUploadBloc = PlaceUploadBloc(
       placeRepository: placeRepository,
