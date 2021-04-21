@@ -40,6 +40,7 @@ dependencies:
   flutter_absolute_path: ^1.0.6
   flutter_native_image: ^0.0.6
   multi_image_picker: ^4.8.00
+  google_maps_flutter: ^2.0.3
 
 
 

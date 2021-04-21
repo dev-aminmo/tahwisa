@@ -74,10 +74,10 @@ class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
           ),
         );
         var _fileImageArray = await _castAssetsToFiles(resultList);
-        var _compressdImageArray = await _compressFiles(_fileImageArray);
+        var _compressedImageArray = await _compressFiles(_fileImageArray);
 
-        print("${_compressdImageArray.length}***************************");
-        yield (ImagesPicked(images: _compressdImageArray));
+        print("${_compressedImageArray.length}***************************");
+        yield (ImagesPicked(images: _compressedImageArray));
       } on Exception catch (e) {
         //error = e.toString();
         yield (ImagePickerFailure(error: e.toString()));
