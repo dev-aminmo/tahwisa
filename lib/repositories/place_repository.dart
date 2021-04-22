@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,7 +31,7 @@ class PlaceRepository {
   Future<dynamic> add({
     String title,
     String description,
-    String picture,
+    List<File> picture,
     int municipalID,
     double latitude,
     double longitude,

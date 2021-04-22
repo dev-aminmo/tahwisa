@@ -14,6 +14,11 @@ class Municipal extends Equatable {
   }
 
   @override
+  String toString() {
+    return "Municipal : {name:$name,id:$id}";
+  }
+
+  @override
   List<Object> get props => [
         id //, state_id
       ];

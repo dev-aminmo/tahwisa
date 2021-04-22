@@ -10,7 +10,6 @@ import 'package:tahwisa/style/my_colors.dart';
 
 import 'screens/auth/signup.dart';
 import 'screens/profile/profile_screen.dart';
-import 'screens/profile/views/add_place.dart';
 import 'screens/profile/views/add_place_navigator.dart';
 
 class SimpleBlocDelegate extends BlocObserver {
@@ -118,10 +117,10 @@ class _AppState extends State<App> {
       case '/sign_up':
         return MaterialPageRoute(builder: (context) => SignUPScreen());
 
-      case '/add_place':
+/*      case '/add_place':
         return MaterialPageRoute(
             builder: (context) => RepositoryProvider(
-                create: (_) => placeRepository, child: AddPlace()));
+                create: (_) => placeRepository, child: AddPlace()));*/
       case '/add_place_navigator':
         return MaterialPageRoute(
             builder: (context) => RepositoryProvider(
