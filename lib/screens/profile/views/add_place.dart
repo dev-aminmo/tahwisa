@@ -1,12 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tahwisa/blocs/drop_down_municipal_bloc/bloc.dart';
 import 'package:tahwisa/blocs/drop_down_state_bloc/bloc.dart';
 import 'package:tahwisa/blocs/image_picker_bloc/bloc.dart';
+import 'package:tahwisa/blocs/location_picker_bloc/bloc.dart';
 import 'package:tahwisa/blocs/place_upload_bloc/bloc.dart';
 import 'package:tahwisa/repositories/dropdowns_repository.dart';
 import 'package:tahwisa/repositories/models/municipal.dart';
@@ -27,6 +25,8 @@ class _AddPlaceState extends State<AddPlace> {
   DropDownStateBloc _dropDownStateBloc;
   DropDownsMunicipalBloc _dropDownsMunicipalBloc;
   ImagePickerBloc _imagePickerBloc;
+  LocationPickerBloc _locationPickerBloc;
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -241,25 +241,32 @@ class _AddPlaceState extends State<AddPlace> {
                               ),
                             ),
                             Spacer(),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MapSample()),
+                            BlocBuilder<LocationPickerBloc,
+                                LocationPickerState>(
+                              builder: (context, state) {
+                                if (state is LocationPicked) {
+                                  return FittedBox(
+                                    fit: BoxFit.fitWidth,
+                                    child: Text(
+                                        "lat ${state.latitude} "),
+                                  );
+                                }
+                                return GestureDetector(
+                                  onTap: () =>
+                                      _locationPickerBloc.add(PickLocation()),
+                                  child: Row(
+                                    children: [
+                                      Icon(CupertinoIcons.location_solid,
+                                          color: MyColors.darkBlue, size: 32),
+                                      SizedBox(width: width * 0.02),
+                                      Text("Location",
+                                          style: TextStyle(
+                                              color: MyColors.darkBlue,
+                                              fontSize: 18)),
+                                    ],
+                                  ),
                                 );
                               },
-                              child: Row(
-                                children: [
-                                  Icon(CupertinoIcons.location_solid,
-                                      color: MyColors.darkBlue, size: 32),
-                                  SizedBox(width: width * 0.02),
-                                  Text("Location",
-                                      style: TextStyle(
-                                          color: MyColors.darkBlue,
-                                          fontSize: 18)),
-                                ],
-                              ),
                             ),
                           ],
                         ),
@@ -280,85 +287,18 @@ class _AddPlaceState extends State<AddPlace> {
     _dropDownStateBloc = DropDownStateBloc(
         dropDownsRepository: _dropDownsRepository,
         municipalBloc: _dropDownsMunicipalBloc);
-    placeRepository = RepositoryProvider.of<PlaceRepository>(context);
+    //placeRepository = RepositoryProvider.of<PlaceRepository>(context);
+    placeRepository = PlaceRepository();
     _placeUploadBloc = PlaceUploadBloc(
       placeRepository: placeRepository,
     );
     _imagePickerBloc = ImagePickerBloc();
+    _locationPickerBloc = BlocProvider.of<LocationPickerBloc>(context);
   }
 
   @override
   void dispose() {
     _placeUploadBloc.close();
     super.dispose();
-  }
-}
-
-class MapSample extends StatefulWidget {
-  @override
-  State<MapSample> createState() => MapSampleState();
-}
-
-class MapSampleState extends State<MapSample> {
-  Completer<GoogleMapController> _controller = Completer();
-  Marker _marker;
-
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(36.73838289080758, 3.0847137703306404),
-    zoom: 10,
-  );
-
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
-
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: AppBar(actions: [
-        IconButton(
-            onPressed: () {
-              if (_marker == null) {
-                showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                          title: Column(children: [
-                            Icon(
-                              Icons.warning_rounded,
-                              color: Colors.yellow.shade600,
-                              size: 96,
-                            ),
-                            SizedBox(height: 36),
-                            Text('Please pick a location')
-                          ]),
-                        ));
-              } else {
-                Navigator.pop(context);
-              }
-            },
-            icon: Icon(
-              Icons.check,
-            ))
-      ]),
-      body: GoogleMap(
-        markers: (_marker != null) ? {_marker} : {},
-        mapType: MapType.normal,
-        initialCameraPosition: _kGooglePlex,
-        onTap: (l) {
-          print(l.latitude);
-          print(l.longitude);
-          setState(() {
-            _marker = Marker(
-                position: LatLng(l.latitude, l.longitude),
-                markerId: MarkerId("1"));
-          });
-        },
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-      ),
-    );
   }
 }
