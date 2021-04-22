@@ -4,7 +4,6 @@ import 'package:tahwisa/blocs/authentication_bloc/bloc.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
-import 'views/add_place_navigator.dart';
 import 'views/explore.dart';
 import 'views/notifications.dart';
 import 'views/search.dart';
@@ -40,10 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           backgroundColor: MyColors.darkBlue,
           onPressed: () {
             // Navigator.of(context).pushNamed('/add_place');
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AddPlaceNavigator()),
-            );
+            Navigator.of(context).pushNamed('/add_place_navigator');
           },
           child: Icon(Icons.add,
               size: 28, color: Theme.of(context).scaffoldBackgroundColor),

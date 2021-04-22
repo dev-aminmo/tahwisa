@@ -247,8 +247,7 @@ class _AddPlaceState extends State<AddPlace> {
                                 if (state is LocationPicked) {
                                   return FittedBox(
                                     fit: BoxFit.fitWidth,
-                                    child: Text(
-                                        "lat ${state.latitude} "),
+                                    child: Text("lat ${state.latitude} "),
                                   );
                                 }
                                 return GestureDetector(
@@ -287,8 +286,7 @@ class _AddPlaceState extends State<AddPlace> {
     _dropDownStateBloc = DropDownStateBloc(
         dropDownsRepository: _dropDownsRepository,
         municipalBloc: _dropDownsMunicipalBloc);
-    //placeRepository = RepositoryProvider.of<PlaceRepository>(context);
-    placeRepository = PlaceRepository();
+    placeRepository = RepositoryProvider.of<PlaceRepository>(context);
     _placeUploadBloc = PlaceUploadBloc(
       placeRepository: placeRepository,
     );
