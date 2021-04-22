@@ -22,13 +22,16 @@ class PlaceUploadBloc extends Bloc<PlaceUploadEvent, PlaceUploadState> {
     if (event is UploadPlaceButtonPressed) {
       yield PlaceUploadLoading();
       try {
-        await placeRepository.add(
+        var response = await placeRepository.add(
             title: event.title,
             description: event.description,
-            picture: event.picture,
+            pictures: event.picture,
             municipalID: event.municipalID,
             latitude: event.latitude,
             longitude: event.longitude);
+        if (response) {
+          yield (PlaceUploadSuccess());
+        }
       } catch (error) {
         yield PlaceUploadInitial();
         yield PlaceUploadFailure(error: error.toString());

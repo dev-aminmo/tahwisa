@@ -75,6 +75,15 @@ class _AddPlaceState extends State<AddPlace> {
                   print("municipal not chosen ***********************");
                 }
               }
+              /*final image = _imagePickerBloc.state as ImagesPicked;
+              _placeUploadBloc.add(UploadPlaceButtonPressed(
+                title: "hello",
+                description: "Mister johnson",
+                picture: image.images,
+                latitude: 4.1,
+                longitude: 3.1,
+                municipalID: 24,
+              ));*/
             },
             child: Icon(
               Icons.send,

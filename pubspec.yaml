@@ -34,7 +34,7 @@ dependencies:
   equatable: ^1.2.6
   queen_validators: ^0.2.0
   shared_preferences: ^2.0.3
-  dio: ^3.0.10
+  dio: ^4.0.0
   flutter_svg: ^0.19.3
   rxdart:
   flutter_absolute_path: ^1.0.6

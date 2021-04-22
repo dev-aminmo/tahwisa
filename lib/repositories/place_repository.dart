@@ -31,7 +31,7 @@ class PlaceRepository {
   Future<dynamic> add({
     String title,
     String description,
-    List<File> picture,
+    List<File> pictures,
     int municipalID,
     double latitude,
     double longitude,
@@ -39,22 +39,43 @@ class PlaceRepository {
     try {
       var pref = await SharedPreferences.getInstance();
       String token = pref.getString("token");
-      /*var response = await Dio().post(Api.all_places,
-          options: Options(headers: {
-            "Authorization": "Bearer " +
-          token,
-          }) // options.headers["Authorization"] = "Bearer " + token;
-           );*/
-      var response = await Dio().get(Api.states,
-          options: Options(headers: {
-            "Authorization": "Bearer " + token,
-          }));
-
+      var formData = FormData.fromMap({
+        'data': {
+          "title": title,
+          "description": description,
+          "latitude": latitude,
+          "longitude": longitude,
+          "municipal_id": municipalID
+        },
+        'file[]': await _picturesToMultipartFile(pictures)
+      });
+      var response = await Dio().post(Api.add_place,
+          data: formData,
+          options: Options(
+            headers: {
+              "Authorization": "Bearer " + token,
+              "Accept": "multipart/mixed",
+              "Content-Type": "multipart/form-data",
+            },
+            validateStatus: (status) => true,
+          ));
       var data = response.data;
       print(data);
-      return data;
+      if (response.statusCode == 201) {
+        return true;
+      }
+      return false;
     } catch (e) {
       throw (e.toString());
     }
+  }
+
+  Future<List> _picturesToMultipartFile(pictures) async {
+    var list = [];
+    for (var item in pictures) {
+      var i = await MultipartFile.fromFile(item.path);
+      list.add(i);
+    }
+    return list;
   }
 }
