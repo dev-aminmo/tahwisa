@@ -12,13 +12,14 @@ class Explore extends StatefulWidget {
 
 class _ExploreState extends State<Explore> {
   bool _hasMore = true;
-  Future<void> getData(ExplorePlacesBloc bloc) async {
-    bloc.add(PlaceFetched(refresh: true));
-  }
 
   final List<Place> _places = [];
   final ScrollController _scrollController = ScrollController();
   PlaceRepository placeRepository;
+  Future<void> getData(ExplorePlacesBloc bloc) async {
+    _places.clear();
+    bloc.add(PlaceFetched(refresh: true));
+  }
 
   @override
   void initState() {
@@ -63,7 +64,7 @@ class _ExploreState extends State<Explore> {
   }
 
   Widget child(state, height, width, bloc) {
-    if (_places.isEmpty && state is ExplorePlacesProgress) {
+    if (state is ExplorePlacesProgress) {
       return Center(child: CircularProgressIndicator());
     }
     if (state is ExplorePlacesEmpty) {
