@@ -7,11 +7,11 @@ import 'api/api_endpoints.dart';
 import 'models/place.dart';
 
 class PlaceRepository {
-  Future<dynamic> fetchPlaces() async {
+  Future<dynamic> fetchPlaces(int page) async {
     try {
       var pref = await SharedPreferences.getInstance();
       String token = pref.getString("token");
-      var response = await Dio().get(Api.all_places,
+      var response = await Dio().get(Api.all_places + "?page=$page",
           options: Options(headers: {
             "Authorization": "Bearer " + token
           }) // options.headers["Authorization"] = "Bearer " + token;

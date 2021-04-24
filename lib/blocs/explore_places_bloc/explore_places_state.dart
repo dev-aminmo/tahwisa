@@ -13,6 +13,8 @@ class ExplorePlacesInitial extends ExplorePlacesState {}
 
 class ExplorePlacesProgress extends ExplorePlacesState {}
 
+class ExplorePlacesEmpty extends ExplorePlacesState {}
+
 class ExplorePlacesSuccess extends ExplorePlacesState {
   final List<Place> places;
   ExplorePlacesSuccess({@required this.places});
