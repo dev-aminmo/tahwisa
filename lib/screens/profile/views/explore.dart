@@ -17,6 +17,7 @@ class _ExploreState extends State<Explore> {
   final ScrollController _scrollController = ScrollController();
   PlaceRepository placeRepository;
   Future<void> getData(ExplorePlacesBloc bloc) async {
+    _hasMore = true;
     _places.clear();
     bloc.add(PlaceFetched(refresh: true));
   }
@@ -27,6 +28,12 @@ class _ExploreState extends State<Explore> {
     //todo
     //scrollController.position.maxScrollExtent == scrollController.offset
     placeRepository = RepositoryProvider.of<PlaceRepository>(context);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override

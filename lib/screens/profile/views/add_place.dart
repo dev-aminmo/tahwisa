@@ -104,7 +104,7 @@ class _AddPlaceState extends State<AddPlace> {
                   Align(
                     alignment: Alignment.topCenter,
                     child: BlocBuilder(
-                        cubit: _dropDownStateBloc..add(FetchStates()),
+                        cubit: _dropDownStateBloc,
                         builder: (context, state) {
                           if (state is DropDownsStatesSuccess)
                             return StreamBuilder<MyState>(
@@ -330,7 +330,8 @@ class _AddPlaceState extends State<AddPlace> {
         DropDownsMunicipalBloc(dropDownsRepository: _dropDownsRepository);
     _dropDownStateBloc = DropDownStateBloc(
         dropDownsRepository: _dropDownsRepository,
-        municipalBloc: _dropDownsMunicipalBloc);
+        municipalBloc: _dropDownsMunicipalBloc)
+      ..add(FetchStates());
     _placeRepository = RepositoryProvider.of<PlaceRepository>(context);
     _placeUploadBloc = PlaceUploadBloc(
       placeRepository: _placeRepository,
