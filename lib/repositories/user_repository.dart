@@ -1,12 +1,10 @@
-import 'dart:convert';
-
-import 'package:meta/meta.dart';
-import 'api/api_endpoints.dart';
 import 'package:dio/dio.dart';
+import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'api/api_endpoints.dart';
+
 class UserRepository {
-  
   Future<String> authenticate({
     @required String email,
     @required String password,
@@ -43,12 +41,31 @@ class UserRepository {
     }
   }
 
+  Future<bool> resetPassword({
+    @required String email,
+  }) async {
+    try {
+      var response = await Dio().post(
+        Api.resetPassword,
+        data: {"email": email},
+      );
+      if (response.statusCode == 200) return true;
+
+      return false;
+    } catch (e) {
+      //throw ("Could not found an account with that email address");
+      rethrow;
+    }
+  }
+
   Future<void> deleteToken() async {
-   await SharedPreferences.getInstance()..remove("token");
+    await SharedPreferences.getInstance()
+      ..remove("token");
   }
 
   Future<void> persistToken(String token) async {
-    await SharedPreferences.getInstance()..setString("token", token);
+    await SharedPreferences.getInstance()
+      ..setString("token", token);
   }
 
   Future<bool> hasToken() async {

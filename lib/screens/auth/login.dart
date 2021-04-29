@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:queen_validators/queen_validators.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:queen_validators/queen_validators.dart';
 import 'package:tahwisa/blocs/authentication_bloc/bloc.dart';
 import 'package:tahwisa/blocs/login_bloc/bloc.dart';
-
 import 'package:tahwisa/repositories/user_repository.dart';
 import 'package:tahwisa/screens/auth/widgets/auth_button.dart';
 import 'package:tahwisa/screens/auth/widgets/auth_input.dart';
 import 'package:tahwisa/style/my_colors.dart';
+
+import 'reset_password.dart';
 
 class LoginForm extends StatefulWidget {
   final LoginBloc loginBloc;
@@ -35,9 +35,7 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
-      //  create: _loginBloc,
       cubit: _loginBloc,
-      // listener: (ctx, state) {},
       builder: (
         BuildContext context,
         LoginState state,
@@ -56,10 +54,9 @@ class _LoginFormState extends State<LoginForm> {
         return Form(
           key: _formKey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Spacer(
-                flex: 5,
+                flex: 7,
               ),
               AuthInput(
                   controller: _emailController,
@@ -71,6 +68,7 @@ class _LoginFormState extends State<LoginForm> {
                   ]),
                   suffix:
                       Icon(Icons.person_outline, color: MyColors.lightGreen)),
+              SizedBox(height: 25),
               AuthInput(
                 hint: "password",
                 controller: _passwordController,
@@ -87,6 +85,25 @@ class _LoginFormState extends State<LoginForm> {
                             color: MyColors.lightGreen)),
                 obscured: obscured,
               ),
+              Row(children: [
+                Spacer(),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      return RepositoryProvider.value(
+                        value: RepositoryProvider.of<UserRepository>(context),
+                        child: ResetPasswordPage(),
+                      );
+                    }));
+                  },
+                  child: Text('Forgot password?',
+                      style: TextStyle(
+                          color: MyColors.lightGreen,
+                          decoration: TextDecoration.underline)),
+                ),
+                SizedBox(width: 20),
+              ]),
               Spacer(
                 flex: 5,
               ),
@@ -136,9 +153,6 @@ class _LoginFormState extends State<LoginForm> {
 }
 
 class LoginPage extends StatefulWidget {
-  //final data;
-  //LoginPage(this.data);
-
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -146,16 +160,16 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   LoginBloc _loginBloc;
   AuthenticationBloc _authenticationBloc;
-  UserRepository  userRepository;
+  UserRepository userRepository;
   @override
   void initState() {
     super.initState();
 
-    userRepository=RepositoryProvider.of<UserRepository>(context);
+    userRepository = RepositoryProvider.of<UserRepository>(context);
 
     _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     _loginBloc = LoginBloc(
-      userRepository:userRepository,
+      userRepository: userRepository,
       authenticationBloc: _authenticationBloc,
     );
   }
