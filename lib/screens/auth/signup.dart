@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tahwisa/repositories/user_repository.dart';
 import 'package:tahwisa/style/my_colors.dart';
+
 import './widgets/auth_button.dart';
 import './widgets/auth_input.dart';
 import '../../blocs/authentication_bloc/bloc.dart';
 import '../../blocs/signup_bloc/bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignUPScreen extends StatefulWidget {
-
-
   @override
   _SignUPScreenState createState() => _SignUPScreenState();
 }
@@ -17,7 +17,7 @@ class SignUPScreen extends StatefulWidget {
 class _SignUPScreenState extends State<SignUPScreen> {
   SignupBloc _signupBloc;
   AuthenticationBloc _authenticationBloc;
-  UserRepository  userRepository;
+  UserRepository userRepository;
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -25,15 +25,16 @@ class _SignUPScreenState extends State<SignUPScreen> {
   final _formKey = GlobalKey<FormState>();
 
   bool obscured = true;
-
+  var _googleSignIn;
   @override
   void initState() {
     super.initState();
-    userRepository=RepositoryProvider.of<UserRepository>(context);
+    _googleSignIn = GoogleSignIn();
+    userRepository = RepositoryProvider.of<UserRepository>(context);
 
     _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     _signupBloc = SignupBloc(
-      userRepository:userRepository,
+      userRepository: userRepository,
       authenticationBloc: _authenticationBloc,
     );
   }
@@ -41,7 +42,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
   @override
   void dispose() {
     _signupBloc.close();
- //  _authenticationBloc.close();
+    //  _authenticationBloc.close();
     super.dispose();
   }
 
@@ -58,6 +59,10 @@ class _SignUPScreenState extends State<SignUPScreen> {
         email: _emailController.text,
         password: _passwordController.text,
       ));
+  }
+
+  _onGoogleButtonPressed() {
+    _signupBloc.add(GoogleButtonPressed());
   }
 
   @override
@@ -137,7 +142,9 @@ class _SignUPScreenState extends State<SignUPScreen> {
                     Spacer(),
                     AuthButton(
                       title: "Sign up with Google",
-                      onTap: () {},
+                      onTap: state is! SignupLoading
+                          ? _onGoogleButtonPressed
+                          : null,
                       isGoogle: true,
                     ),
                     Spacer(

@@ -4,6 +4,8 @@ import 'package:meta/meta.dart';
 @immutable
 abstract class SignupEvent extends Equatable {
   const SignupEvent();
+  @override
+  List<Object> get props => [];
 }
 
 class SignupButtonPressed extends SignupEvent {
@@ -23,4 +25,9 @@ class SignupButtonPressed extends SignupEvent {
   @override
   String toString() =>
       'LoginButtonPressed { username: $email, password: $password }';
+}
+
+class GoogleButtonPressed extends SignupEvent {
+  @override
+  String toString() => 'GoogleButtonPressed';
 }

@@ -41,6 +41,24 @@ class UserRepository {
     }
   }
 
+  Future<String> social({
+    @required String accessToken,
+  }) async {
+    try {
+      var response = await Dio().post(
+        Api.social,
+        data: {"access_token": accessToken},
+      );
+      if (response.statusCode != 201) {
+        print(response.toString());
+        throw ("cannot log in with this account");
+      }
+      return response.data["token"];
+    } catch (e) {
+      throw ("error occurred");
+    }
+  }
+
   Future<bool> resetPassword({
     @required String email,
   }) async {
