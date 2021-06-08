@@ -12,9 +12,11 @@ class PlaceRepository {
       var pref = await SharedPreferences.getInstance();
       String token = pref.getString("token");
       var response = await Dio().get(Api.all_places + "?page=$page",
-          options: Options(headers: {
-            "Authorization": "Bearer " + token
-          }) // options.headers["Authorization"] = "Bearer " + token;
+          options: Options(
+            headers: {"Authorization": "Bearer " + token},
+            validateStatus: (status) => true,
+          ) // options.headers["Authorization"] = "Bearer " + token;
+
           );
       var data = response.data;
       List<Place> places = [];

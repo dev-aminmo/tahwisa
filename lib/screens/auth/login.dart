@@ -123,7 +123,7 @@ class _LoginFormState extends State<LoginForm> {
               Spacer(),
               AuthButton(
                 title: "Login with Google",
-                onTap: () {},
+                onTap: state is! LoginLoading ? _onGoogleButtonPressed : null,
                 isGoogle: true,
               ),
               Spacer(
@@ -149,6 +149,10 @@ class _LoginFormState extends State<LoginForm> {
         password: _passwordController.text,
       ));
     // Navigator.pop(context);
+  }
+
+  _onGoogleButtonPressed() {
+    _loginBloc.add(GoogleButtonPressed());
   }
 }
 

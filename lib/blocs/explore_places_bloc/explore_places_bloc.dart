@@ -9,7 +9,6 @@ class ExplorePlacesBloc extends Bloc<ExplorePlacesEvent, ExplorePlacesState> {
   final placeRepository;
   int page = 1;
   bool isFetching = false;
-  // bool hasMore = true;
   ExplorePlacesBloc({@required this.placeRepository})
       : assert(placeRepository != null),
         super(ExplorePlacesInitial());
@@ -24,13 +23,14 @@ class ExplorePlacesBloc extends Bloc<ExplorePlacesEvent, ExplorePlacesState> {
       }
       try {
         final places = await placeRepository.fetchPlaces(page);
+        print(places.length == 0);
         if (places.length == 0) {
           //yield ExplorePlacesEmpty();
           //hasMore = false;
           yield ExplorePlacesEmpty();
         } else {
-          yield ExplorePlacesSuccess(places: places);
           page++;
+          yield ExplorePlacesSuccess(places: places);
         }
         // authenticationBloc.add(LoggedIn(token: token));
       } catch (error) {

@@ -11,13 +11,10 @@ class Explore extends StatefulWidget {
 }
 
 class _ExploreState extends State<Explore> {
-  bool _hasMore = true;
-
   final List<Place> _places = [];
   final ScrollController _scrollController = ScrollController();
   PlaceRepository placeRepository;
   Future<void> getData(ExplorePlacesBloc bloc) async {
-    _hasMore = true;
     _places.clear();
     bloc.add(PlaceFetched(refresh: true));
   }
@@ -43,14 +40,7 @@ class _ExploreState extends State<Explore> {
     return BlocProvider(
       create: (_) => ExplorePlacesBloc(placeRepository: placeRepository)
         ..add(PlaceFetched()),
-      child: BlocConsumer<ExplorePlacesBloc, ExplorePlacesState>(
-        listener: (context, state) {
-          if (state is ExplorePlacesEmpty) {
-            setState(() {
-              _hasMore = false;
-            });
-          }
-        },
+      child: BlocBuilder<ExplorePlacesBloc, ExplorePlacesState>(
         buildWhen: (previousState, currentState) {
           if (currentState is ExplorePlacesEmpty) {
             return false;
@@ -100,19 +90,11 @@ class _ExploreState extends State<Explore> {
         itemCount: _places.length + 1,
         itemBuilder: (ctx, index) {
           if (index == _places.length) {
-            if (!_hasMore) {
-              return Center(
-                child: Container(
-                    margin: const EdgeInsets.only(top: 20, bottom: 60),
-                    height: 60,
-                    width: 300,
-                    color: Colors.black12,
-                    child: Center(child: Text("No more places"))),
-              );
-            } else
-              return Container(
-                  margin: const EdgeInsets.only(top: 10, bottom: 40),
-                  child: Center(child: CircularProgressIndicator()));
+            return Container(
+              margin: const EdgeInsets.only(top: 20, bottom: 60),
+              height: 60,
+              width: 300,
+            );
           }
           return PlaceCard(
             height: height,

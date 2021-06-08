@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tahwisa/repositories/user_repository.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
@@ -25,11 +24,9 @@ class _SignUPScreenState extends State<SignUPScreen> {
   final _formKey = GlobalKey<FormState>();
 
   bool obscured = true;
-  var _googleSignIn;
   @override
   void initState() {
     super.initState();
-    _googleSignIn = GoogleSignIn();
     userRepository = RepositoryProvider.of<UserRepository>(context);
 
     _authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
@@ -42,7 +39,6 @@ class _SignUPScreenState extends State<SignUPScreen> {
   @override
   void dispose() {
     _signupBloc.close();
-    //  _authenticationBloc.close();
     super.dispose();
   }
 
