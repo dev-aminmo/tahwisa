@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_tagging/flutter_tagging.dart';
 import 'package:tahwisa/blocs/drop_down_municipal_bloc/bloc.dart';
 import 'package:tahwisa/blocs/drop_down_state_bloc/bloc.dart';
 import 'package:tahwisa/blocs/image_picker_bloc/bloc.dart';
@@ -29,6 +32,8 @@ class _AddPlaceState extends State<AddPlace> {
   TextEditingController _titleEditingController;
   TextEditingController _descriptionEditingController;
   final _formKey = GlobalKey<FormState>();
+
+  List<Tag> _selectedTags;
 
   @override
   Widget build(BuildContext context) {
@@ -95,11 +100,71 @@ class _AddPlaceState extends State<AddPlace> {
         resizeToAvoidBottomInset: false,
         //  resizeToAvoidBottomPadding: false,
         body: SingleChildScrollView(
+          reverse: true,
           child: Container(
               margin: EdgeInsets.symmetric(horizontal: width * 0.04),
               child: Form(
                 key: _formKey,
                 child: Column(children: [
+                  SizedBox(height: height * 0.1),
+                  FlutterTagging<Tag>(
+                    initialItems: _selectedTags,
+                    emptyBuilder: (ctx) {
+                      return Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Text("No tags found"));
+                    },
+                    textFieldConfiguration: TextFieldConfiguration(
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        filled: true,
+                        fillColor: MyColors.darkBlue.withAlpha(30),
+                        hintText: 'Search Tags',
+                        labelText: 'Select Tags',
+                      ),
+                    ),
+                    findSuggestions: TagService.getTags,
+                    additionCallback: (value) {
+                      return Tag(
+                        name: value,
+                      );
+                    },
+                    onAdded: (tag) {
+                      return Tag(name: tag.name);
+                    },
+                    configureSuggestion: (tag) {
+                      return SuggestionConfiguration(
+                        title: Text(tag.name),
+                        // subtitle: Text(lang.position.toString()),
+                        additionWidget: Chip(
+                          avatar: Icon(
+                            Icons.add_circle,
+                            color: MyColors.white,
+                          ),
+                          label: Text('Add New Tag'),
+                          labelStyle: TextStyle(
+                            color: MyColors.white,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w300,
+                          ),
+                          backgroundColor: MyColors.greenBorder,
+                        ),
+                      );
+                    },
+                    configureChip: (tag) {
+                      return ChipConfiguration(
+                        label: Text(tag.name),
+                        backgroundColor: MyColors.lightGreen,
+                        labelStyle: TextStyle(
+                          color: MyColors.white,
+                        ),
+                        deleteIconColor: MyColors.white,
+                      );
+                    },
+                    onChanged: () {
+                      print(_selectedTags);
+                    },
+                  ),
                   SizedBox(height: height * 0.05),
                   Align(
                     alignment: Alignment.topCenter,
@@ -193,7 +258,7 @@ class _AddPlaceState extends State<AddPlace> {
                   TextFormField(
                     controller: _titleEditingController,
                     decoration: InputDecoration(
-                        fillColor: Colors.white,
+                        fillColor: MyColors.white,
                         filled: true,
                         hintText: "enter title of the place",
                         counterText: "",
@@ -225,14 +290,14 @@ class _AddPlaceState extends State<AddPlace> {
                           color: MyColors.greenBorder,
                         ),
                         borderRadius: BorderRadius.circular(width * 0.03),
-                        color: Colors.white),
+                        color: MyColors.white),
                     child: Column(
                       children: [
                         TextFormField(
                           controller: _descriptionEditingController,
                           maxLines: 5,
                           decoration: InputDecoration(
-                              fillColor: Colors.white,
+                              fillColor: MyColors.white,
                               filled: true,
                               hintText: "description",
                               counterText: "",
@@ -315,6 +380,11 @@ class _AddPlaceState extends State<AddPlace> {
                       ],
                     ),
                   ),
+                  SizedBox(height: height * 0.05),
+                  Container(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                  )
                 ]),
               )),
         ));
@@ -323,6 +393,8 @@ class _AddPlaceState extends State<AddPlace> {
   @override
   void initState() {
     super.initState();
+    _selectedTags = [];
+
     _titleEditingController = TextEditingController();
     _descriptionEditingController = TextEditingController();
     _dropDownsRepository = DropDownsRepository();
@@ -342,8 +414,43 @@ class _AddPlaceState extends State<AddPlace> {
 
   @override
   void dispose() {
+    _selectedTags.clear();
     _placeUploadBloc.close();
     _dropDownsMunicipalBloc.close();
     super.dispose();
   }
+}
+
+/// TagService
+class TagService {
+  /// Mocks fetching Tags from network API with delay of 500ms.
+  static Future<List<Tag>> getTags(String query) async {
+    await Future.delayed(Duration(milliseconds: 500), null);
+    return <Tag>[
+      Tag(name: 'JavaScript'),
+      Tag(name: 'Python'),
+      Tag(name: 'Java'),
+      Tag(name: 'PHP'),
+      Tag(name: 'C#'),
+      Tag(name: 'C++'),
+    ]
+        .where((tag) => tag.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+  }
+}
+
+/// Tag Class
+class Tag extends Taggable {
+  ///
+  final String name;
+
+  ///
+
+  /// Creates Tag
+  Tag({
+    this.name = "",
+  });
+
+  @override
+  List<Object> get props => [name];
 }

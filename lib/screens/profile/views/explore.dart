@@ -22,7 +22,6 @@ class _ExploreState extends State<Explore> {
   @override
   void initState() {
     super.initState();
-    //todo
     //scrollController.position.maxScrollExtent == scrollController.offset
     placeRepository = RepositoryProvider.of<PlaceRepository>(context);
   }
