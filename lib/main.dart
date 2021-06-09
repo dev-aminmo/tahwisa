@@ -10,7 +10,7 @@ import 'package:tahwisa/style/my_colors.dart';
 
 import 'screens/auth/signup.dart';
 import 'screens/profile/profile_screen.dart';
-import 'screens/profile/views/add_place_navigator.dart';
+import 'screens/profile/views/add_place/add_place_navigator.dart';
 
 class SimpleBlocDelegate extends BlocObserver {
   @override

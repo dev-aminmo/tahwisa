@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tahwisa/blocs/location_picker_bloc/bloc.dart';
 
-import 'LocationPickerScreen.dart';
+import '../LocationPickerScreen.dart';
 import 'add_place.dart';
 
 class AddPlaceNavigator extends StatefulWidget {
