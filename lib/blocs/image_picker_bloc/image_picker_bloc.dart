@@ -58,16 +58,16 @@ class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
   ) async* {
     if (event is PickImages) {
       List<Asset> resultList = <Asset>[];
-      //_images = [];
       try {
         resultList = await MultiImagePicker.pickImages(
-          maxImages: 300,
+          maxImages: 10,
           enableCamera: true,
           selectedAssets: _images,
           cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
           materialOptions: MaterialOptions(
-            actionBarColor: "#abcdef",
-            actionBarTitle: "Example App",
+            statusBarColor: "#04415d",
+            actionBarColor: "#04415d",
+            actionBarTitle: "Pick Images",
             allViewTitle: "All Photos",
             useDetailsView: false,
             selectCircleStrokeColor: "#000000",
@@ -76,10 +76,8 @@ class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
         var _fileImageArray = await _castAssetsToFiles(resultList);
         var _compressedImageArray = await _compressFiles(_fileImageArray);
 
-        print("${_compressedImageArray.length}***************************");
         yield (ImagesPicked(images: _compressedImageArray));
       } on Exception catch (e) {
-        //error = e.toString();
         yield (ImagePickerFailure(error: e.toString()));
       }
     }
