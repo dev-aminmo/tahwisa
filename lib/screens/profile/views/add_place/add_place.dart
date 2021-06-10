@@ -9,6 +9,7 @@ import 'package:tahwisa/blocs/place_upload_bloc/bloc.dart';
 import 'package:tahwisa/repositories/dropdowns_repository.dart';
 import 'package:tahwisa/repositories/models/tag.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
+import 'package:tahwisa/repositories/tag_repository.dart';
 import 'package:tahwisa/screens/profile/widgets/add_place/widgets.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
@@ -21,6 +22,7 @@ class _AddPlaceState extends State<AddPlace> {
   String path;
   PlaceUploadBloc _placeUploadBloc;
   PlaceRepository _placeRepository;
+  TagRepository _tagRepository;
   DropDownsRepository _dropDownsRepository;
   DropDownStateBloc _dropDownStateBloc;
   DropDownsMunicipalBloc _dropDownsMunicipalBloc;
@@ -56,7 +58,9 @@ class _AddPlaceState extends State<AddPlace> {
                 key: _formKey,
                 child: Column(children: [
                   SizedBox(height: height * 0.1),
-                  TagPicker(selectedTags: _selectedTags),
+                  TagPicker(
+                      selectedTags: _selectedTags,
+                      tagRepository: _tagRepository),
                   SizedBox(height: height * 0.05),
                   StateDropdown(
                       dropDownStateBloc: _dropDownStateBloc, height: height),
@@ -91,6 +95,7 @@ class _AddPlaceState extends State<AddPlace> {
     _titleEditingController = TextEditingController();
     _descriptionEditingController = TextEditingController();
     _dropDownsRepository = DropDownsRepository();
+    _tagRepository = TagRepository();
     _dropDownsMunicipalBloc =
         DropDownsMunicipalBloc(dropDownsRepository: _dropDownsRepository);
     _dropDownStateBloc = DropDownStateBloc(

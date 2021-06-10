@@ -5,14 +5,16 @@ import 'package:tahwisa/repositories/tag_repository.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 class TagPicker extends StatelessWidget {
-  TagPicker({
+  const TagPicker({
     Key key,
     @required List<Tag> selectedTags,
+    @required TagRepository tagRepository,
   })  : _selectedTags = selectedTags,
+        _tagRepository = tagRepository,
         super(key: key);
 
   final List<Tag> _selectedTags;
-  final tagRepository = TagRepository();
+  final _tagRepository;
   @override
   Widget build(BuildContext context) {
     return FlutterTagging<Tag>(
@@ -30,7 +32,7 @@ class TagPicker extends StatelessWidget {
           labelText: 'Select Tags',
         ),
       ),
-      findSuggestions: tagRepository.getTags,
+      findSuggestions: _tagRepository.getTags,
       additionCallback: (value) {
         return Tag(
           name: value,
