@@ -113,8 +113,13 @@ class _AddPlaceState extends State<AddPlace> {
   @override
   void dispose() {
     _selectedTags.clear();
+    _titleEditingController.dispose();
+    _descriptionEditingController.dispose();
     _placeUploadBloc.close();
     _dropDownsMunicipalBloc.close();
+    _imagePickerBloc.close();
+    _dropDownStateBloc.close();
+
     super.dispose();
   }
 }
