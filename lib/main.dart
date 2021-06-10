@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:tahwisa/blocs/authentication_bloc/bloc.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/user_repository.dart';
@@ -64,12 +65,15 @@ class _AppState extends State<App> {
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             //primarySwatch: Colors.blue,
+            textTheme: GoogleFonts.latoTextTheme(
+              Theme.of(context).textTheme,
+            ),
             primaryColor: MyColors.darkBlue,
             indicatorColor: MyColors.lightGreen,
             accentColor: MyColors.lightGreen,
             scaffoldBackgroundColor: MyColors.white,
 
-            fontFamily: 'Lato',
+            //  fontFamily: 'Lato',
             backgroundColor: MyColors.white,
           ),
           builder: (context, child) {
