@@ -17,20 +17,18 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   AuthenticationBloc authenticationBloc;
   PlaceRepository placeRepository;
-
-  int _currentIndex = 0;
-  List<Widget> children = [
-    Explore(),
-    SearchScreen(),
-    Container(),
-    WishList(),
-    Notifications(),
-  ];
+  PageController _pageController;
+  int _currentIndex;
+  List<Widget> children;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.white,
-      body: children[_currentIndex],
+      body: PageView(
+        controller: _pageController,
+        physics: NeverScrollableScrollPhysics(),
+        children: children,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: SizedBox(
         width: 58,
@@ -146,6 +144,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+    _currentIndex = 0;
+    _pageController = PageController(initialPage: _currentIndex);
+    children = [
+      Explore(),
+      SearchScreen(),
+      Container(),
+      WishList(),
+      Notifications(),
+    ];
     placeRepository = RepositoryProvider.of<PlaceRepository>(context);
     authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
   }
@@ -156,9 +163,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.dispose();
   }
 
-  Widget _selectItem(int value) {
+  void _selectItem(int value) {
     setState(() {
       _currentIndex = value;
+      _pageController.jumpToPage(_currentIndex);
     });
   }
 }

@@ -10,7 +10,8 @@ class Explore extends StatefulWidget {
   _ExploreState createState() => _ExploreState();
 }
 
-class _ExploreState extends State<Explore> {
+class _ExploreState extends State<Explore>
+    with AutomaticKeepAliveClientMixin<Explore> {
   final List<Place> _places = [];
   final ScrollController _scrollController = ScrollController();
   PlaceRepository placeRepository;
@@ -19,6 +20,9 @@ class _ExploreState extends State<Explore> {
     bloc.add(PlaceFetched(refresh: true));
   }
 
+  // Setting to true will force the tab to never be disposed.
+  @override
+  bool get wantKeepAlive => true;
   @override
   void initState() {
     super.initState();
