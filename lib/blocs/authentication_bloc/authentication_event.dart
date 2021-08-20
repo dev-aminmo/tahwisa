@@ -1,5 +1,5 @@
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
 abstract class AuthenticationEvent extends Equatable {
   AuthenticationEvent([List props = const []]) : super();
@@ -30,6 +30,5 @@ class LoggedOut extends AuthenticationEvent {
   String toString() => 'LoggedOut';
 
   @override
-  // TODO: implement props
   List<Object> get props => [];
 }

@@ -30,6 +30,30 @@ class PlaceRepository {
     }
   }
 
+  Future<dynamic> search(String pattern) async {
+    try {
+      print('from repo ******' + pattern);
+      var pref = await SharedPreferences.getInstance();
+      String token = pref.getString("token");
+      var response = await Dio().get(Api.search_places + "?query=$pattern",
+          options: Options(
+            headers: {"Authorization": "Bearer " + token},
+            validateStatus: (status) => true,
+          ) // options.headers["Authorization"] = "Bearer " + token;
+
+          );
+      var data = response.data;
+      List<Place> places = [];
+      for (var jsonPlace in data['data']) {
+        var place = Place.fromJson(jsonPlace);
+        places.add(place);
+      }
+      return places;
+    } catch (e) {
+      throw (e.toString());
+    }
+  }
+
   Future<dynamic> fetchWishListPlaces(int page) async {
     try {
       var pref = await SharedPreferences.getInstance();
