@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tahwisa/screens/profile/widgets/hide_keyboard_ontap.dart';
+import 'package:tahwisa/screens/profile/widgets/search/search_for_places_type_ahead_field.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -42,12 +43,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       searchEditingController: _searchEditingController,
                       width: width,
                       height: height)),
-              RawMaterialButton(
-                onPressed: () {},
-                padding: EdgeInsets.all(12),
-                fillColor: MyColors.lightGreen,
-                child: Icon(Icons.search, color: Colors.white),
-                shape: CircleBorder(),
+              RoundedSearchIcon(
+                searchIconClicked: () {},
               ),
             ],
           ),
@@ -98,5 +95,23 @@ class _SearchScreenState extends State<SearchScreen> {
       */
       ],
     ));
+  }
+}
+
+class RoundedSearchIcon extends StatelessWidget {
+  const RoundedSearchIcon({
+    this.searchIconClicked,
+  });
+  final searchIconClicked;
+
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      onPressed: searchIconClicked,
+      padding: EdgeInsets.all(12),
+      fillColor: MyColors.lightGreen,
+      child: Icon(Icons.search, color: Colors.white),
+      shape: CircleBorder(),
+    );
   }
 }
