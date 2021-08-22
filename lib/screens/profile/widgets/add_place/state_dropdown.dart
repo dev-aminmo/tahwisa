@@ -31,7 +31,6 @@ class StateDropdown extends StatelessWidget {
                       isExpanded: true,
                       hint: Text(
                         "State",
-                        //  style: SharedUI.textStyle(SharedUI.gray).copyWith(fontSize: 22),
                       ),
                       value: item.data,
                       icon: Icon(
@@ -40,7 +39,6 @@ class StateDropdown extends StatelessWidget {
                       ),
                       iconSize: 24,
                       elevation: 16,
-                      //style: SharedUI.textStyle(Colors.black).copyWith(fontSize: 20),
                       underline: Container(
                         height: 2,
                         color: MyColors.greenBorder,

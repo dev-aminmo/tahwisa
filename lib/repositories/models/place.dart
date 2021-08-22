@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
-class Place {
+class Place extends Equatable {
   /* int id;
   String title;
   String description;
@@ -48,4 +49,9 @@ class Place {
       });
     }
   }
+  @override
+  List<Object> get props => [id, title];
+
+  @override
+  String toString() => "$id" + "$title";
 }

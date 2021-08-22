@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tahwisa/blocs/search_bloc/search_bloc.dart';
+import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/screens/profile/widgets/hide_keyboard_ontap.dart';
 import 'package:tahwisa/screens/profile/widgets/place_card.dart';
@@ -54,9 +55,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         width: width,
                         height: height,
                         onEditingComplete: () {
-                          context
-                              .read<SearchBloc>()
-                              .add(SearchFirstPageEvent(query: 'tout va'));
+                          context.read<SearchBloc>().add(SearchFirstPageEvent(
+                              query: _searchEditingController.text));
                         },
                       );
                     },
@@ -113,8 +113,34 @@ class _SearchScreenState extends State<SearchScreen> {
                     },
                   ),
                 );
+              } else if (state is SearchEmpty) {
+                return SizedBox(
+                  height: height * 0.7,
+                  child: StreamBuilder<List<Place>>(
+                      stream: context.read<SearchBloc>().places,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          // List<Place> _placesList = snapshot.data;
+                          return ListView.builder(
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (ctx, index) => PlaceCard(
+                              place: snapshot.data[index],
+                              height: height,
+                              width: width,
+                              index: index,
+                            ),
+                          );
+                        }
+                        return ListView.builder(
+                          itemCount: 1,
+                          itemBuilder: (ctx, index) => Text(
+                            "State",
+                          ),
+                        );
+                      }),
+                );
               } else {
-                return Center(child: Text("Nothing here"));
+                return Text("State");
               }
             })
           ],
