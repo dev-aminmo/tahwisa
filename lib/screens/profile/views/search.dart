@@ -55,6 +55,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         width: width,
                         height: height,
                         onEditingComplete: () {
+                        _dismissKeyboard(context);
                           context.read<SearchBloc>().add(SearchFirstPageEvent(
                               query: _searchEditingController.text));
                         },
@@ -147,6 +148,13 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
     );
+  }
+
+  void _dismissKeyboard(BuildContext context) {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
   }
 }
 
