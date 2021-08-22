@@ -32,7 +32,6 @@ class PlaceRepository {
 
   Future<dynamic> search(String pattern) async {
     try {
-      print('from repo ******' + pattern);
       var pref = await SharedPreferences.getInstance();
       String token = pref.getString("token");
       var response = await Dio().get(Api.search_places + "?query=$pattern",

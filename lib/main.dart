@@ -120,11 +120,6 @@ class _AppState extends State<App> {
         break;
       case '/sign_up':
         return MaterialPageRoute(builder: (context) => SignUPScreen());
-
-/*      case '/add_place':
-        return MaterialPageRoute(
-            builder: (context) => RepositoryProvider(
-                create: (_) => placeRepository, child: AddPlace()));*/
       case '/add_place_navigator':
         return MaterialPageRoute(
             builder: (context) => RepositoryProvider(

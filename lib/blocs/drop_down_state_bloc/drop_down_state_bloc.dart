@@ -13,7 +13,6 @@ class DropDownStateBloc extends Bloc<DropDownStateEvent, DropDownState> {
   final DropDownsMunicipalBloc municipalBloc;
 
   final _selectedState$ = BehaviorSubject<MyState>();
-//  Future<List<MyState>> states;
   Stream<MyState> get selectedState => _selectedState$;
 
   @override
@@ -43,14 +42,6 @@ class DropDownStateBloc extends Bloc<DropDownStateEvent, DropDownState> {
     if (event is StateChosen) {
       _selectedState$.add(event.state);
       municipalBloc.add(FetchMuniciaples(state: event.state));
-      /*try {
-        dynamic municipales =
-        await dropDownsRepository.fetchMunicipales(stateId: event.state.id);
-        yield DropDownsMunicipalesSuccess(municipales: municipales);
-      } catch (error) {
-        yield DropDownsFailure(
-            when: "Municipales Failure", error: error.toString());
-      }*/
     }
   }
 }

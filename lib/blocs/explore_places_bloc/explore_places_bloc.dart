@@ -25,14 +25,11 @@ class ExplorePlacesBloc extends Bloc<ExplorePlacesEvent, ExplorePlacesState> {
         final places = await placeRepository.fetchPlaces(page);
         print(places.length == 0);
         if (places.length == 0) {
-          //yield ExplorePlacesEmpty();
-          //hasMore = false;
           yield ExplorePlacesEmpty();
         } else {
           page++;
           yield ExplorePlacesSuccess(places: places);
         }
-        // authenticationBloc.add(LoggedIn(token: token));
       } catch (error) {
         print("error");
         yield ExplorePlacesFailure(error: error.toString());

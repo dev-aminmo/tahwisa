@@ -9,19 +9,23 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
     @required TextEditingController searchEditingController,
     @required this.width,
     @required this.height,
+    @required this.onEditingComplete,
   })  : _searchEditingController = searchEditingController,
         super(key: key);
 
   final TextEditingController _searchEditingController;
   final double width;
   final double height;
+  final Function onEditingComplete;
 
   @override
   Widget build(BuildContext context) {
     return TypeAheadField(
       hideOnEmpty: true,
       hideOnLoading: true,
+      //Todo  hideOnError: true, in production
       textFieldConfiguration: TextFieldConfiguration(
+        onEditingComplete: onEditingComplete,
         controller: _searchEditingController,
         autofocus: true,
         decoration: InputDecoration(
@@ -58,27 +62,23 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
             : [];
       },
       itemBuilder: (context, suggestion) {
-        return Row(
-          children: [
-            Image.network(
-                suggestion.pictures[0].replaceFirstMapped(
-                    "image/upload/",
-                    (match) =>
-                        "image/upload/w_${(width * 0.1).round()},f_auto/"),
-                height: height * 0.1,
-                fit: BoxFit.cover,
-                width: width * 0.1),
-            SizedBox(width: 20),
-            Text(suggestion.title),
-            SizedBox(width: 5),
-          ],
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              SizedBox(width: 20),
+              Text(suggestion.title),
+              SizedBox(width: 5),
+            ],
+          ),
         );
       },
       onSuggestionSelected: (suggestion) {
         /*Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ProductPage(product: suggestion)));
           */
-        print("hello");
+        _searchEditingController.text = suggestion.title;
+        //   print("hello");
       },
     );
   }

@@ -15,7 +15,7 @@ class _ExploreState extends State<Explore>
   final List<Place> _places = [];
   final ScrollController _scrollController = ScrollController();
   PlaceRepository placeRepository;
-  Future<void> getData(ExplorePlacesBloc bloc) async {
+  Future<void> refreshPlacesList(ExplorePlacesBloc bloc) async {
     _places.clear();
     bloc.add(PlaceFetched(refresh: true));
   }
@@ -54,7 +54,7 @@ class _ExploreState extends State<Explore>
           return RefreshIndicator(
               strokeWidth: 3,
               onRefresh: () async {
-                getData(context.read<ExplorePlacesBloc>());
+                refreshPlacesList(context.read<ExplorePlacesBloc>());
               },
               child: child(
                   state, height, width, context.read<ExplorePlacesBloc>()));

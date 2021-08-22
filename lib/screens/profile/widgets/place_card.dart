@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tahwisa/style/my_colors.dart';
 import 'package:rating_bar/rating_bar.dart';
 import 'package:tahwisa/repositories/models/place.dart';
+import 'package:tahwisa/style/my_colors.dart';
 
 class PlaceCard extends StatelessWidget {
   const PlaceCard({
@@ -9,7 +9,7 @@ class PlaceCard extends StatelessWidget {
     @required this.height,
     @required this.width,
     @required this.index,
-    this.place,
+    @required this.place,
   }) : super(key: key);
 
   final double height;
