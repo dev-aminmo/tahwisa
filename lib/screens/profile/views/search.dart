@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tahwisa/blocs/search_bloc/search_bloc.dart';
 import 'package:tahwisa/repositories/models/place.dart';
@@ -37,92 +38,72 @@ class _SearchScreenState extends State<SearchScreen> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     return HideKeyboardOnTap(
-      child: BlocProvider(
+        child: Scaffold(
+      body: BlocProvider(
         lazy: false,
         create: (_) => SearchBloc(placeRepository: placeRepository),
-        child: ListView(
-          children: [
-            SizedBox(height: height * 0.05),
-            Container(
-              margin: EdgeInsets.only(left: width * 0.02),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+        child: NestedScrollView(
+          floatHeaderSlivers: true,
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverToBoxAdapter(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(child: BlocBuilder<SearchBloc, SearchState>(
-                    builder: (context, state) {
-                      return SearchForPlacesTypeAheadField(
-                        searchEditingController: _searchEditingController,
-                        width: width,
-                        height: height,
-                        onEditingComplete: () {
-                        _dismissKeyboard(context);
-                          context.read<SearchBloc>().add(SearchFirstPageEvent(
-                              query: _searchEditingController.text));
-                        },
-                      );
-                    },
-                  )),
-                  RoundedSearchIcon(
-                    searchIconClicked: () {},
+                  SizedBox(height: height * 0.05),
+                  Container(
+                    margin: EdgeInsets.only(left: width * 0.02),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _buildSearchTextField(),
+                        RoundedSearchIcon(
+                          searchIconClicked: () {},
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                        horizontal: width * 0.05, vertical: height * 0.025),
+                    child: Row(
+                      children: [
+                        Text("14 places found",
+                            style: TextStyle(
+                              color: MyColors.darkBlue,
+                            )),
+                        Expanded(
+                          child: SizedBox(),
+                        ),
+                        Row(
+                          children: [
+                            Text("Filters",
+                                style: TextStyle(
+                                  color: MyColors.darkBlue,
+                                )),
+                            Icon(
+                              Icons.filter_list_sharp,
+                              color: MyColors.lightGreen,
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(
-                  horizontal: width * 0.05, vertical: height * 0.025),
-              child: Row(
-                children: [
-                  Text("14 places found",
-                      style: TextStyle(
-                        color: MyColors.darkBlue,
-                      )),
-                  Expanded(
-                    child: SizedBox(),
-                  ),
-                  Row(
-                    children: [
-                      Text("Filters",
-                          style: TextStyle(
-                            color: MyColors.darkBlue,
-                          )),
-                      Icon(
-                        Icons.filter_list_sharp,
-                        color: MyColors.lightGreen,
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
-            BlocBuilder<SearchBloc, SearchState>(builder: (context, state) {
-              if (state is SearchSuccess) {
-                return SingleChildScrollView(
-                  child: ListView.builder(
-                    physics: ClampingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: state.places.length,
-                    itemBuilder: (ctx, index) {
-                      return PlaceCard(
-                        height: height,
-                        width: width,
-                        index: index,
-                        place: state.places[index],
-                      );
-
-                      return Text("Helllo index $index");
-                    },
-                  ),
-                );
-              } else if (state is SearchEmpty) {
-                return SizedBox(
-                  height: height * 0.7,
-                  child: StreamBuilder<List<Place>>(
-                      stream: context.read<SearchBloc>().places,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          // List<Place> _placesList = snapshot.data;
-                          return ListView.builder(
+            )
+          ],
+          body: BlocBuilder<SearchBloc, SearchState>(builder: (context, state) {
+            if (state is SearchEmpty) {
+              return StreamBuilder<List<Place>>(
+                  stream: context.read<SearchBloc>().places,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return SizedBox(
+                          height: 400,
+                          child: ListView.builder(
+                            physics: ClampingScrollPhysics(),
+                            shrinkWrap: true,
                             itemCount: snapshot.data.length,
                             itemBuilder: (ctx, index) => PlaceCard(
                               place: snapshot.data[index],
@@ -130,24 +111,34 @@ class _SearchScreenState extends State<SearchScreen> {
                               width: width,
                               index: index,
                             ),
-                          );
-                        }
-                        return ListView.builder(
-                          itemCount: 1,
-                          itemBuilder: (ctx, index) => Text(
-                            "State",
-                          ),
-                        );
-                      }),
-                );
-              } else {
-                return Text("State");
-              }
-            })
-          ],
+                          ));
+                    }
+                    return Text(
+                      "State",
+                    );
+                  });
+            } else {
+              return Text("State");
+            }
+          }),
         ),
       ),
-    );
+    ));
+  }
+
+  BlocBuilder<SearchBloc, SearchState> _buildSearchTextField() {
+    return BlocBuilder<SearchBloc, SearchState>(
+        builder: (context, state) => Expanded(
+                child: SearchForPlacesTypeAheadField(
+              searchEditingController: _searchEditingController,
+              width: width,
+              height: height,
+              onEditingComplete: () {
+                _dismissKeyboard(context);
+                context.read<SearchBloc>().add(
+                    SearchFirstPageEvent(query: _searchEditingController.text));
+              },
+            )));
   }
 
   void _dismissKeyboard(BuildContext context) {
