@@ -6,6 +6,7 @@ import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/screens/profile/widgets/hide_keyboard_ontap.dart';
 import 'package:tahwisa/screens/profile/widgets/place_card.dart';
+import 'package:tahwisa/screens/profile/widgets/search/filters_screen.dart';
 import 'package:tahwisa/screens/profile/widgets/search/search_for_places_type_ahead_field.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
@@ -97,18 +98,41 @@ class _SearchScreenState extends State<SearchScreen> {
                               Expanded(
                                 child: SizedBox(),
                               ),
-                              Row(
-                                children: [
-                                  Text("Filters",
-                                      style: TextStyle(
-                                        color: MyColors.darkBlue,
-                                      )),
-                                  Icon(
-                                    Icons.filter_list_sharp,
-                                    color: MyColors.lightGreen,
-                                  )
-                                ],
-                              )
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  focusColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  splashColor: Colors.grey.withOpacity(0.2),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(4.0),
+                                  ),
+                                  onTap: () {
+                                    FocusScope.of(context)
+                                        .requestFocus(FocusNode());
+                                    Navigator.push<dynamic>(
+                                      context,
+                                      MaterialPageRoute<dynamic>(
+                                          builder: (BuildContext context) =>
+                                              FiltersScreen(),
+                                          fullscreenDialog: true),
+                                    );
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Text("Filters",
+                                          style: TextStyle(
+                                            color: MyColors.darkBlue,
+                                          )),
+                                      Icon(
+                                        Icons.filter_list_sharp,
+                                        color: MyColors.lightGreen,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),
