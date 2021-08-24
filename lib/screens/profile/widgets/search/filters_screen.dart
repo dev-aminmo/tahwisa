@@ -1,5 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tahwisa/blocs/drop_down_municipal_bloc/bloc.dart';
+import 'package:tahwisa/blocs/drop_down_state_bloc/bloc.dart';
+import 'package:tahwisa/repositories/dropdowns_repository.dart';
+import 'package:tahwisa/screens/profile/widgets/add_place/municipal_dorpdown.dart';
+import 'package:tahwisa/screens/profile/widgets/add_place/state_dropdown.dart';
+import 'package:tahwisa/style/my_colors.dart';
 
 import 'range_slider_view.dart';
 
@@ -11,9 +17,28 @@ class FiltersScreen extends StatefulWidget {
 class _FiltersScreenState extends State<FiltersScreen> {
   RangeValues _values = const RangeValues(0, 5);
   double distValue = 50.0;
+  double width;
+  double height;
+  DropDownsRepository _dropDownsRepository;
+  DropDownStateBloc _dropDownStateBloc;
+  DropDownsMunicipalBloc _dropDownsMunicipalBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _dropDownsRepository = DropDownsRepository();
+    _dropDownsMunicipalBloc =
+        DropDownsMunicipalBloc(dropDownsRepository: _dropDownsRepository);
+    _dropDownStateBloc = DropDownStateBloc(
+        dropDownsRepository: _dropDownsRepository,
+        municipalBloc: _dropDownsMunicipalBloc)
+      ..add(FetchStates());
+  }
 
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
     return Container(
       color: Color(0xFFFFFFFF),
       child: Scaffold(
@@ -29,6 +54,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                     const Divider(
                       height: 1,
                     ),
+                    buildDropDowns()
                   ],
                 ),
               ),
@@ -38,11 +64,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  left: 16, right: 16, bottom: 16, top: 8),
+                  left: 16, right: 16, bottom: 32, top: 8),
               child: Container(
                 height: 48,
                 decoration: BoxDecoration(
-                  color: Color(0xff54D3C2),
+                  color: MyColors.lightGreen,
                   borderRadius: const BorderRadius.all(Radius.circular(24.0)),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
@@ -77,6 +103,29 @@ class _FiltersScreenState extends State<FiltersScreen> {
         ),
       ),
     );
+  }
+
+  Padding buildDropDowns() {
+    return Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Location',
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                  fontWeight: FontWeight.normal),
+            ),
+            StateDropdown(
+                dropDownStateBloc: _dropDownStateBloc, height: height),
+            MunicipalDropDown(
+                dropDownsMunicipalBloc: _dropDownsMunicipalBloc,
+                height: height),
+          ],
+        ));
   }
 
   Widget priceBarFilter() {
@@ -117,7 +166,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
   Widget getAppBarUI() {
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xFFFFFFFF),
+        color: const Color(0xFFFFFFFF),
         boxShadow: <BoxShadow>[
           BoxShadow(
               color: Colors.grey.withOpacity(0.2),
