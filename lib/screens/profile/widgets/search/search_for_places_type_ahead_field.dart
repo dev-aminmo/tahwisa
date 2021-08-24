@@ -27,7 +27,7 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
       textFieldConfiguration: TextFieldConfiguration(
         onEditingComplete: onEditingComplete,
         controller: _searchEditingController,
-        autofocus: true,
+        //autofocus: true,
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(
               left: width * 0.07,
@@ -56,7 +56,7 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
             fontSize: 20),
       ),
       suggestionsCallback: (pattern) async {
-        await Future.delayed(Duration(milliseconds: 250));
+        await Future.delayed(Duration(milliseconds: 150));
         return (pattern.length > 1)
             ? await PlaceRepository().search(pattern)
             : [];
