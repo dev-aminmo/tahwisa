@@ -100,9 +100,8 @@ class _ExploreState extends State<Explore>
             );
           }
           return PlaceCard(
-            height: height,
             width: width,
-            index: index,
+            callback: () {},
             place: _places[index],
           );
         },

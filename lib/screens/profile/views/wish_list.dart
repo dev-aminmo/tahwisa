@@ -84,9 +84,8 @@ class _WishListState extends State<WishList> {
             );
           }
           return PlaceCard(
-            height: height,
             width: width,
-            index: index,
+            callback: () {},
             place: _places[index],
           );
         },

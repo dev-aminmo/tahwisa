@@ -23,6 +23,7 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
     return TypeAheadField(
       hideOnEmpty: true,
       hideOnLoading: true,
+
       //Todo  hideOnError: true, in production
       textFieldConfiguration: TextFieldConfiguration(
         onEditingComplete: onEditingComplete,
@@ -44,11 +45,12 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
             border: OutlineInputBorder(),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(width * 0.1),
-                borderSide: BorderSide(color: MyColors.lightGreen, width: 1.5)),
+                borderSide: BorderSide(
+                    color: Colors.grey.withOpacity(0.8), width: 1.5)),
             focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(width * 0.03),
-                borderSide:
-                    BorderSide(color: MyColors.lightGreen, width: 2.5))),
+                borderRadius: BorderRadius.circular(width * 0.1),
+                borderSide: BorderSide(
+                    color: Colors.grey.withOpacity(0.8), width: 2.5))),
         cursorColor: MyColors.lightGreen,
         style: DefaultTextStyle.of(context).style.copyWith(
             color: MyColors.darkBlue,

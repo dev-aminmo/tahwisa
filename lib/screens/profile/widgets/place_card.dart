@@ -3,120 +3,201 @@ import 'package:rating_bar/rating_bar.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
-class PlaceCard extends StatelessWidget {
-  const PlaceCard({
-    Key key,
-    @required this.height,
-    @required this.width,
-    @required this.index,
-    @required this.place,
-  }) : super(key: key);
+Widget buildRating(double x) {
+  return RatingBar.readOnly(
+    size: 24,
+    filledIcon: Icons.star,
+    emptyIcon: Icons.star_border,
+    halfFilledIcon: Icons.star_half,
+    emptyColor: MyColors.darkBlue,
+    filledColor: MyColors.darkBlue,
+    halfFilledColor: MyColors.darkBlue,
+    initialRating: x,
+    isHalfAllowed: true,
+  );
+}
 
-  final double height;
-  final double width;
-  final int index;
+class PlaceCard extends StatelessWidget {
+  const PlaceCard({Key key, @required this.place, this.callback, this.width})
+      : super(key: key);
+
+  final VoidCallback callback;
   final Place place;
+  final width;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(25)),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black12,
-                blurRadius: 4,
-                offset: Offset(-3, -3),
-                spreadRadius: 2)
-          ]),
-      margin: EdgeInsets.symmetric(
-          horizontal: width * 0.025, vertical: height * 0.018),
-      child: Stack(
-        children: [
-          Container(
-              height: height * 0.4,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.grey.shade400, width: 2),
-                  borderRadius: BorderRadius.all(Radius.circular(25))),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                margin: EdgeInsets.only(top: height * 0.3),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              place.title,
-                              style: TextStyle(
-                                  color: MyColors.lightGreen, fontSize: 16),
-                            ),
-                            SizedBox(height: height * 0.008),
-                            Row(children: [
-                              Icon(Icons.location_on, color: MyColors.darkBlue),
-                              Text(
-                                'Algiers, Algeria',
-                                style: TextStyle(
-                                    color: MyColors.darkBlue, fontSize: 16),
-                              ),
-                            ]),
-                          ]),
-                      IconButton(
-                        icon: Icon(Icons.favorite,
-                            color: MyColors.darkBlue, size: 32),
-                        onPressed: () {},
-                      )
-                    ]),
-              )),
-          Stack(
-            children: [
-              Transform.translate(
-                offset: Offset(0, -5),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(25),
-                        topLeft: Radius.circular(25)),
-                    child: Stack(
-                      children: [
-                        Container(
-                          color: Colors.grey.shade400,
-                          width: width * 0.96,
-                          height: height * 0.3,
-                        ),
-                        Image.network(
-                          //"https://source.unsplash.com/random/${(width * 0.96).round()}x${(height * 0.3).round()}?nature?sig=$index",
-                          place.pictures[0].replaceFirstMapped(
-                              "image/upload/",
-                              (match) =>
-                                  "image/upload/w_${(width * 0.96).round()},f_auto/"),
-                          height: height * 0.3,
-                          fit: BoxFit.cover,
-                          width: width * 0.97,
-                        ),
-                      ],
-                    )),
+    return Padding(
+      padding: EdgeInsets.only(
+          left: width * 0.025, right: width * 0.025, top: 8, bottom: 16),
+      child: InkWell(
+        splashColor: Colors.transparent,
+        onTap: callback,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+            color: Colors.grey.shade400,
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.6),
+                offset: const Offset(4, 4),
+                blurRadius: 16,
               ),
-              Positioned(bottom: 20, left: 20, child: buildRating(3.2))
             ],
           ),
-        ],
+          child: ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+            child: Stack(
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    AspectRatio(
+                      aspectRatio: 2,
+                      child: Image.network(
+                        place.pictures[0].replaceFirstMapped(
+                            "image/upload/",
+                            (match) =>
+                                "image/upload/w_${(width).round()},f_auto/"),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Container(
+                      color: const Color(0xFFFFFFFF),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 16, top: 8, bottom: 8),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(right: 16),
+                                      child: Text(
+                                        place.title,
+                                        textAlign: TextAlign.left,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.location_on,
+                                          size: 14,
+                                          color: Color(0xff54D3C2),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            'Chlef, Chettia',
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.grey
+                                                    .withOpacity(0.8)),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 4),
+                                      child: Row(
+                                        children: <Widget>[
+                                          buildRating(3.5),
+                                          /*RatingBar(
+                                                    initialRating:
+                                                    hotelData!.rating,
+                                                    direction: Axis.horizontal,
+                                                    allowHalfRating: true,
+                                                    itemCount: 5,
+                                                    itemSize: 24,
+                                                    ratingWidget: RatingWidget(
+                                                      full: Icon(
+                                                        Icons.star_rate_rounded,
+                                                        color: HotelAppTheme
+                                                            .buildLightTheme()
+                                                            .primaryColor,
+                                                      ),
+                                                      half: Icon(
+                                                        Icons.star_half_rounded,
+                                                        color: HotelAppTheme
+                                                            .buildLightTheme()
+                                                            .primaryColor,
+                                                      ),
+                                                      empty: Icon(
+                                                        Icons
+                                                            .star_border_rounded,
+                                                        color: HotelAppTheme
+                                                            .buildLightTheme()
+                                                            .primaryColor,
+                                                      ),
+                                                    ),
+                                                    itemPadding:
+                                                    EdgeInsets.zero,
+                                                    onRatingUpdate: (rating) {
+                                                      print(rating);
+                                                    },
+                                                  ),*/
+                                          Text(
+                                            ' 62 Reviews',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.grey
+                                                    .withOpacity(0.8)),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(32.0),
+                      ),
+                      onTap: () {},
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.favorite_border,
+                          color: Color(0xff54D3C2),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
       ),
-    );
-  }
-
-  Widget buildRating(double x) {
-    return RatingBar.readOnly(
-      filledIcon: Icons.star,
-      emptyIcon: Icons.star_border,
-      halfFilledIcon: Icons.star_half,
-      emptyColor: MyColors.white,
-      filledColor: MyColors.white,
-      halfFilledColor: MyColors.white,
-      initialRating: x,
-      isHalfAllowed: true,
     );
   }
 }

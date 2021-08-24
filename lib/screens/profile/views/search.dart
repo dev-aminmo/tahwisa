@@ -21,44 +21,20 @@ class _SearchScreenState extends State<SearchScreen> {
   double height;
   TextEditingController _searchEditingController;
 
-  ScrollController _scrollViewController;
-  bool _showAppbar = true;
-  bool isScrollingDown = false;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+
     _searchEditingController = TextEditingController();
     placeRepository = RepositoryProvider.of<PlaceRepository>(context);
-
-    _scrollViewController = new ScrollController();
-    _scrollViewController.addListener(() {
-      if (_scrollViewController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
-        if (!isScrollingDown) {
-          isScrollingDown = true;
-          _showAppbar = false;
-          setState(() {});
-        }
-      }
-
-      if (_scrollViewController.position.userScrollDirection ==
-          ScrollDirection.forward) {
-        if (isScrollingDown) {
-          isScrollingDown = false;
-          _showAppbar = true;
-          setState(() {});
-        }
-      }
-    });
   }
 
   @override
   void dispose() {
     _searchEditingController.dispose();
-
-    _scrollViewController.dispose();
-    _scrollViewController.removeListener(() {});
+    _scrollController.dispose();
 
     super.dispose();
   }
@@ -68,100 +44,127 @@ class _SearchScreenState extends State<SearchScreen> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     return HideKeyboardOnTap(
-        child: Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: BlocProvider(
-          lazy: false,
-          create: (_) => SearchBloc(placeRepository: placeRepository),
-          child: NestedScrollView(
-            floatHeaderSlivers: true,
-            headerSliverBuilder: (context, innerBoxIsScrolled) => [
-              SliverToBoxAdapter(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(height: height * 0.05),
-                    Container(
-                      margin: EdgeInsets.only(left: width * 0.02),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          _buildSearchTextField(),
-                          RoundedSearchIcon(
-                            searchIconClicked: () {},
-                          ),
-                        ],
+      child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: BlocProvider(
+            lazy: false,
+            create: (_) => SearchBloc(placeRepository: placeRepository),
+            child: NestedScrollView(
+              floatHeaderSlivers: true,
+              controller: _scrollController,
+              headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                SliverToBoxAdapter(
+                  child: Container(
+                    padding:
+                        EdgeInsets.only(top: height * 0.05, left: width * 0.02),
+                    decoration: BoxDecoration(
+                      // color: Colors.grey.withOpacity(0.2),
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.vertical(
+                        bottom: Radius.circular(38.0),
                       ),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            offset: const Offset(0, 2),
+                            blurRadius: 8.0),
+                      ],
                     ),
-                    Container(
-                      margin: EdgeInsets.symmetric(
-                          horizontal: width * 0.05, vertical: height * 0.025),
-                      child: Row(
-                        children: [
-                          Text("14 places found",
-                              style: TextStyle(
-                                color: MyColors.darkBlue,
-                              )),
-                          Expanded(
-                            child: SizedBox(),
-                          ),
-                          Row(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text("Filters",
+                              _buildSearchTextField(),
+                              RoundedSearchIcon(
+                                searchIconClicked: () {},
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(
+                              horizontal: width * 0.05,
+                              vertical: height * 0.025),
+                          child: Row(
+                            children: [
+                              Text("14 places found",
                                   style: TextStyle(
                                     color: MyColors.darkBlue,
                                   )),
-                              Icon(
-                                Icons.filter_list_sharp,
-                                color: MyColors.lightGreen,
+                              Expanded(
+                                child: SizedBox(),
+                              ),
+                              Row(
+                                children: [
+                                  Text("Filters",
+                                      style: TextStyle(
+                                        color: MyColors.darkBlue,
+                                      )),
+                                  Icon(
+                                    Icons.filter_list_sharp,
+                                    color: MyColors.lightGreen,
+                                  )
+                                ],
                               )
                             ],
-                          )
-                        ],
-                      ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              )
-            ],
-            body:
-                BlocBuilder<SearchBloc, SearchState>(builder: (context, state) {
-              if (state is SearchEmpty) {
-                return StreamBuilder<List<Place>>(
-                    stream: context.read<SearchBloc>().places,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return ListView.builder(
-                          physics: ClampingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (ctx, index) => PlaceCard(
-                            place: snapshot.data[index],
-                            height: height,
-                            width: width,
-                            index: index,
+                  ),
+                )
+              ],
+              body: BlocBuilder<SearchBloc, SearchState>(
+                  builder: (context, state) {
+                if (state is SearchEmpty) {
+                  return StreamBuilder<List<Place>>(
+                      stream: context.read<SearchBloc>().places,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                              // physics: ClampingScrollPhysics(),
+                              physics: BouncingScrollPhysics(),
+                              // shrinkWrap: true,
+                              itemCount: snapshot.data.length,
+                              /*
+                            itemBuilder: (ctx, index) => PlaceCard(
+                              place: snapshot.data[index],
+                              height: height,
+                              width: width,
+                              index: index,
+                            ),*/
+                              padding: const EdgeInsets.only(top: 8),
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: (ctx, index) {
+                                return PlaceCard(
+                                  place: snapshot.data[index],
+                                  callback: () {},
+                                  width: width,
+                                );
+                              });
+                        }
+                        return Container(
+                          height: 100,
+                          color: Colors.red,
+                          child: Text(
+                            "State 1",
                           ),
                         );
-                      }
-                      return Container(
-                        height: 100,
-                        color: Colors.red,
-                        child: Text(
-                          "State 1",
-                        ),
-                      );
-                    });
-              } else {
-                return Container(
-                    height: 100,
-                    color: Colors.red,
-                    child: Text(
-                      "State 0",
-                    ));
-              }
-            }),
+                      });
+                } else {
+                  return Container(
+                      height: 100,
+                      child: Text(
+                        "State 0",
+                      ));
+                }
+              }),
+            ),
           )),
-    ));
+    );
   }
 
   BlocBuilder<SearchBloc, SearchState> _buildSearchTextField() {
