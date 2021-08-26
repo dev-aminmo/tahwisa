@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:tahwisa/repositories/models/place.dart';
+import 'package:tahwisa/repositories/models/tag.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
@@ -23,7 +25,7 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
     return TypeAheadField(
       hideOnEmpty: true,
       hideOnLoading: true,
-
+      debounceDuration: const Duration(milliseconds: 150),
       //Todo  hideOnError: true, in production
       textFieldConfiguration: TextFieldConfiguration(
         onEditingComplete: onEditingComplete,
@@ -58,28 +60,44 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
             fontSize: 20),
       ),
       suggestionsCallback: (pattern) async {
-        await Future.delayed(Duration(milliseconds: 150));
         return (pattern.length > 1)
-            ? await PlaceRepository().search(pattern)
+            ? await PlaceRepository().autocomplete(pattern)
             : [];
       },
       itemBuilder: (context, suggestion) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              SizedBox(width: 20),
-              Text(suggestion.title),
-              SizedBox(width: 5),
-            ],
-          ),
-        );
+        if (suggestion is Place) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Icon(Icons.place),
+                SizedBox(width: 20),
+                Text(suggestion.title),
+                SizedBox(width: 5),
+              ],
+            ),
+          );
+        }
+        if (suggestion is Tag) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Icon(Icons.tag),
+                SizedBox(width: 20),
+                Text(suggestion.name),
+                SizedBox(width: 5),
+              ],
+            ),
+          );
+        }
+        return SizedBox();
       },
       onSuggestionSelected: (suggestion) {
         /*Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ProductPage(product: suggestion)));
           */
-        _searchEditingController.text = suggestion.title;
+        //  _searchEditingController.text = suggestion.title;
         //   print("hello");
       },
     );

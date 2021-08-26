@@ -200,8 +200,7 @@ class _SearchScreenState extends State<SearchScreen> {
               height: height,
               onEditingComplete: () {
                 _dismissKeyboard(context);
-                context.read<SearchBloc>().add(
-                    SearchFirstPageEvent(query: _searchEditingController.text));
+                // context.read<SearchBloc>().add(SearchFirstPageEvent(query: _searchEditingController.text));
               },
             )));
   }

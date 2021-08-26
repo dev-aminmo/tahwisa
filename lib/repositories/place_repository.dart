@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api/api_endpoints.dart';
 import 'models/place.dart';
+import 'models/tag.dart';
 
 class PlaceRepository {
   Future<dynamic> fetchPlaces(int page) async {
@@ -48,6 +49,35 @@ class PlaceRepository {
         places.add(place);
       }
       return places;
+    } catch (e) {
+      throw (e.toString());
+    }
+  }
+
+  Future<dynamic> autocomplete(String pattern) async {
+    try {
+      print(pattern);
+      var pref = await SharedPreferences.getInstance();
+      String token = pref.getString("token");
+      var response = await Dio().get(Api.autocomplete + "?query=$pattern",
+          options: Options(
+            headers: {"Authorization": "Bearer " + token},
+            validateStatus: (status) => true,
+          ) // options.headers["Authorization"] = "Bearer " + token;
+
+          );
+      var data = response.data;
+      List<dynamic> suggestions = [];
+      for (var jsonPlace in data['data']) {
+        var suggestion;
+        if (jsonPlace["model"] == "place") {
+          suggestion = Place.fromJson(jsonPlace);
+        } else if (jsonPlace["model"] == "tag") {
+          suggestion = Tag.fromJson(jsonPlace);
+        }
+        suggestions.add(suggestion);
+      }
+      return suggestions;
     } catch (e) {
       throw (e.toString());
     }
