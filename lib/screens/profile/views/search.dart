@@ -111,13 +111,85 @@ class _SearchScreenState extends State<SearchScreen> {
                                   onTap: () {
                                     FocusScope.of(context)
                                         .requestFocus(FocusNode());
-                                    Navigator.push<dynamic>(
+                                    showModalBottomSheet<void>(
+                                      context: context,
+                                      backgroundColor: Colors.transparent,
+                                      isScrollControlled: true,
+                                      builder: (BuildContext context) {
+                                        return FiltersScreen();
+                                        /* return Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: <Widget>[
+                                            */
+                                        /*
+                                            const SizedBox(
+                                              height: 100,
+                                            ),
+                                            const Text('Modal BottomSheet'),
+                                            const SizedBox(
+                                              height: 100,
+                                            ),*/
+                                        /*
+                                            FiltersScreen(),
+                                            ElevatedButton(
+                                              child: const Text(
+                                                  'Close BottomSheet'),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                            ),
+                                            const SizedBox(
+                                              height: 16,
+                                            ),
+                                          ],
+                                        );*/
+                                      },
+                                    );
+                                    /*   showModalBottomSheet<void>(
+                                      context: context,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                              top: Radius.circular(25))),
+                                      isScrollControlled: true,
+                                      builder: (BuildContext context) {
+                                        return FiltersScreen();
+                                        */ /* return Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: <Widget>[
+                                            */ /*
+                                        */ /*
+                                            const SizedBox(
+                                              height: 100,
+                                            ),
+                                            const Text('Modal BottomSheet'),
+                                            const SizedBox(
+                                              height: 100,
+                                            ),*/ /*
+                                        */ /*
+                                            FiltersScreen(),
+                                            ElevatedButton(
+                                              child: const Text(
+                                                  'Close BottomSheet'),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                            ),
+                                            const SizedBox(
+                                              height: 16,
+                                            ),
+                                          ],
+                                        );*/ /*
+                                      },
+                                    );*/
+                                    /*    Navigator.push<dynamic>(
                                       context,
                                       MaterialPageRoute<dynamic>(
                                           builder: (BuildContext context) =>
                                               FiltersScreen(),
                                           fullscreenDialog: true),
-                                    );
+                                    );*/
                                   },
                                   child: Row(
                                     children: [

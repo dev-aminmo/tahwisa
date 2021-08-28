@@ -35,79 +35,102 @@ class _FiltersScreenState extends State<FiltersScreen> {
       ..add(FetchStates());
   }
 
+  Widget makeDismissible({Widget child}) => GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => Navigator.of(context).pop(),
+      child: GestureDetector(
+        onTap: () {},
+        child: child,
+      ));
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    return Container(
-      color: Color(0xFFFFFFFF),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Column(
-          children: <Widget>[
-            getAppBarUI(),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    priceBarFilter(),
-                    const Divider(
-                      height: 1,
-                    ),
-                    buildDropDowns()
-                  ],
-                ),
-              ),
-            ),
-            const Divider(
-              height: 1,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 16, right: 16, bottom: 32, top: 8),
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  color: MyColors.lightGreen,
-                  borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.6),
-                      blurRadius: 8,
-                      offset: const Offset(4, 4),
-                    ),
-                  ],
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-                    highlightColor: Colors.transparent,
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Center(
-                      child: Text(
-                        'Apply',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
-                            color: Colors.white),
-                      ),
+    return makeDismissible(
+        child: DraggableScrollableSheet(
+            initialChildSize: 0.7,
+            minChildSize: 0.7,
+            maxChildSize: 1,
+            builder: (BuildContext context,
+                    ScrollController scrollController) =>
+                Container(
+                  color: MyColors.white,
+/*
+                  decoration: BoxDecoration(
+                      color: MyColors.white,
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(25))),*/
+                  child: Scaffold(
+                    backgroundColor: Colors.transparent,
+                    body: Column(
+                      children: <Widget>[
+                        //  getAppBarUI(),
+                        SizedBox(height: 20),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            controller: scrollController,
+                            child: Column(
+                              children: <Widget>[
+                                priceBarFilter(),
+                                const Divider(
+                                  height: 1,
+                                ),
+                                buildDropDowns(),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const Divider(
+                          height: 1,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16, right: 16, bottom: 32, top: 8),
+                          child: Container(
+                            height: 48,
+                            decoration: BoxDecoration(
+                              color: MyColors.lightGreen,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(24.0)),
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.6),
+                                  blurRadius: 8,
+                                  offset: const Offset(4, 4),
+                                ),
+                              ],
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(24.0)),
+                                highlightColor: Colors.transparent,
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Center(
+                                  child: Text(
+                                    'Apply',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 18,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+                )));
   }
 
   Padding buildDropDowns() {
     return Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(32),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
