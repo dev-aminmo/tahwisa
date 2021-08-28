@@ -57,7 +57,9 @@ class MunicipalDropDown extends StatelessWidget {
           } else if (state is DropDownMunicipalInitial) {
             return SizedBox();
           } else {
-            return CircularProgressIndicator();
+            return Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: CircularProgressIndicator());
           }
         });
   }

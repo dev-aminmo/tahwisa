@@ -11,6 +11,7 @@ part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final placeRepository;
+  final searchQueryCubit;
 
   final _places$ = BehaviorSubject<List<Place>>();
   Stream<List<Place>> get places => _places$;
@@ -21,8 +22,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     _places$.close();
   }
 
-  SearchBloc({@required this.placeRepository})
-      : assert(placeRepository != null),
+  SearchBloc({
+    @required this.placeRepository,
+    @required this.searchQueryCubit,
+  })  : assert(placeRepository != null),
         super(SearchInitial());
 
   @override
@@ -30,10 +33,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     SearchEvent event,
   ) async* {
     if (event is SearchFirstPageEvent) {
-      // final x = await placeRepository.search(event.query);
-      final api_places =
-          await placeRepository.fetchPlaces(int.parse(event.query));
-      _places.addAll(api_places);
+      final searchResult = await placeRepository.search(searchQueryCubit.state);
+      _places.addAll(searchResult);
       //Short hand to avoid duplicates
       _places$.add([
         ...{..._places}

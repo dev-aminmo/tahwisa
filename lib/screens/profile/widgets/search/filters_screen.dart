@@ -55,11 +55,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
                     ScrollController scrollController) =>
                 Container(
                   color: MyColors.white,
-/*
-                  decoration: BoxDecoration(
-                      color: MyColors.white,
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(25))),*/
                   child: Scaffold(
                     backgroundColor: Colors.transparent,
                     body: Column(
@@ -144,9 +139,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
             ),
             StateDropdown(
                 dropDownStateBloc: _dropDownStateBloc, height: height),
-            MunicipalDropDown(
-                dropDownsMunicipalBloc: _dropDownsMunicipalBloc,
-                height: height),
+            Center(
+              child: MunicipalDropDown(
+                  dropDownsMunicipalBloc: _dropDownsMunicipalBloc,
+                  height: height),
+            ),
           ],
         ));
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tahwisa/blocs/search_bloc/search_bloc.dart';
+import 'package:tahwisa/cubits/search_query_cubit.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/screens/profile/widgets/hide_keyboard_ontap.dart';
@@ -17,7 +18,8 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   PlaceRepository placeRepository;
-
+  SearchBloc _searchBloc;
+  SearchQueryCubit _searchQueryCubit;
   double width;
   double height;
   TextEditingController _searchEditingController;
@@ -27,16 +29,19 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
-
     _searchEditingController = TextEditingController();
     placeRepository = RepositoryProvider.of<PlaceRepository>(context);
+    _searchQueryCubit = SearchQueryCubit();
+
+    _searchBloc = SearchBloc(
+        placeRepository: placeRepository, searchQueryCubit: _searchQueryCubit);
   }
 
   @override
   void dispose() {
     _searchEditingController.dispose();
     _scrollController.dispose();
-
+    _searchBloc.close();
     super.dispose();
   }
 
@@ -46,192 +51,112 @@ class _SearchScreenState extends State<SearchScreen> {
     height = MediaQuery.of(context).size.height;
     return HideKeyboardOnTap(
       child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: BlocProvider(
-            lazy: false,
-            create: (_) => SearchBloc(placeRepository: placeRepository),
-            child: NestedScrollView(
-              floatHeaderSlivers: true,
-              controller: _scrollController,
-              headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                SliverToBoxAdapter(
-                  child: Container(
-                    padding:
-                        EdgeInsets.only(top: height * 0.05, left: width * 0.02),
-                    decoration: BoxDecoration(
-                      // color: Colors.grey.withOpacity(0.2),
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.vertical(
-                        bottom: Radius.circular(38.0),
-                      ),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            offset: const Offset(0, 2),
-                            blurRadius: 8.0),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              _buildSearchTextField(),
-                              RoundedSearchIcon(
-                                searchIconClicked: () {},
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                              horizontal: width * 0.05,
-                              vertical: height * 0.025),
-                          child: Row(
-                            children: [
-                              Text("14 places found",
-                                  style: TextStyle(
-                                    color: MyColors.darkBlue,
-                                  )),
-                              Expanded(
-                                child: SizedBox(),
-                              ),
-                              Material(
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  focusColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  splashColor: Colors.grey.withOpacity(0.2),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(4.0),
-                                  ),
-                                  onTap: () {
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
-                                    showModalBottomSheet<void>(
-                                      context: context,
-                                      backgroundColor: Colors.transparent,
-                                      isScrollControlled: true,
-                                      builder: (BuildContext context) {
-                                        return FiltersScreen();
-                                        /* return Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: <Widget>[
-                                            */
-                                        /*
-                                            const SizedBox(
-                                              height: 100,
-                                            ),
-                                            const Text('Modal BottomSheet'),
-                                            const SizedBox(
-                                              height: 100,
-                                            ),*/
-                                        /*
-                                            FiltersScreen(),
-                                            ElevatedButton(
-                                              child: const Text(
-                                                  'Close BottomSheet'),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                            ),
-                                            const SizedBox(
-                                              height: 16,
-                                            ),
-                                          ],
-                                        );*/
-                                      },
-                                    );
-                                    /*   showModalBottomSheet<void>(
-                                      context: context,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.vertical(
-                                              top: Radius.circular(25))),
-                                      isScrollControlled: true,
-                                      builder: (BuildContext context) {
-                                        return FiltersScreen();
-                                        */ /* return Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: <Widget>[
-                                            */ /*
-                                        */ /*
-                                            const SizedBox(
-                                              height: 100,
-                                            ),
-                                            const Text('Modal BottomSheet'),
-                                            const SizedBox(
-                                              height: 100,
-                                            ),*/ /*
-                                        */ /*
-                                            FiltersScreen(),
-                                            ElevatedButton(
-                                              child: const Text(
-                                                  'Close BottomSheet'),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                            ),
-                                            const SizedBox(
-                                              height: 16,
-                                            ),
-                                          ],
-                                        );*/ /*
-                                      },
-                                    );*/
-                                    /*    Navigator.push<dynamic>(
-                                      context,
-                                      MaterialPageRoute<dynamic>(
-                                          builder: (BuildContext context) =>
-                                              FiltersScreen(),
-                                          fullscreenDialog: true),
-                                    );*/
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Text("Filters",
-                                          style: TextStyle(
-                                            color: MyColors.darkBlue,
-                                          )),
-                                      Icon(
-                                        Icons.filter_list_sharp,
-                                        color: MyColors.lightGreen,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+        resizeToAvoidBottomInset: false,
+        body: NestedScrollView(
+          floatHeaderSlivers: true,
+          controller: _scrollController,
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverToBoxAdapter(
+              child: Container(
+                padding:
+                    EdgeInsets.only(top: height * 0.05, left: width * 0.02),
+                decoration: BoxDecoration(
+                  // color: Colors.grey.withOpacity(0.2),
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.vertical(
+                    bottom: Radius.circular(38.0),
                   ),
-                )
-              ],
-              body: BlocBuilder<SearchBloc, SearchState>(
-                  builder: (context, state) {
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        offset: const Offset(0, 2),
+                        blurRadius: 8.0),
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          _buildSearchTextField(),
+                          RoundedSearchIcon(
+                            searchIconClicked: () {
+                              _dismissKeyboard(context);
+                              _addSearchFirstPageEvent();
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal: width * 0.05, vertical: height * 0.025),
+                      child: Row(
+                        children: [
+                          Text("14 places found",
+                              style: TextStyle(
+                                color: MyColors.darkBlue,
+                              )),
+                          Expanded(
+                            child: SizedBox(),
+                          ),
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              focusColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              splashColor: Colors.grey.withOpacity(0.2),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(4.0),
+                              ),
+                              onTap: () {
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
+                                showModalBottomSheet<void>(
+                                  context: context,
+                                  backgroundColor: Colors.transparent,
+                                  isScrollControlled: true,
+                                  builder: (BuildContext context) {
+                                    return FiltersScreen();
+                                  },
+                                );
+                              },
+                              child: Row(
+                                children: [
+                                  Text("Filters",
+                                      style: TextStyle(
+                                        color: MyColors.darkBlue,
+                                      )),
+                                  Icon(
+                                    Icons.filter_list_sharp,
+                                    color: MyColors.lightGreen,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+          body: BlocBuilder<SearchBloc, SearchState>(
+              cubit: _searchBloc,
+              builder: (context, state) {
                 if (state is SearchEmpty) {
                   return StreamBuilder<List<Place>>(
-                      stream: context.read<SearchBloc>().places,
+                      stream: _searchBloc.places,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return ListView.builder(
-                              // physics: ClampingScrollPhysics(),
                               physics: BouncingScrollPhysics(),
-                              // shrinkWrap: true,
                               itemCount: snapshot.data.length,
-                              /*
-                            itemBuilder: (ctx, index) => PlaceCard(
-                              place: snapshot.data[index],
-                              height: height,
-                              width: width,
-                              index: index,
-                            ),*/
                               padding: const EdgeInsets.only(top: 8),
                               scrollDirection: Axis.vertical,
                               itemBuilder: (ctx, index) {
@@ -258,13 +183,14 @@ class _SearchScreenState extends State<SearchScreen> {
                       ));
                 }
               }),
-            ),
-          )),
+        ),
+      ),
     );
   }
 
   BlocBuilder<SearchBloc, SearchState> _buildSearchTextField() {
     return BlocBuilder<SearchBloc, SearchState>(
+        cubit: _searchBloc,
         builder: (context, state) => Expanded(
                 child: SearchForPlacesTypeAheadField(
               searchEditingController: _searchEditingController,
@@ -272,7 +198,7 @@ class _SearchScreenState extends State<SearchScreen> {
               height: height,
               onEditingComplete: () {
                 _dismissKeyboard(context);
-                // context.read<SearchBloc>().add(SearchFirstPageEvent(query: _searchEditingController.text));
+                _addSearchFirstPageEvent();
               },
             )));
   }
@@ -282,6 +208,11 @@ class _SearchScreenState extends State<SearchScreen> {
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
     }
+  }
+
+  void _addSearchFirstPageEvent() {
+    _searchQueryCubit.setQuery(_searchEditingController.text);
+    _searchBloc.add(SearchFirstPageEvent());
   }
 }
 

@@ -54,10 +54,12 @@ class PlaceCard extends StatelessWidget {
                     AspectRatio(
                       aspectRatio: 2,
                       child: Image.network(
-                        place.pictures[0].replaceFirstMapped(
+                        /* place.pictures[0].replaceFirstMapped(
                             "image/upload/",
                             (match) =>
                                 "image/upload/w_${(width).round()},f_auto/"),
+                        */
+                        "https://images.unsplash.com/photo-1517712604573-5cd32ea201a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8dW5rbm93bnx8fHx8fDE2MzAxNzUxNTU&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
                         fit: BoxFit.cover,
                       ),
                     ),

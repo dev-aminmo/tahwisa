@@ -7,8 +7,4 @@ abstract class SearchEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class SearchFirstPageEvent extends SearchEvent {
-  final String query;
-
-  SearchFirstPageEvent({this.query = ''});
-}
+class SearchFirstPageEvent extends SearchEvent {}

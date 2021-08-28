@@ -44,7 +44,7 @@ class PlaceRepository {
           );
       var data = response.data;
       List<Place> places = [];
-      for (var jsonPlace in data['data']) {
+      for (var jsonPlace in data['data']['data']) {
         var place = Place.fromJson(jsonPlace);
         places.add(place);
       }
@@ -56,7 +56,6 @@ class PlaceRepository {
 
   Future<dynamic> autocomplete(String pattern) async {
     try {
-      print(pattern);
       var pref = await SharedPreferences.getInstance();
       String token = pref.getString("token");
       var response = await Dio().get(Api.autocomplete + "?query=$pattern",
