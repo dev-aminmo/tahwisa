@@ -27,4 +27,23 @@ class TagRepository {
         .where((tag) => tag.name.toLowerCase().contains(query.toLowerCase()))
         .toList();
   }
+
+  Future<List<Tag>> getTopTags() async {
+    var pref = await SharedPreferences.getInstance();
+    String token = pref.getString("token");
+    var response = await Dio().get(Api.tags + "/top",
+        options: Options(
+          headers: {"Authorization": "Bearer " + token},
+        ));
+    var data = response.data;
+    List<Tag> tags = [];
+
+    for (var jsonTag in data["data"]) {
+      var tag = Tag.fromJson(jsonTag);
+      tags.add(tag);
+    }
+    print(tags.length);
+
+    return tags;
+  }
 }

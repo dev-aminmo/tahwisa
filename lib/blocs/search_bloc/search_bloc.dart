@@ -6,13 +6,16 @@ import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/models/query_response.dart';
+import 'package:tahwisa/repositories/models/tag.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
+import 'package:tahwisa/repositories/tag_repository.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final PlaceRepository placeRepository;
+  final TagRepository tagRepository;
   final searchQueryCubit;
 
   final _places$ = BehaviorSubject<List<Place>>();
@@ -31,6 +34,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc({
     @required this.placeRepository,
     @required this.searchQueryCubit,
+    @required this.tagRepository,
   })  : assert(placeRepository != null),
         super(SearchInitial());
 
@@ -38,6 +42,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   Stream<SearchState> mapEventToState(
     SearchEvent event,
   ) async* {
+    if (event is FetchTags) {
+      final List<Tag> _tags = await tagRepository.getTopTags();
+      yield TagsFetched(tags: _tags);
+    }
     if (event is SearchFirstPageEvent) {
       final QueryResponse _queryResponse =
           await placeRepository.search(query: event.query);

@@ -5,6 +5,7 @@ import 'package:tahwisa/blocs/search_bloc/search_bloc.dart';
 import 'package:tahwisa/cubits/search_query_cubit.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
+import 'package:tahwisa/repositories/tag_repository.dart';
 import 'package:tahwisa/screens/profile/widgets/hide_keyboard_ontap.dart';
 import 'package:tahwisa/screens/profile/widgets/place_card.dart';
 import 'package:tahwisa/screens/profile/widgets/search/filters_screen.dart';
@@ -32,9 +33,13 @@ class _SearchScreenState extends State<SearchScreen> {
     _searchEditingController = TextEditingController();
     placeRepository = RepositoryProvider.of<PlaceRepository>(context);
     _searchQueryCubit = SearchQueryCubit();
+    TagRepository _tagRepository = TagRepository();
 
     _searchBloc = SearchBloc(
-        placeRepository: placeRepository, searchQueryCubit: _searchQueryCubit);
+      placeRepository: placeRepository,
+      searchQueryCubit: _searchQueryCubit,
+      tagRepository: _tagRepository,
+    )..add(FetchTags());
   }
 
   @override
@@ -162,6 +167,43 @@ class _SearchScreenState extends State<SearchScreen> {
                 }
               },
               builder: (context, state) {
+                if (state is TagsFetched) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: GridView.builder(
+                        itemCount: state.tags.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 16,
+                            childAspectRatio: 1.4,
+                            mainAxisSpacing: 16),
+                        itemBuilder: (context, index) {
+                          //  return Text("${state.tags[index].name}");
+                          return Container(
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    state.tags[index].picture,
+                                  ),
+                                  fit: BoxFit.cover,
+                                )),
+                            child: Center(
+                                child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 4, vertical: 2),
+                              color: Colors.black.withOpacity(0.05),
+                              child: Text("${state.tags[index].name}",
+                                  style: TextStyle(
+                                      color: MyColors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600)),
+                            )),
+                          );
+                        }),
+                  );
+                }
                 if (state is SearchSuccess) {
                   _searchBloc..isFetching = false;
 

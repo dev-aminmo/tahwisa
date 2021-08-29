@@ -34,4 +34,6 @@ class SearchPageRequested extends SearchEvent {
   }
 }
 
+class FetchTags extends SearchEvent {}
+
 class SearchCleared extends SearchEvent {}
