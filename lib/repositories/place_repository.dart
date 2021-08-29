@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tahwisa/repositories/models/query_response.dart';
 
@@ -32,24 +33,30 @@ class PlaceRepository {
     }
   }
 
-  Future<dynamic> search(String pattern) async {
+  Future<dynamic> search({@required String query, int page = 1}) async {
+    print("page $page");
     try {
       var pref = await SharedPreferences.getInstance();
       String token = pref.getString("token");
-      var response = await Dio().get(Api.search_places + "?query=$pattern",
-          options: Options(
-            headers: {"Authorization": "Bearer " + token},
-            validateStatus: (status) => true,
-          ) // options.headers["Authorization"] = "Bearer " + token;
+      var response =
+          await Dio().get(Api.search_places + "?query=$query&page=$page",
+              options: Options(
+                headers: {"Authorization": "Bearer " + token},
+                validateStatus: (status) => true,
+              ) // options.headers["Authorization"] = "Bearer " + token;
 
-          );
+              );
       var data = response.data;
       List<Place> places = [];
       for (var jsonPlace in data['data']['data']) {
         var place = Place.fromJson(jsonPlace);
         places.add(place);
       }
-
+      var arr = [];
+      for (var place in places) {
+        arr.add(place.id);
+      }
+      print(arr);
       return QueryResponse(
           results: places,
           numPages: data['data']['last_page'],

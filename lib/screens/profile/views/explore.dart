@@ -89,6 +89,7 @@ class _ExploreState extends State<Explore>
               bloc
                 ..isFetching = true
                 ..add(PlaceFetched());
+              print("fetch more places");
             }
           }),
         itemCount: _places.length + 1,

@@ -81,7 +81,7 @@ class PlaceCard extends StatelessWidget {
                                     Padding(
                                       padding: EdgeInsets.only(right: 16),
                                       child: Text(
-                                        place.title,
+                                        " ${place.id} " + place.title,
                                         textAlign: TextAlign.left,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(

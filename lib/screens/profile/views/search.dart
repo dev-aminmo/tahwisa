@@ -25,7 +25,7 @@ class _SearchScreenState extends State<SearchScreen> {
   TextEditingController _searchEditingController;
 
   final ScrollController _scrollController = ScrollController();
-
+  bool _canLoadMore = true;
   @override
   void initState() {
     super.initState();
@@ -142,20 +142,60 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             )
           ],
-          body: BlocBuilder<SearchBloc, SearchState>(
+          body: BlocConsumer<SearchBloc, SearchState>(
               cubit: _searchBloc,
+              listenWhen: (prev, next) {
+                if (prev is SearchSuccess && next is SearchSuccess) {
+                  return true;
+                }
+                return false;
+              },
+              listener: (prev, next) {
+                print("consumerr called.........................");
+
+                if (next is SearchSuccess) {
+                  print("consumerr exuted.........................");
+                  setState(() {
+                    _canLoadMore = next.canLoadMore(_searchBloc.page);
+                  });
+                  print(_canLoadMore);
+                }
+              },
               builder: (context, state) {
                 if (state is SearchSuccess) {
+                  _searchBloc..isFetching = false;
+
                   return StreamBuilder<List<Place>>(
                       stream: _searchBloc.places,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return ListView.builder(
+                              controller: _scrollController
+                                ..addListener(() {
+                                  if ((_scrollController.offset ==
+                                              _scrollController
+                                                  .position.maxScrollExtent &&
+                                          !_searchBloc.isFetching) &&
+                                      _canLoadMore) {
+                                    _searchBloc
+                                      ..isFetching = true
+                                      ..add(SearchPageRequested(state));
+                                  }
+                                }),
                               physics: BouncingScrollPhysics(),
-                              itemCount: snapshot.data.length,
+                              itemCount: snapshot.data.length + 1,
                               padding: const EdgeInsets.only(top: 8),
                               scrollDirection: Axis.vertical,
                               itemBuilder: (ctx, index) {
+                                if (index == snapshot.data.length) {
+                                  return (_canLoadMore)
+                                      ? Container(
+                                          padding: const EdgeInsets.all(25),
+                                          child: const Center(
+                                              child:
+                                                  CircularProgressIndicator()))
+                                      : const SizedBox();
+                                }
                                 return PlaceCard(
                                   place: snapshot.data[index],
                                   callback: () {},

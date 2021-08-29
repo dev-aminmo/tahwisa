@@ -22,16 +22,15 @@ class SearchFirstPageEvent extends SearchEvent {
 }
 
 class SearchPageRequested extends SearchEvent {
-  final int page;
-
-  const SearchPageRequested(this.page);
+  final SearchSuccess state;
+  const SearchPageRequested(this.state);
 
   @override
-  List<Object> get props => [page];
+  List<Object> get props => [state];
 
   @override
   String toString() {
-    return 'SearchPageRequested { page: $page }';
+    return 'SearchPageRequested { state : $state }';
   }
 }
 

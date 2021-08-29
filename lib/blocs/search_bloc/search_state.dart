@@ -1,11 +1,6 @@
 part of 'search_bloc.dart';
 
-@immutable
-abstract class SearchState extends Equatable {
-  const SearchState();
-  @override
-  List<Object> get props => [];
-}
+abstract class SearchState {}
 
 class SearchInitial extends SearchState {}
 
@@ -15,27 +10,25 @@ class SearchEmpty extends SearchState {}
 
 class SearchSuccess extends SearchState {
   final String query;
-  final int page;
+  //int page;
   final int numPages;
   final int numResults;
-  const SearchSuccess({
+  SearchSuccess({
     @required this.query,
-    @required this.page,
+    //  @required this.page,
     @required this.numPages,
     @required this.numResults,
   });
 
-  @override
-  List<Object> get props => [query, page, numPages, numResults];
+  /// Whether or not there are more pages to load based off
+  /// the current `page` and server-provided `numPages`.
+  bool canLoadMore(int page) => page + 1 <= numPages;
 }
 
 class SearchFailure extends SearchState {
   final String error;
 
-  const SearchFailure({@required this.error});
-
-  @override
-  List<Object> get props => [error];
+  SearchFailure({@required this.error});
 
   @override
   String toString() => 'SearchFailure { error: $error }';

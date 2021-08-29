@@ -23,7 +23,6 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
       }
       try {
         final places = await placeRepository.fetchWishListPlaces(page);
-        print(places.length == 0);
         if (places.length == 0) {
           yield WishListEmpty();
         } else {

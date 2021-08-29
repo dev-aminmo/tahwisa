@@ -23,7 +23,6 @@ class ExplorePlacesBloc extends Bloc<ExplorePlacesEvent, ExplorePlacesState> {
       }
       try {
         final places = await placeRepository.fetchPlaces(page);
-        print(places.length == 0);
         if (places.length == 0) {
           yield ExplorePlacesEmpty();
         } else {
