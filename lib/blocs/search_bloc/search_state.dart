@@ -14,10 +14,19 @@ class SearchProgress extends SearchState {}
 class SearchEmpty extends SearchState {}
 
 class SearchSuccess extends SearchState {
-  final List<Place> places;
-  SearchSuccess({@required this.places});
+  final String query;
+  final int page;
+  final int numPages;
+  final int numResults;
+  const SearchSuccess({
+    @required this.query,
+    @required this.page,
+    @required this.numPages,
+    @required this.numResults,
+  });
+
   @override
-  List<Object> get props => [places];
+  List<Object> get props => [query, page, numPages, numResults];
 }
 
 class SearchFailure extends SearchState {

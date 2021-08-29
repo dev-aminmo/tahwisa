@@ -54,23 +54,19 @@ class _SearchScreenState extends State<SearchScreen> {
         resizeToAvoidBottomInset: false,
         body: NestedScrollView(
           floatHeaderSlivers: true,
-          controller: _scrollController,
+          //     controller: _scrollController,
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             SliverToBoxAdapter(
               child: Container(
                 padding:
                     EdgeInsets.only(top: height * 0.05, left: width * 0.02),
                 decoration: BoxDecoration(
-                  // color: Colors.grey.withOpacity(0.2),
                   color: Colors.white,
-                  borderRadius: const BorderRadius.vertical(
-                    bottom: Radius.circular(38.0),
-                  ),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
+                        color: Colors.grey.withOpacity(0.3),
                         offset: const Offset(0, 2),
-                        blurRadius: 8.0),
+                        blurRadius: 25.0),
                   ],
                 ),
                 child: Column(
@@ -149,7 +145,7 @@ class _SearchScreenState extends State<SearchScreen> {
           body: BlocBuilder<SearchBloc, SearchState>(
               cubit: _searchBloc,
               builder: (context, state) {
-                if (state is SearchEmpty) {
+                if (state is SearchSuccess) {
                   return StreamBuilder<List<Place>>(
                       stream: _searchBloc.places,
                       builder: (context, snapshot) {
@@ -211,8 +207,8 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void _addSearchFirstPageEvent() {
-    _searchQueryCubit.setQuery(_searchEditingController.text);
-    _searchBloc.add(SearchFirstPageEvent());
+    //_searchQueryCubit.setQuery(_searchEditingController.text);
+    _searchBloc.add(SearchFirstPageEvent(_searchEditingController.text));
   }
 }
 

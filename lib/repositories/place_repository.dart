@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tahwisa/repositories/models/query_response.dart';
 
 import 'api/api_endpoints.dart';
 import 'models/place.dart';
@@ -48,7 +49,11 @@ class PlaceRepository {
         var place = Place.fromJson(jsonPlace);
         places.add(place);
       }
-      return places;
+
+      return QueryResponse(
+          results: places,
+          numPages: data['data']['last_page'],
+          numResults: data['data']['total']);
     } catch (e) {
       throw (e.toString());
     }
@@ -99,6 +104,7 @@ class PlaceRepository {
         var place = Place.fromJson(jsonPlace);
         places.add(place);
       }
+
       return places;
     } catch (e) {
       throw (e.toString());

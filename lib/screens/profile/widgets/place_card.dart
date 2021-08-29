@@ -188,9 +188,9 @@ class PlaceCard extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Icon(
-                          Icons.favorite_border,
-                          color: Color(0xff54D3C2),
-                        ),
+                            //Icons.favorite_outlined,
+                            Icons.favorite_border,
+                            color: MyColors.lightGreen),
                       ),
                     ),
                   ),
