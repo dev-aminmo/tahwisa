@@ -4,12 +4,6 @@ abstract class SearchState {}
 
 class SearchInitial extends SearchState {}
 
-class TagsFetched extends SearchState {
-  final List<Tag> tags;
-
-  TagsFetched({@required this.tags});
-}
-
 class SearchProgress extends SearchState {}
 
 class SearchEmpty extends SearchState {}

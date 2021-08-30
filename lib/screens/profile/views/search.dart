@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tahwisa/blocs/search_bloc/search_bloc.dart';
 import 'package:tahwisa/cubits/search_query_cubit.dart';
+import 'package:tahwisa/cubits/top_tags_cubit/top_tags_cubit.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/tag_repository.dart';
 import 'package:tahwisa/screens/profile/widgets/hide_keyboard_ontap.dart';
 import 'package:tahwisa/screens/profile/widgets/place_card.dart';
-import 'package:tahwisa/screens/profile/widgets/search/filters_screen.dart';
-import 'package:tahwisa/screens/profile/widgets/search/search_for_places_type_ahead_field.dart';
+import 'package:tahwisa/screens/profile/widgets/search/widgets.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -24,7 +23,7 @@ class _SearchScreenState extends State<SearchScreen> {
   double width;
   double height;
   TextEditingController _searchEditingController;
-
+  TopTagsCubit _topTagsCubit;
   final ScrollController _scrollController = ScrollController();
   bool _canLoadMore = true;
   @override
@@ -34,12 +33,12 @@ class _SearchScreenState extends State<SearchScreen> {
     placeRepository = RepositoryProvider.of<PlaceRepository>(context);
     _searchQueryCubit = SearchQueryCubit();
     TagRepository _tagRepository = TagRepository();
-
+    _topTagsCubit = TopTagsCubit(repository: _tagRepository);
     _searchBloc = SearchBloc(
       placeRepository: placeRepository,
       searchQueryCubit: _searchQueryCubit,
       tagRepository: _tagRepository,
-    )..add(FetchTags());
+    );
   }
 
   @override
@@ -82,7 +81,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           _buildSearchTextField(),
-                          RoundedSearchIcon(
+                          RoundedSearchButton(
                             searchIconClicked: () {
                               _dismissKeyboard(context);
                               _addSearchFirstPageEvent();
@@ -167,46 +166,23 @@ class _SearchScreenState extends State<SearchScreen> {
                 }
               },
               builder: (context, state) {
-                if (state is TagsFetched) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: GridView.builder(
-                        itemCount: state.tags.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 16,
-                            childAspectRatio: 1.4,
-                            mainAxisSpacing: 16),
-                        itemBuilder: (context, index) {
-                          //  return Text("${state.tags[index].name}");
-                          return Container(
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    state.tags[index].picture,
-                                  ),
-                                  fit: BoxFit.cover,
-                                )),
-                            child: Center(
-                                child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 4, vertical: 2),
-                              color: Colors.black.withOpacity(0.05),
-                              child: Text("${state.tags[index].name}",
-                                  style: TextStyle(
-                                      color: MyColors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600)),
-                            )),
-                          );
-                        }),
+                if (state is SearchInitial) {
+                  return BlocBuilder<TopTagsCubit, TopTagsState>(
+                    cubit: _topTagsCubit,
+                    builder: (context, state) {
+                      if (state is LoadingState) {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                      if (state is LoadedState) {
+                        var tags = state.tags;
+                        return TopTagsGridView(tags: tags);
+                      }
+                      return SizedBox();
+                    },
                   );
                 }
                 if (state is SearchSuccess) {
                   _searchBloc..isFetching = false;
-
                   return StreamBuilder<List<Place>>(
                       stream: _searchBloc.places,
                       builder: (context, snapshot) {
@@ -291,23 +267,5 @@ class _SearchScreenState extends State<SearchScreen> {
   void _addSearchFirstPageEvent() {
     //_searchQueryCubit.setQuery(_searchEditingController.text);
     _searchBloc.add(SearchFirstPageEvent(_searchEditingController.text));
-  }
-}
-
-class RoundedSearchIcon extends StatelessWidget {
-  const RoundedSearchIcon({
-    this.searchIconClicked,
-  });
-  final searchIconClicked;
-
-  @override
-  Widget build(BuildContext context) {
-    return RawMaterialButton(
-      onPressed: searchIconClicked,
-      padding: EdgeInsets.all(12),
-      fillColor: MyColors.lightGreen,
-      child: Icon(Icons.search, color: Colors.white),
-      shape: CircleBorder(),
-    );
   }
 }
