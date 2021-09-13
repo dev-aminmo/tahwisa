@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tahwisa/blocs/drop_down_municipal_bloc/bloc.dart';
 import 'package:tahwisa/blocs/drop_down_state_bloc/bloc.dart';
-import 'package:tahwisa/repositories/dropdowns_repository.dart';
+import 'package:tahwisa/cubits/search_filter_cubit/search_filter_cubit.dart';
+import 'package:tahwisa/repositories/models/SearchFilter.dart';
 import 'package:tahwisa/screens/profile/widgets/add_place/municipal_dorpdown.dart';
 import 'package:tahwisa/screens/profile/widgets/add_place/state_dropdown.dart';
 import 'package:tahwisa/style/my_colors.dart';
@@ -12,27 +13,25 @@ import 'range_slider_view.dart';
 class FiltersScreen extends StatefulWidget {
   @override
   _FiltersScreenState createState() => _FiltersScreenState();
+  final SearchFilterCubit searchFilterCubit;
+  final DropDownStateBloc _dropDownStateBloc;
+  final DropDownsMunicipalBloc _dropDownsMunicipalBloc;
+
+  const FiltersScreen(this.searchFilterCubit, this._dropDownStateBloc,
+      this._dropDownsMunicipalBloc);
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
-  RangeValues _values = const RangeValues(0, 5);
-  double distValue = 50.0;
+  SearchFilterCubit searchFilterCubit;
+  RangeValues _values;
   double width;
   double height;
-  DropDownsRepository _dropDownsRepository;
-  DropDownStateBloc _dropDownStateBloc;
-  DropDownsMunicipalBloc _dropDownsMunicipalBloc;
 
   @override
   void initState() {
     super.initState();
-    _dropDownsRepository = DropDownsRepository();
-    _dropDownsMunicipalBloc =
-        DropDownsMunicipalBloc(dropDownsRepository: _dropDownsRepository);
-    _dropDownStateBloc = DropDownStateBloc(
-        dropDownsRepository: _dropDownsRepository,
-        municipalBloc: _dropDownsMunicipalBloc)
-      ..add(FetchStates());
+    searchFilterCubit = widget.searchFilterCubit;
+    _initSliderValues();
   }
 
   Widget makeDismissible({Widget child}) => GestureDetector(
@@ -59,68 +58,51 @@ class _FiltersScreenState extends State<FiltersScreen> {
                     backgroundColor: Colors.transparent,
                     body: Column(
                       children: <Widget>[
-                        //  getAppBarUI(),
                         SizedBox(height: 20),
-                        Expanded(
-                          child: SingleChildScrollView(
-                            controller: scrollController,
-                            child: Column(
-                              children: <Widget>[
-                                priceBarFilter(),
-                                const Divider(
-                                  height: 1,
-                                ),
-                                buildDropDowns(),
-                              ],
-                            ),
-                          ),
-                        ),
+                        _buildFiltersList(scrollController),
                         const Divider(
                           height: 1,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 16, right: 16, bottom: 32, top: 8),
-                          child: Container(
-                            height: 48,
-                            decoration: BoxDecoration(
-                              color: MyColors.lightGreen,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(24.0)),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.6),
-                                  blurRadius: 8,
-                                  offset: const Offset(4, 4),
-                                ),
-                              ],
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 9,
+                              child: ApplyButton(),
                             ),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(24.0)),
-                                highlightColor: Colors.transparent,
-                                onTap: () {
-                                  Navigator.pop(context);
+                            Expanded(
+                              flex: 6,
+                              child: ResetButton(
+                                callback: () {
+                                  widget._dropDownStateBloc.add(ClearState());
+                                  _values = const RangeValues(0, 5);
                                 },
-                                child: Center(
-                                  child: Text(
-                                    'Apply',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 18,
-                                        color: Colors.white),
-                                  ),
-                                ),
                               ),
-                            ),
-                          ),
-                        )
+                            )
+                          ],
+                        ),
                       ],
                     ),
                   ),
                 )));
+  }
+
+  Expanded _buildFiltersList(ScrollController scrollController) {
+    return Expanded(
+      child: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        controller: scrollController,
+        child: Column(
+          children: <Widget>[
+            _buildRatingSlider(),
+            const Divider(
+              height: 1,
+            ),
+            buildDropDowns(),
+          ],
+        ),
+      ),
+    );
   }
 
   Padding buildDropDowns() {
@@ -138,17 +120,17 @@ class _FiltersScreenState extends State<FiltersScreen> {
                   fontWeight: FontWeight.normal),
             ),
             StateDropdown(
-                dropDownStateBloc: _dropDownStateBloc, height: height),
+                dropDownStateBloc: widget._dropDownStateBloc, height: height),
             Center(
               child: MunicipalDropDown(
-                  dropDownsMunicipalBloc: _dropDownsMunicipalBloc,
+                  dropDownsMunicipalBloc: widget._dropDownsMunicipalBloc,
                   height: height),
             ),
           ],
         ));
   }
 
-  Widget priceBarFilter() {
+  Widget _buildRatingSlider() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +139,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
           height: 8,
         ),
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.only(top: 16.0, bottom: 16, left: 32),
           child: Text(
             'Reviews average',
             textAlign: TextAlign.left,
@@ -171,9 +153,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
           padding: const EdgeInsets.all(16.0),
           child: RangeSliderView(
             values: _values,
-            onChangeRangeValues: (RangeValues values) {
-              _values = values;
-            },
+            onChangeRangeValues: _setValuesFilter,
           ),
         ),
         const SizedBox(
@@ -183,58 +163,114 @@ class _FiltersScreenState extends State<FiltersScreen> {
     );
   }
 
-  Widget getAppBarUI() {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFFFFF),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              offset: const Offset(0, 2),
-              blurRadius: 4.0),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top, left: 8, right: 8),
-        child: Row(
-          children: <Widget>[
-            Container(
-              alignment: Alignment.centerLeft,
-              width: AppBar().preferredSize.height + 40,
-              height: AppBar().preferredSize.height,
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(32.0),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.close),
-                  ),
-                ),
-              ),
+  void _initSliderValues() {
+    if (searchFilterCubit.state is FilterLoadedState) {
+      _values = RangeValues(
+          ((searchFilterCubit.state) as FilterLoadedState).filter.ratingMin,
+          ((searchFilterCubit.state) as FilterLoadedState).filter.ratingMax);
+    } else {
+      _values = const RangeValues(0, 5);
+    }
+  }
+
+  _setValuesFilter(RangeValues values) {
+    if (searchFilterCubit.state is FilterLoadedState) {
+      searchFilterCubit.setFilter(
+          ((searchFilterCubit.state) as FilterLoadedState).filter.copyWith(
+                ratingMin: values.start,
+                ratingMax: values.end,
+              ));
+    } else {
+      searchFilterCubit.setFilter(SearchFilter(
+        ratingMin: values.start,
+        ratingMax: values.end,
+      ));
+    }
+  }
+}
+
+class ApplyButton extends StatelessWidget {
+  const ApplyButton({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 8, bottom: 32, top: 8),
+      child: Container(
+        height: 48,
+        decoration: BoxDecoration(
+          color: MyColors.lightGreen,
+          borderRadius: const BorderRadius.all(Radius.circular(24.0)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.6),
+              blurRadius: 8,
+              offset: const Offset(4, 4),
             ),
-            Expanded(
-              child: Center(
-                child: Text(
-                  'Filters',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 22,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: AppBar().preferredSize.height + 40,
-              height: AppBar().preferredSize.height,
-            )
           ],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: const BorderRadius.all(Radius.circular(24.0)),
+            highlightColor: Colors.transparent,
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Center(
+              child: Text(
+                'Apply',
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                    color: Colors.white),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ResetButton extends StatelessWidget {
+  final Function callback;
+  const ResetButton({
+    Key key,
+    this.callback,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8, right: 16, bottom: 32, top: 8),
+      child: Container(
+        height: 48,
+        decoration: BoxDecoration(
+            color: MyColors.white,
+            borderRadius: const BorderRadius.all(Radius.circular(24.0)),
+            border: Border.all(
+              color: MyColors.darkBlue,
+              width: 1.5,
+            )),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: const BorderRadius.all(Radius.circular(24.0)),
+            highlightColor: Colors.transparent,
+            onTap: callback,
+            child: Center(
+              child: Text(
+                'Reset',
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                    color: MyColors.darkBlue),
+              ),
+            ),
+          ),
         ),
       ),
     );

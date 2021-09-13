@@ -42,5 +42,9 @@ class DropDownsMunicipalBloc
       _selectedMunicipal$.add(event.municipal);
       // yield (DropDownsMunicipalChosen(municipal: event.municipal));
     }
+
+    if (event is ClearMunicipal) {
+      _selectedMunicipal$.add(null);
+    }
   }
 }

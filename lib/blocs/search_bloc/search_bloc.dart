@@ -42,13 +42,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     SearchEvent event,
   ) async* {
     if (event is SearchFirstPageEvent) {
+      yield SearchProgress();
       final QueryResponse _queryResponse =
           await placeRepository.search(query: event.query);
       _places.addAll(_queryResponse.results);
-      //Short hand to avoid duplicates
-      /*_places$.add([
-        ...{..._places}
-      ]);*/
       _places$.add(_places);
       //if (places.length == 0) {
       yield SearchSuccess(
@@ -61,17 +58,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
     if (event is SearchPageRequested) {
       _page++;
-      print("search bloc page $_page .........................");
-
       final QueryResponse _queryResponse =
           await placeRepository.search(query: event.state.query, page: _page);
 
       _places.addAll(_queryResponse.results);
 
-      //Short hand to avoid duplicates
       _places$.add(_places);
       //if (places.length == 0) {
-      print("page in success state is $_page");
       yield SearchSuccess(
           query: event.state.query,
           numPages: _queryResponse.numPages,

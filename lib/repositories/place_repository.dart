@@ -34,7 +34,6 @@ class PlaceRepository {
   }
 
   Future<dynamic> search({@required String query, int page = 1}) async {
-    print("page $page");
     try {
       var pref = await SharedPreferences.getInstance();
       String token = pref.getString("token");

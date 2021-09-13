@@ -16,9 +16,10 @@ class DropDownStateBloc extends Bloc<DropDownStateEvent, DropDownState> {
   Stream<MyState> get selectedState => _selectedState$;
 
   @override
-  Future<Function> close() {
+  Future<void> close() {
     municipalBloc.close();
     _selectedState$.close();
+    return super.close();
   }
 
   DropDownStateBloc(
@@ -42,6 +43,10 @@ class DropDownStateBloc extends Bloc<DropDownStateEvent, DropDownState> {
     if (event is StateChosen) {
       _selectedState$.add(event.state);
       municipalBloc.add(FetchMuniciaples(state: event.state));
+    }
+    if (event is ClearState) {
+      _selectedState$.add(null);
+      municipalBloc.add(ClearMunicipal());
     }
   }
 }

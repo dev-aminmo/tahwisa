@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tahwisa/blocs/drop_down_municipal_bloc/bloc.dart';
+import 'package:tahwisa/blocs/drop_down_state_bloc/bloc.dart';
 import 'package:tahwisa/blocs/search_bloc/search_bloc.dart';
+import 'package:tahwisa/cubits/search_filter_cubit/search_filter_cubit.dart';
 import 'package:tahwisa/cubits/search_query_cubit.dart';
 import 'package:tahwisa/cubits/top_tags_cubit/top_tags_cubit.dart';
+import 'package:tahwisa/repositories/dropdowns_repository.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/tag_repository.dart';
@@ -25,6 +29,9 @@ class _SearchScreenState extends State<SearchScreen> {
   TextEditingController _searchEditingController;
   TopTagsCubit _topTagsCubit;
   final ScrollController _scrollController = ScrollController();
+  SearchFilterCubit _searchFilterCubit;
+  DropDownStateBloc _dropDownStateBloc;
+  DropDownsMunicipalBloc _dropDownsMunicipalBloc;
   bool _canLoadMore = true;
   @override
   void initState() {
@@ -39,6 +46,19 @@ class _SearchScreenState extends State<SearchScreen> {
       searchQueryCubit: _searchQueryCubit,
       tagRepository: _tagRepository,
     );
+
+    DropDownsRepository _dropDownsRepository = DropDownsRepository();
+    _dropDownsMunicipalBloc =
+        DropDownsMunicipalBloc(dropDownsRepository: _dropDownsRepository);
+    _dropDownStateBloc = DropDownStateBloc(
+        dropDownsRepository: _dropDownsRepository,
+        municipalBloc: _dropDownsMunicipalBloc)
+      ..add(FetchStates());
+
+    _searchFilterCubit = SearchFilterCubit(
+      selectedState: _dropDownStateBloc.selectedState,
+      selectedMunicipal: _dropDownsMunicipalBloc.selectedMunicipal,
+    );
   }
 
   @override
@@ -46,6 +66,8 @@ class _SearchScreenState extends State<SearchScreen> {
     _searchEditingController.dispose();
     _scrollController.dispose();
     _searchBloc.close();
+    _dropDownStateBloc.close();
+    _dropDownsMunicipalBloc.close();
     super.dispose();
   }
 
@@ -120,7 +142,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                   backgroundColor: Colors.transparent,
                                   isScrollControlled: true,
                                   builder: (BuildContext context) {
-                                    return FiltersScreen();
+                                    return FiltersScreen(
+                                      _searchFilterCubit,
+                                      _dropDownStateBloc,
+                                      _dropDownsMunicipalBloc,
+                                    );
                                   },
                                 );
                               },
@@ -170,16 +196,19 @@ class _SearchScreenState extends State<SearchScreen> {
                   return BlocBuilder<TopTagsCubit, TopTagsState>(
                     cubit: _topTagsCubit,
                     builder: (context, state) {
-                      if (state is LoadingState) {
+                      if (state is TagsLoadingState) {
                         return Center(child: CircularProgressIndicator());
                       }
-                      if (state is LoadedState) {
+                      if (state is TagsLoadedState) {
                         var tags = state.tags;
                         return TopTagsGridView(tags: tags);
                       }
                       return SizedBox();
                     },
                   );
+                }
+                if (state is SearchProgress) {
+                  return const Center(child: CircularProgressIndicator());
                 }
                 if (state is SearchSuccess) {
                   _searchBloc..isFetching = false;
@@ -221,13 +250,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 );
                               });
                         }
-                        return Container(
-                          height: 100,
-                          color: Colors.red,
-                          child: Text(
-                            "State 1",
-                          ),
-                        );
+                        return SizedBox();
                       });
                 } else {
                   return Container(

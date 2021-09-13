@@ -5,12 +5,11 @@ import 'package:tahwisa/repositories/models/state.dart';
 @immutable
 abstract class DropDownStateEvent extends Equatable {
   const DropDownStateEvent();
-}
-
-class FetchStates extends DropDownStateEvent {
   @override
   List<Object> get props => [];
 }
+
+class FetchStates extends DropDownStateEvent {}
 
 class StateChosen extends DropDownStateEvent {
   final MyState state;
@@ -24,3 +23,5 @@ class StateChosen extends DropDownStateEvent {
   @override
   String toString() => 'StateChosen { state: $state }';
 }
+
+class ClearState extends DropDownStateEvent {}

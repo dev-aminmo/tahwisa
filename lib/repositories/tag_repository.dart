@@ -14,7 +14,6 @@ class TagRepository {
         options: Options(
           headers: {"Authorization": "Bearer " + token},
         ));
-    print(response.data);
     var data = response.data;
     List<Tag> tags = [];
 

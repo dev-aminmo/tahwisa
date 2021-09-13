@@ -15,9 +15,9 @@ class TopTagsCubit extends Cubit<TopTagsState> {
 
   void getTopTags() async {
     try {
-      emit(LoadingState());
+      emit(TagsLoadingState());
       final tags = await repository.getTopTags();
-      emit(LoadedState(tags));
+      emit(TagsLoadedState(tags));
     } catch (e) {
       emit(ErrorState());
     }
