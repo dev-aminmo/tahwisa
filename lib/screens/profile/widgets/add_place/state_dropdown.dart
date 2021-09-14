@@ -27,7 +27,7 @@ class StateDropdown extends StatelessWidget {
                   stream: _dropDownStateBloc.selectedState,
                   builder: (context, item) {
                     return DropdownButton(
-                      itemHeight: height * 0.1,
+                      itemHeight: 72,
                       isExpanded: true,
                       hint: Text(
                         "State",

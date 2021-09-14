@@ -1,13 +1,13 @@
 part of 'search_filter_cubit.dart';
 
 abstract class SearchFilterState extends Equatable {
-  const SearchFilterState();
-}
+  final SearchFilter filter = SearchFilter();
 
-class SearchFilterInitial extends SearchFilterState {
   @override
   List<Object> get props => [];
 }
+
+class SearchFilterInitial extends SearchFilterState {}
 
 class FilterLoadedState extends SearchFilterState {
   FilterLoadedState(this.filter);

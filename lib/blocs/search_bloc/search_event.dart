@@ -35,3 +35,5 @@ class SearchPageRequested extends SearchEvent {
 }
 
 class SearchCleared extends SearchEvent {}
+
+class FilterUpdated extends SearchEvent {}

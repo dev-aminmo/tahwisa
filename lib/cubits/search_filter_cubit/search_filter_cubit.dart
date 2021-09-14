@@ -25,21 +25,27 @@ class SearchFilterCubit extends Cubit<SearchFilterState> {
       if (state is FilterLoadedState) {
         setFilter(((state) as FilterLoadedState)
             .filter
-            .copyWith(municipalId: '' ?? event?.id.toString()));
+            .copyWith(municipalId: event == null ? '' : event?.id.toString()));
       } else {
-        setFilter(SearchFilter(municipalId: '' ?? event?.id.toString()));
+        setFilter(SearchFilter(
+            municipalId: event == null ? '' : event?.id.toString()));
       }
     });
   }
 
   void _monitorSelectedState(Stream<MyState> selectedState) {
     _selectedStateSubscription = selectedState.listen((event) {
+      print(event?.id.toString() + ".........................stream");
+      //print(event == null ? '' : event?.id.toString());
+      print(event == null ? '' : event?.id.toString());
+
       if (state is FilterLoadedState) {
         setFilter(((state) as FilterLoadedState)
             .filter
-            .copyWith(stateId: '' ?? event?.id.toString()));
+            .copyWith(stateId: event == null ? '' : event?.id.toString()));
       } else {
-        setFilter(SearchFilter(stateId: '' ?? event?.id.toString()));
+        setFilter(
+            SearchFilter(stateId: event == null ? '' : event?.id.toString()));
       }
     });
   }
@@ -47,10 +53,6 @@ class SearchFilterCubit extends Cubit<SearchFilterState> {
   void setFilter(SearchFilter searchFilter) {
     emit(FilterLoadedState(searchFilter));
     print(searchFilter);
-  }
-
-  void setRangeValues(SearchFilter searchFilter) {
-    emit(FilterLoadedState(searchFilter));
   }
 
   void clearFilter() {

@@ -24,9 +24,8 @@ class MunicipalDropDown extends StatelessWidget {
             return StreamBuilder<Municipal>(
                 stream: _dropDownsMunicipalBloc.selectedMunicipal,
                 builder: (context, item) {
-                  print(item.data?.name);
                   return DropdownButton(
-                    itemHeight: height * 0.1,
+                    itemHeight: 72,
                     isExpanded: true,
                     hint: Text(
                       "Municipal",

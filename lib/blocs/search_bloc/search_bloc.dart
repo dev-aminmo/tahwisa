@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:tahwisa/cubits/search_filter_cubit/search_filter_cubit.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/models/query_response.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
@@ -16,6 +17,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final PlaceRepository placeRepository;
   final TagRepository tagRepository;
   final searchQueryCubit;
+  final SearchFilterCubit searchFilterCubit;
 
   final _places$ = BehaviorSubject<List<Place>>();
   Stream<List<Place>> get places => _places$;
@@ -26,14 +28,16 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   //int _page=1;
   @override
-  Future<Function> close() {
+  Future<dynamic> close() {
     _places$.close();
+    return super.close();
   }
 
   SearchBloc({
     @required this.placeRepository,
     @required this.searchQueryCubit,
     @required this.tagRepository,
+    @required this.searchFilterCubit,
   })  : assert(placeRepository != null),
         super(SearchInitial());
 
@@ -70,5 +74,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           numPages: _queryResponse.numPages,
           numResults: _queryResponse.numResults);
     }
+    if (event is FilterUpdated) {}
   }
 }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:tahwisa/blocs/drop_down_municipal_bloc/bloc.dart';
 import 'package:tahwisa/blocs/drop_down_state_bloc/bloc.dart';
 import 'package:tahwisa/cubits/search_filter_cubit/search_filter_cubit.dart';
-import 'package:tahwisa/repositories/models/SearchFilter.dart';
 import 'package:tahwisa/screens/profile/widgets/add_place/municipal_dorpdown.dart';
 import 'package:tahwisa/screens/profile/widgets/add_place/state_dropdown.dart';
 import 'package:tahwisa/style/my_colors.dart';
@@ -74,8 +73,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
                               flex: 6,
                               child: ResetButton(
                                 callback: () {
+                                  setState(() {
+                                    _values = const RangeValues(0, 5);
+                                  });
                                   widget._dropDownStateBloc.add(ClearState());
-                                  _values = const RangeValues(0, 5);
+                                  searchFilterCubit.clearFilter();
                                 },
                               ),
                             )
@@ -153,6 +155,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
           padding: const EdgeInsets.all(16.0),
           child: RangeSliderView(
             values: _values,
+            /*   onChangeRangeValues: (values) {
+              _values = values;
+            },*/
             onChangeRangeValues: _setValuesFilter,
           ),
         ),
@@ -165,27 +170,21 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
   void _initSliderValues() {
     if (searchFilterCubit.state is FilterLoadedState) {
-      _values = RangeValues(
-          ((searchFilterCubit.state) as FilterLoadedState).filter.ratingMin,
-          ((searchFilterCubit.state) as FilterLoadedState).filter.ratingMax);
+      _values = RangeValues(searchFilterCubit.state.filter.ratingMin,
+          searchFilterCubit.state.filter.ratingMax);
     } else {
       _values = const RangeValues(0, 5);
     }
   }
 
   _setValuesFilter(RangeValues values) {
-    if (searchFilterCubit.state is FilterLoadedState) {
-      searchFilterCubit.setFilter(
-          ((searchFilterCubit.state) as FilterLoadedState).filter.copyWith(
-                ratingMin: values.start,
-                ratingMax: values.end,
-              ));
-    } else {
-      searchFilterCubit.setFilter(SearchFilter(
-        ratingMin: values.start,
-        ratingMax: values.end,
-      ));
-    }
+    setState(() {
+      _values = values;
+    });
+    searchFilterCubit.setFilter(searchFilterCubit.state.filter.copyWith(
+      ratingMin: double.parse(values.start.toStringAsFixed(1)),
+      ratingMax: double.parse(values.end.toStringAsFixed(1)),
+    ));
   }
 }
 

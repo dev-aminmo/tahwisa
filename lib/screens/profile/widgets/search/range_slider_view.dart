@@ -1,25 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
-class RangeSliderView extends StatefulWidget {
+class RangeSliderView extends StatelessWidget {
   const RangeSliderView({Key key, this.values, this.onChangeRangeValues})
       : super(key: key);
 
   final Function(RangeValues) onChangeRangeValues;
   final RangeValues values;
 
-  @override
-  _RangeSliderViewState createState() => _RangeSliderViewState();
-}
-
-class _RangeSliderViewState extends State<RangeSliderView> {
-  RangeValues _values;
-
+/*
   @override
   void initState() {
     _values = widget.values;
     super.initState();
   }
+*/
 
   @override
   Widget build(BuildContext context) {
@@ -31,18 +26,18 @@ class _RangeSliderViewState extends State<RangeSliderView> {
               Row(
                 children: <Widget>[
                   Expanded(
-                    flex: _values.start.round(),
+                    flex: values.start.round(),
                     child: const SizedBox(),
                   ),
                   Container(
                     width: 54,
                     child: Text(
-                      _values.start.toStringAsFixed(1),
+                      values.start.toStringAsFixed(1),
                       textAlign: TextAlign.center,
                     ),
                   ),
                   Expanded(
-                    flex: 5 - _values.start.round(),
+                    flex: 5 - values.start.round(),
                     child: const SizedBox(),
                   ),
                 ],
@@ -50,18 +45,18 @@ class _RangeSliderViewState extends State<RangeSliderView> {
               Row(
                 children: <Widget>[
                   Expanded(
-                    flex: _values.end.round(),
+                    flex: values.end.round(),
                     child: const SizedBox(),
                   ),
                   Container(
                     width: 54,
                     child: Text(
-                      _values.end.toStringAsFixed(1),
+                      values.end.toStringAsFixed(1),
                       textAlign: TextAlign.center,
                     ),
                   ),
                   Expanded(
-                    flex: 5 - _values.end.round(),
+                    flex: 5 - values.end.round(),
                     child: const SizedBox(),
                   ),
                 ],
@@ -71,24 +66,26 @@ class _RangeSliderViewState extends State<RangeSliderView> {
           SliderTheme(
             data: SliderThemeData(
               rangeThumbShape: CustomRangeThumbShape(),
+              // activeTickMarkColor: MyColors.lightGreen,
+              //   activeTrackColor: MyColors.lightGreen,
+              //disabledActiveTrackColor: MyColors.gray,
             ),
             child: RangeSlider(
-              values: _values,
-              min: 0.0,
-              max: 5.0,
-              activeColor: MyColors.lightGreen,
-              inactiveColor: Colors.grey.withOpacity(0.4),
-              divisions: 50,
-              onChanged: (RangeValues values) {
-                try {
-                  setState(() {
-                    _values = values;
-                  });
-                  widget.onChangeRangeValues(_values);
-                } catch (_) {}
-              },
-            ),
+                values: values,
+                min: 0.0,
+                max: 5.0,
+                activeColor: MyColors.lightGreen,
+                inactiveColor: Colors.grey.withOpacity(0.4),
+                divisions: 50,
+                onChanged: onChangeRangeValues),
           ),
+          /*      MaterialButton(
+              child: Text("TTC"),
+              onPressed: () => setState(() {
+                    print("clicked");
+                    _values = const RangeValues(1.5, 2.5);
+                    print(_values);
+                  }))*/
         ],
       ),
     );
@@ -96,8 +93,8 @@ class _RangeSliderViewState extends State<RangeSliderView> {
 }
 
 class CustomRangeThumbShape extends RangeSliderThumbShape {
-  static const double _thumbSize = 3.0;
-  static const double _disabledThumbSize = 3.0;
+  static const double _thumbSize = 20.0;
+  static const double _disabledThumbSize = 20.0;
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {

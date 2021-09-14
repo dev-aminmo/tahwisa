@@ -30,6 +30,7 @@ class _SearchScreenState extends State<SearchScreen> {
   TopTagsCubit _topTagsCubit;
   final ScrollController _scrollController = ScrollController();
   SearchFilterCubit _searchFilterCubit;
+
   DropDownStateBloc _dropDownStateBloc;
   DropDownsMunicipalBloc _dropDownsMunicipalBloc;
   bool _canLoadMore = true;
@@ -137,6 +138,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               onTap: () {
                                 FocusScope.of(context)
                                     .requestFocus(FocusNode());
+
                                 showModalBottomSheet<void>(
                                   context: context,
                                   backgroundColor: Colors.transparent,
@@ -148,7 +150,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                       _dropDownsMunicipalBloc,
                                     );
                                   },
-                                );
+                                ).then((value) {
+                                  print("hey its closed");
+                                  //  print(_searchFilterCubit.state.filter);
+                                });
                               },
                               child: Row(
                                 children: [
