@@ -118,10 +118,19 @@ class _SearchScreenState extends State<SearchScreen> {
                           horizontal: width * 0.05, vertical: height * 0.025),
                       child: Row(
                         children: [
-                          Text("14 places found",
-                              style: TextStyle(
-                                color: MyColors.darkBlue,
-                              )),
+                          BlocBuilder<SearchBloc, SearchState>(
+                            cubit: _searchBloc,
+                            builder: (context, state) {
+                              if (state is SearchSuccess) {
+                                return Text("${state.numResults} places found",
+                                    style: TextStyle(
+                                      color: MyColors.darkBlue,
+                                    ));
+                              } else {
+                                return SizedBox.shrink();
+                              }
+                            },
+                          ),
                           Expanded(
                             child: SizedBox(),
                           ),
@@ -187,8 +196,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 return false;
               },
               listener: (prev, next) {
-                print("consumerr called.........................");
-
                 if (next is SearchSuccess) {
                   setState(() {
                     _canLoadMore = next.canLoadMore(_searchBloc.page);
