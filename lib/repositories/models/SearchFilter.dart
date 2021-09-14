@@ -25,8 +25,8 @@ class SearchFilter extends Equatable {
   @override
   List<Object> get props => [municipalId, stateId, ratingMin, ratingMax];
   @override
-  String toString() => "&municipal=${this.municipalId}"
-      "&state= ${this.stateId}"
-      "&rating_min= ${this.ratingMin}"
-      "&rating_min= ${this.ratingMax}";
+  String toString() => "municipal=${this.municipalId}"
+      "&state=${this.stateId}"
+      "&rating_min=${this.ratingMin}"
+      "&rating_max=${this.ratingMax}";
 }

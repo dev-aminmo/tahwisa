@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tahwisa/repositories/models/query_response.dart';
 
 import 'api/api_endpoints.dart';
+import 'models/SearchFilter.dart';
 import 'models/place.dart';
 import 'models/tag.dart';
 
@@ -33,18 +34,22 @@ class PlaceRepository {
     }
   }
 
-  Future<dynamic> search({@required String query, int page = 1}) async {
+  Future<dynamic> search(
+      {@required String query,
+      int page = 1,
+      @required SearchFilter filter}) async {
     try {
       var pref = await SharedPreferences.getInstance();
+      print("?query=$query&page=$page&${filter.toString()}");
       String token = pref.getString("token");
-      var response =
-          await Dio().get(Api.search_places + "?query=$query&page=$page",
-              options: Options(
-                headers: {"Authorization": "Bearer " + token},
-                validateStatus: (status) => true,
-              ) // options.headers["Authorization"] = "Bearer " + token;
+      var response = await Dio().get(
+          Api.search_places + "?query=$query&page=$page&${filter.toString()}",
+          options: Options(
+            headers: {"Authorization": "Bearer " + token},
+            validateStatus: (status) => true,
+          ) // options.headers["Authorization"] = "Bearer " + token;
 
-              );
+          );
       var data = response.data;
       List<Place> places = [];
       for (var jsonPlace in data['data']['data']) {
@@ -55,11 +60,12 @@ class PlaceRepository {
       for (var place in places) {
         arr.add(place.id);
       }
-      print(arr);
+      print("total number of results is:${data['data']['total']}");
       return QueryResponse(
           results: places,
           numPages: data['data']['last_page'],
-          numResults: data['data']['total']);
+          numResults: data['data']['total'],
+          filter: filter);
     } catch (e) {
       throw (e.toString());
     }

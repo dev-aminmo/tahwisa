@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tahwisa/cubits/search_filter_cubit/search_filter_cubit.dart';
+import 'package:tahwisa/repositories/models/SearchFilter.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/models/query_response.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
@@ -47,15 +48,17 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   ) async* {
     if (event is SearchFirstPageEvent) {
       yield SearchProgress();
-      final QueryResponse _queryResponse =
-          await placeRepository.search(query: event.query);
+      final QueryResponse _queryResponse = await placeRepository.search(
+          query: event.query, filter: searchFilterCubit.state.filter);
       _places.addAll(_queryResponse.results);
       _places$.add(_places);
       //if (places.length == 0) {
       yield SearchSuccess(
-          query: event.query,
-          numPages: _queryResponse.numPages,
-          numResults: _queryResponse.numResults);
+        query: event.query,
+        numPages: _queryResponse.numPages,
+        numResults: _queryResponse.numResults,
+        filter: _queryResponse.filter,
+      );
       //  } else {
       //     yield SearchSuccess(places: places);
       //   }
@@ -74,6 +77,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           numPages: _queryResponse.numPages,
           numResults: _queryResponse.numResults);
     }
-    if (event is FilterUpdated) {}
+    if (event is FilterUpdated) {
+      if (state is SearchSuccess) {
+        var oldFilter = (state as SearchSuccess).filter;
+        var newFilter = searchFilterCubit.state.filter;
+        if (oldFilter != newFilter) {
+          _places.clear();
+          add(SearchFirstPageEvent((state as SearchSuccess).query));
+        }
+      }
+    }
   }
 }

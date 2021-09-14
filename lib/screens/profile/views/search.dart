@@ -42,11 +42,6 @@ class _SearchScreenState extends State<SearchScreen> {
     _searchQueryCubit = SearchQueryCubit();
     TagRepository _tagRepository = TagRepository();
     _topTagsCubit = TopTagsCubit(repository: _tagRepository);
-    _searchBloc = SearchBloc(
-      placeRepository: placeRepository,
-      searchQueryCubit: _searchQueryCubit,
-      tagRepository: _tagRepository,
-    );
 
     DropDownsRepository _dropDownsRepository = DropDownsRepository();
     _dropDownsMunicipalBloc =
@@ -60,6 +55,11 @@ class _SearchScreenState extends State<SearchScreen> {
       selectedState: _dropDownStateBloc.selectedState,
       selectedMunicipal: _dropDownsMunicipalBloc.selectedMunicipal,
     );
+    _searchBloc = SearchBloc(
+        placeRepository: placeRepository,
+        searchQueryCubit: _searchQueryCubit,
+        tagRepository: _tagRepository,
+        searchFilterCubit: _searchFilterCubit);
   }
 
   @override
@@ -153,6 +153,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 ).then((value) {
                                   print("hey its closed");
                                   //  print(_searchFilterCubit.state.filter);
+                                  _searchBloc.add(FilterUpdated());
                                 });
                               },
                               child: Row(
@@ -189,28 +190,14 @@ class _SearchScreenState extends State<SearchScreen> {
                 print("consumerr called.........................");
 
                 if (next is SearchSuccess) {
-                  print("consumerr exuted.........................");
                   setState(() {
                     _canLoadMore = next.canLoadMore(_searchBloc.page);
                   });
-                  print(_canLoadMore);
                 }
               },
               builder: (context, state) {
                 if (state is SearchInitial) {
-                  return BlocBuilder<TopTagsCubit, TopTagsState>(
-                    cubit: _topTagsCubit,
-                    builder: (context, state) {
-                      if (state is TagsLoadingState) {
-                        return Center(child: CircularProgressIndicator());
-                      }
-                      if (state is TagsLoadedState) {
-                        var tags = state.tags;
-                        return TopTagsGridView(tags: tags);
-                      }
-                      return SizedBox();
-                    },
-                  );
+                  return TopTagsView(topTagsCubit: _topTagsCubit);
                 }
                 if (state is SearchProgress) {
                   return const Center(child: CircularProgressIndicator());
@@ -295,5 +282,32 @@ class _SearchScreenState extends State<SearchScreen> {
   void _addSearchFirstPageEvent() {
     //_searchQueryCubit.setQuery(_searchEditingController.text);
     _searchBloc.add(SearchFirstPageEvent(_searchEditingController.text));
+  }
+}
+
+class TopTagsView extends StatelessWidget {
+  const TopTagsView({
+    Key key,
+    @required TopTagsCubit topTagsCubit,
+  })  : _topTagsCubit = topTagsCubit,
+        super(key: key);
+
+  final TopTagsCubit _topTagsCubit;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<TopTagsCubit, TopTagsState>(
+      cubit: _topTagsCubit,
+      builder: (context, state) {
+        if (state is TagsLoadingState) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (state is TagsLoadedState) {
+          var tags = state.tags;
+          return TopTagsGridView(tags: tags);
+        }
+        return SizedBox();
+      },
+    );
   }
 }
