@@ -45,6 +45,7 @@ dependencies:
   flutter_tagging: ^3.0.0
   google_fonts: ^2.1.0
   flutter_typeahead: ^3.2.0
+  carousel_slider: ^4.0.0
 
 
 

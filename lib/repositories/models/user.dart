@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 class User {
   String profilePicture;
-  String id;
+  int id;
   String name;
   String email;
 
@@ -18,4 +18,6 @@ class User {
     this.email = json['email'];
     this.profilePicture = json['profile_picture'];
   }
+  @override
+  String toString() => "id:$id ,name: $name, ";
 }

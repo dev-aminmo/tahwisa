@@ -32,7 +32,13 @@ class PlaceCard extends StatelessWidget {
           left: width * 0.025, right: width * 0.025, top: 8, bottom: 16),
       child: InkWell(
         splashColor: Colors.transparent,
-        onTap: callback,
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            '/place_details',
+            arguments: place,
+          );
+        },
         child: Container(
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(16.0)),
@@ -54,12 +60,10 @@ class PlaceCard extends StatelessWidget {
                     AspectRatio(
                       aspectRatio: 2,
                       child: Image.network(
-                        /* place.pictures[0].replaceFirstMapped(
+                        place.pictures[0].replaceFirstMapped(
                             "image/upload/",
                             (match) =>
                                 "image/upload/w_${(width).round()},f_auto/"),
-                        */
-                        "https://images.unsplash.com/photo-1517712604573-5cd32ea201a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8dW5rbm93bnx8fHx8fDE2MzAxNzUxNTU&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -81,7 +85,7 @@ class PlaceCard extends StatelessWidget {
                                     Padding(
                                       padding: EdgeInsets.only(right: 16),
                                       child: Text(
-                                        " ${place.id} " + place.title,
+                                        place.title,
                                         textAlign: TextAlign.left,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
@@ -106,7 +110,7 @@ class PlaceCard extends StatelessWidget {
                                         ),
                                         Expanded(
                                           child: Text(
-                                            'Chlef, Chettia',
+                                            '${place.state}, ${place.municipal}',
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                                 fontSize: 14,
@@ -120,43 +124,10 @@ class PlaceCard extends StatelessWidget {
                                       padding: const EdgeInsets.only(top: 4),
                                       child: Row(
                                         children: <Widget>[
-                                          buildRating(3.5),
-                                          /*RatingBar(
-                                                    initialRating:
-                                                    hotelData!.rating,
-                                                    direction: Axis.horizontal,
-                                                    allowHalfRating: true,
-                                                    itemCount: 5,
-                                                    itemSize: 24,
-                                                    ratingWidget: RatingWidget(
-                                                      full: Icon(
-                                                        Icons.star_rate_rounded,
-                                                        color: HotelAppTheme
-                                                            .buildLightTheme()
-                                                            .primaryColor,
-                                                      ),
-                                                      half: Icon(
-                                                        Icons.star_half_rounded,
-                                                        color: HotelAppTheme
-                                                            .buildLightTheme()
-                                                            .primaryColor,
-                                                      ),
-                                                      empty: Icon(
-                                                        Icons
-                                                            .star_border_rounded,
-                                                        color: HotelAppTheme
-                                                            .buildLightTheme()
-                                                            .primaryColor,
-                                                      ),
-                                                    ),
-                                                    itemPadding:
-                                                    EdgeInsets.zero,
-                                                    onRatingUpdate: (rating) {
-                                                      print(rating);
-                                                    },
-                                                  ),*/
+                                          buildRating(
+                                              place.reviewsAverage + 0.0),
                                           Text(
-                                            ' 62 Reviews',
+                                            ' ${place.reviewsCount} Reviews',
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.grey
@@ -188,9 +159,12 @@ class PlaceCard extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Icon(
-                            //Icons.favorite_outlined,
-                            Icons.favorite_border,
-                            color: MyColors.lightGreen),
+                          //Icons.favorite_outlined,
+                          (place.wished)
+                              ? Icons.favorite_outlined
+                              : Icons.favorite_border,
+                          color: MyColors.lightGreen,
+                        ),
                       ),
                     ),
                   ),

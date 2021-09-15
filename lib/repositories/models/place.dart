@@ -1,15 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
+import 'tag.dart';
+import 'user.dart';
+
 class Place extends Equatable {
-  /* int id;
-  String title;
-  String description;
-  double latitude;
-  double longitude;
-  double municipal;
-  String state;
-  double reviewsAverage;*/
   var id;
   var title;
   var description;
@@ -18,18 +13,27 @@ class Place extends Equatable {
   var municipal;
   var state;
   var reviewsAverage;
+  var reviewsCount;
+  var wished;
+  List<Tag> tags;
+  User user;
   List<String> pictures;
 
-  Place(
-      {this.id,
-      @required this.title,
-      this.description,
-      this.latitude,
-      this.longitude,
-      this.municipal,
-      this.state,
-      this.reviewsAverage,
-      this.pictures});
+  Place({
+    @required this.id,
+    @required this.title,
+    this.description,
+    this.latitude,
+    this.longitude,
+    this.municipal,
+    this.state,
+    this.reviewsAverage,
+    this.reviewsCount,
+    this.wished,
+    this.pictures,
+    this.tags,
+    this.user,
+  });
 
   Place.fromJson(Map<String, dynamic> json) {
     this.id = json['id'];
@@ -37,10 +41,20 @@ class Place extends Equatable {
     this.description = json['description'];
     this.latitude = json['latitude'];
     this.longitude = json['longitude'];
-    this.municipal = json['municipal_id'];
-    //this.state = json['profile_picture'];
-    this.reviewsAverage = json['reviews_avg_vote'];
-
+    this.municipal = json['municipal_id']['name_fr'];
+    this.state = json['municipal_id']['state']['name_fr'];
+    this.reviewsAverage = (json['reviews_avg_vote'] == null)
+        ? 0.0
+        : double.parse(json['reviews_avg_vote']);
+    this.reviewsCount = json['reviews_count'];
+    this.wished = json['wished'];
+    this.user = User.fromJson(json['user']);
+    if (json['tags'] != null) {
+      this.tags = [];
+      json['tags'].forEach((tag) {
+        tags.add(Tag.fromJson(tag));
+      });
+    }
     // this.pictures = json['pictures'];
     if (json['pictures'] != null) {
       pictures = [];
@@ -50,8 +64,22 @@ class Place extends Equatable {
     }
   }
   @override
-  List<Object> get props => [id, title];
+  List<Object> get props => [
+        this.id,
+        this.title,
+        this.description,
+        this.latitude,
+        this.longitude,
+        this.municipal,
+        this.state,
+        this.reviewsAverage,
+        this.reviewsCount,
+        this.wished,
+        this.pictures,
+        this.tags,
+        this.user,
+      ];
 
   @override
-  String toString() => "$id" + "$title";
+  bool get stringify => true;
 }

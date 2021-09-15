@@ -1,16 +1,16 @@
 import 'package:flutter_tagging/flutter_tagging.dart';
 
 class Tag extends Taggable {
-  int id;
-  String name;
-  String picture;
+  var id;
+  var name;
+  var picture;
 
   /// Creates Tag
   Tag({
     final this.name = "",
   });
   Tag.fromJson(Map<String, dynamic> json) {
-    this.id = json['id'];
+    this.id = json['id'] ?? json['tag_id'];
     this.name = json['name'];
     this.picture = json['picture'];
   }

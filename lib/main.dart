@@ -9,9 +9,11 @@ import 'package:tahwisa/screens/auth/login.dart';
 import 'package:tahwisa/screens/welcome.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
+import 'repositories/models/place.dart';
 import 'screens/auth/signup.dart';
 import 'screens/profile/profile_screen.dart';
 import 'screens/profile/views/add_place/add_place_navigator.dart';
+import 'screens/profile/views/place_details.dart';
 
 class SimpleBlocDelegate extends BlocObserver {
   @override
@@ -124,6 +126,8 @@ class _AppState extends State<App> {
         return MaterialPageRoute(
             builder: (context) => RepositoryProvider(
                 create: (_) => placeRepository, child: AddPlaceNavigator()));
+      case PlaceDetailsScreen.routeName:
+        return PlaceDetailsScreen.route(place: settings.arguments as Place);
     }
   }
 }
