@@ -32,6 +32,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   DropDownStateBloc _dropDownStateBloc;
   DropDownsMunicipalBloc _dropDownsMunicipalBloc;
+  ScrollController innerScrollController;
   bool _canLoadMore = true;
   @override
   void initState() {
@@ -67,6 +68,7 @@ class _SearchScreenState extends State<SearchScreen> {
     _searchBloc.close();
     _dropDownStateBloc.close();
     _dropDownsMunicipalBloc.close();
+    innerScrollController = null;
     super.dispose();
   }
 
