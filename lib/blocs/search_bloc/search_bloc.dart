@@ -48,6 +48,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   ) async* {
     if (event is SearchFirstPageEvent) {
       yield SearchProgress();
+      _places.clear();
       final QueryResponse _queryResponse = await placeRepository.search(
           query: event.query, filter: searchFilterCubit.state.filter);
       _places.addAll(_queryResponse.results);
@@ -73,16 +74,17 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       _places$.add(_places);
       //if (places.length == 0) {
       yield SearchSuccess(
-          query: event.state.query,
-          numPages: _queryResponse.numPages,
-          numResults: _queryResponse.numResults);
+        query: event.state.query,
+        numPages: _queryResponse.numPages,
+        numResults: _queryResponse.numResults,
+        filter: _queryResponse.filter,
+      );
     }
     if (event is FilterUpdated) {
       if (state is SearchSuccess) {
         var oldFilter = (state as SearchSuccess).filter;
         var newFilter = searchFilterCubit.state.filter;
         if (oldFilter != newFilter) {
-          _places.clear();
           add(SearchFirstPageEvent((state as SearchSuccess).query));
         }
       }

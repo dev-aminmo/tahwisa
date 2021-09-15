@@ -15,10 +15,10 @@ class TopTagsGridView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      margin: const EdgeInsets.only(bottom: 16),
       child: GridView.builder(
           physics: BouncingScrollPhysics(),
           itemCount: tags.length,
+          padding: const EdgeInsets.symmetric(vertical: 16),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 16,
