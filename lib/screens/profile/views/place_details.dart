@@ -246,23 +246,28 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
           itemCount: place.pictures.length,
           itemBuilder: (context, index, realIndex) {
             return GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => FullScreenPage(
-                            child: PhotoView(
-                          imageProvider: NetworkImage(place.pictures[index]),
-                        ))),
-              ),
-              child: SizedBox(
-                width: double.infinity,
-                child: Image.network(
-                  place.pictures[index].replaceFirstMapped("image/upload/",
-                      (match) => "image/upload/w_${(width).round()},f_auto/"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            );
+                onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => FullScreenPage(
+                                  child: PhotoView(
+                                imageProvider:
+                                    NetworkImage(place.pictures[index]),
+                              ))),
+                    ),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Hero(
+                    tag: 'place_tag${place.id}',
+                    child: Image.network(
+                      place.pictures[index].replaceFirstMapped(
+                          "image/upload/",
+                          (match) =>
+                              "image/upload/w_${(width).round()},f_auto/"),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ));
           }),
     );
   }

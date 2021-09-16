@@ -45,15 +45,17 @@ class PlaceCard extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     AspectRatio(
-                      aspectRatio: 2,
-                      child: Image.network(
-                        place.pictures[0].replaceFirstMapped(
-                            "image/upload/",
-                            (match) =>
-                                "image/upload/w_${(width).round()},f_auto/"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                        aspectRatio: 2,
+                        child: Hero(
+                          tag: 'place_tag${place.id}',
+                          child: Image.network(
+                            place.pictures[0].replaceFirstMapped(
+                                "image/upload/",
+                                (match) =>
+                                    "image/upload/w_${(width).round()},f_auto/"),
+                            fit: BoxFit.cover,
+                          ),
+                        )),
                     Container(
                       color: const Color(0xFFFFFFFF),
                       child: Row(
