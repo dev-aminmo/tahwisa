@@ -1,21 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:rating_bar/rating_bar.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
-Widget buildRating(double x) {
-  return RatingBar.readOnly(
-    size: 24,
-    filledIcon: Icons.star,
-    emptyIcon: Icons.star_border,
-    halfFilledIcon: Icons.star_half,
-    emptyColor: MyColors.darkBlue,
-    filledColor: MyColors.darkBlue,
-    halfFilledColor: MyColors.darkBlue,
-    initialRating: x,
-    isHalfAllowed: true,
-  );
-}
+import 'rating_bar_stars_read_only.dart';
 
 class PlaceCard extends StatelessWidget {
   const PlaceCard({Key key, @required this.place, this.callback, this.width})
@@ -124,8 +111,9 @@ class PlaceCard extends StatelessWidget {
                                       padding: const EdgeInsets.only(top: 4),
                                       child: Row(
                                         children: <Widget>[
-                                          buildRating(
-                                              place.reviewsAverage + 0.0),
+                                          RatingBarStarsReadOnly(
+                                              reviewsAverage:
+                                                  place.reviewsAverage),
                                           Text(
                                             ' ${place.reviewsCount} Reviews',
                                             style: TextStyle(

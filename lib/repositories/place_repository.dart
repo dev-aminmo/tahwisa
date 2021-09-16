@@ -26,9 +26,6 @@ class PlaceRepository {
       List<Place> places = [];
       for (var jsonPlace in data['data']) {
         var place = Place.fromJson(jsonPlace);
-        if (place.id == 5) {
-          print(place);
-        }
         places.add(place);
       }
       return places;
