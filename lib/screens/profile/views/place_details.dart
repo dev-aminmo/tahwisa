@@ -60,7 +60,9 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                   const SizedBox(height: 8),
                   buildUserRow(),
                   const SizedBox(height: 8),
-                  ShowMoreText(text: place.description)
+                  ShowMoreText(text: place.description),
+                  const SizedBox(height: 8),
+                  _buildTagsList()
                 ],
               ),
             ),
@@ -119,7 +121,6 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                   color: Colors.transparent,
                   decoration: TextDecoration.underline,
                   decorationColor: MyColors.darkBlue,
-                  // decorationThickness: 1.5,
                   fontSize: 18,
                 )
                 //color: MyColors.darkBlue),
@@ -127,6 +128,14 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  _buildTagsList() {
+    return Wrap(
+      spacing: 6.0,
+      runSpacing: 6.0,
+      children: place.tags.map((tag) => TagChip(tag.name)).toList(),
     );
   }
 
@@ -262,6 +271,29 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
   void initState() {
     super.initState();
     place = widget.place;
+  }
+}
+
+class TagChip extends StatelessWidget {
+  const TagChip(
+    this.label,
+  );
+  final label;
+  @override
+  Widget build(BuildContext context) {
+    return Chip(
+      labelPadding: EdgeInsets.all(2.0),
+      label: Text(
+        "#" + label,
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+      backgroundColor: MyColors.greenBorder,
+      elevation: 3.0,
+      shadowColor: Colors.grey[60],
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+    );
   }
 }
 
