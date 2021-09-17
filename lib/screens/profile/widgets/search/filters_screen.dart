@@ -106,13 +106,12 @@ class _FiltersScreenState extends State<FiltersScreen> {
                               flex: 9,
                               child: ApplyButton(
                                 callback: () {
-                                  print("hello from apply");
-                                  print(_dropDownStateBloc.currentState);
                                   widget._filterManagerBloc.add(SaveFilterState(
                                       dropDownsMunicipalBloc:
                                           _dropDownsMunicipalBloc,
                                       dropDownStateBloc: _dropDownStateBloc,
                                       ratingRangeValues: _values));
+                                  Navigator.of(context).pop();
                                 },
                               ),
                             ),

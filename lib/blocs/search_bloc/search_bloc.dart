@@ -44,6 +44,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     SearchEvent event,
   ) async* {
     if (event is SearchFirstPageEvent) {
+      _page = 1;
       yield SearchProgress();
       _places.clear();
       final QueryResponse _queryResponse = await placeRepository.search(

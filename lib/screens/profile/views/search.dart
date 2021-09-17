@@ -94,6 +94,9 @@ class _SearchScreenState extends State<SearchScreen> {
                         stream: _searchBloc.places,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
+                            for (var place in snapshot.data) {
+                              print(place.id);
+                            }
                             return ListView.builder(
                                 controller: innerScrollController
                                   ..addListener(() {
@@ -168,6 +171,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   RoundedSearchButton(
                     searchIconClicked: () {
                       _dismissKeyboard(context);
+
                       _addSearchFirstPageEvent();
                     },
                   ),
@@ -265,6 +269,9 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void _addSearchFirstPageEvent() {
+    /* setState(() {
+      _canLoadMore = true;
+    });*/
     _searchBloc.add(SearchFirstPageEvent(_searchEditingController.text));
   }
 }

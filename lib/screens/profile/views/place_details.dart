@@ -18,9 +18,11 @@ class PlaceDetailsScreen extends StatefulWidget {
   }
 
   final Place place;
+  final String heroTag;
 
   const PlaceDetailsScreen({
     @required this.place,
+     this.heroTag="explore"
   });
 
   @override
@@ -41,7 +43,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
           physics: ClampingScrollPhysics(),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            buildCarouselSlider(width),
+            buildCarouselSlider(width,widget.heroTag),
             buildCarouselDots(),
             Padding(
               padding: EdgeInsets.all(18),
@@ -237,7 +239,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
     );
   }
 
-  Widget buildCarouselSlider(double width) {
+  Widget buildCarouselSlider(double width,String heroTag) {
     return Container(
       color: Colors.black,
       child: CarouselSlider.builder(
@@ -267,7 +269,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                 child: SizedBox(
                   width: double.infinity,
                   child: Hero(
-                    tag: 'place_tag${place.id}',
+                    tag: 'place_tag_${place.id}_$heroTag',
                     child: Image.network(
                       place.pictures[index].replaceFirstMapped(
                           "image/upload/",

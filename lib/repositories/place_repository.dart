@@ -61,6 +61,7 @@ class PlaceRepository {
         arr.add(place.id);
       }
       print("total number of results is:${data['data']['total']}");
+      print("total number of pages is:${data['data']['last_page']}");
       return QueryResponse(
           results: places,
           numPages: data['data']['last_page'],
