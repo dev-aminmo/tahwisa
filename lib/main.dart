@@ -127,7 +127,12 @@ class _AppState extends State<App> {
             builder: (context) => RepositoryProvider(
                 create: (_) => placeRepository, child: AddPlaceNavigator()));
       case PlaceDetailsScreen.routeName:
-        return PlaceDetailsScreen.route(place: settings.arguments as Place);
+        Map<String, dynamic> arguments =
+            new Map<String, dynamic>.from(settings.arguments);
+        return PlaceDetailsScreen.route(
+          place: arguments['place'] as Place,
+          heroAnimationTag: arguments['heroAnimationTag'],
+        );
     }
   }
 }

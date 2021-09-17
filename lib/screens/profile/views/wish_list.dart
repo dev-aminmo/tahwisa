@@ -87,6 +87,7 @@ class _WishListState extends State<WishList> {
             width: width,
             callback: () {},
             place: _places[index],
+            heroAnimationTag: 'wish',
           );
         },
       );

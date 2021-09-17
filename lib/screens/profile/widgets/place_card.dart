@@ -5,11 +5,17 @@ import 'package:tahwisa/style/my_colors.dart';
 import 'rating_bar_stars_read_only.dart';
 
 class PlaceCard extends StatelessWidget {
-  const PlaceCard({Key key, @required this.place, this.callback, this.width})
+  const PlaceCard(
+      {Key key,
+      @required this.place,
+      this.callback,
+      this.width,
+      this.heroAnimationTag})
       : super(key: key);
 
   final VoidCallback callback;
   final Place place;
+  final String heroAnimationTag;
   final width;
 
   @override
@@ -23,7 +29,7 @@ class PlaceCard extends StatelessWidget {
           Navigator.pushNamed(
             context,
             '/place_details',
-            arguments: place,
+            arguments: {'place': place, 'heroAnimationTag': heroAnimationTag},
           );
         },
         child: Container(
@@ -47,7 +53,7 @@ class PlaceCard extends StatelessWidget {
                     AspectRatio(
                         aspectRatio: 2,
                         child: Hero(
-                          tag: 'place_tag${place.id}',
+                          tag: '${place.id}_$heroAnimationTag',
                           child: Image.network(
                             place.pictures[0].replaceFirstMapped(
                                 "image/upload/",

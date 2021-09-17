@@ -105,6 +105,7 @@ class _ExploreState extends State<Explore>
             width: width,
             callback: () {},
             place: _places[index],
+            heroAnimationTag: 'explore',
           );
         },
       );

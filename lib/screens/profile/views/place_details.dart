@@ -10,20 +10,21 @@ import 'package:tahwisa/style/my_colors.dart';
 class PlaceDetailsScreen extends StatefulWidget {
   static const String routeName = '/place_details';
 
-  static Route route({@required Place place}) {
+  static Route route(
+      {@required Place place, String heroAnimationTag = "explore"}) {
     return MaterialPageRoute(
-      builder: (_) => PlaceDetailsScreen(place: place),
+      builder: (_) => PlaceDetailsScreen(
+        place: place,
+        heroAnimationTag: heroAnimationTag,
+      ),
       settings: RouteSettings(name: routeName),
     );
   }
 
   final Place place;
-  final String heroTag;
+  final String heroAnimationTag;
 
-  const PlaceDetailsScreen({
-    @required this.place,
-     this.heroTag="explore"
-  });
+  const PlaceDetailsScreen({@required this.place, this.heroAnimationTag});
 
   @override
   _PlaceDetailsScreenState createState() => _PlaceDetailsScreenState();
@@ -43,7 +44,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
           physics: ClampingScrollPhysics(),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            buildCarouselSlider(width,widget.heroTag),
+            buildCarouselSlider(width, widget.heroAnimationTag),
             buildCarouselDots(),
             Padding(
               padding: EdgeInsets.all(18),
@@ -239,7 +240,8 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
     );
   }
 
-  Widget buildCarouselSlider(double width,String heroTag) {
+  Widget buildCarouselSlider(double width, String heroTag) {
+    print('${place.id}_$heroTag');
     return Container(
       color: Colors.black,
       child: CarouselSlider.builder(

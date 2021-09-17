@@ -126,6 +126,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   }
                                   return PlaceCard(
                                     place: snapshot.data[index],
+                                    heroAnimationTag: 'search',
                                     callback: () {},
                                     width: width,
                                   );
