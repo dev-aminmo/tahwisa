@@ -11,9 +11,11 @@ class DropDownsMunicipalBloc
     extends Bloc<DropDownMunicipalEvent, DropDownMunicipalState> {
   final dropDownsRepository;
   final _selectedMunicipal$ = BehaviorSubject<Municipal>();
+
   void selectedStateEvent(Municipal state) => _selectedMunicipal$.add(state);
-//  Future<List<MyState>> states;
   Stream<Municipal> get selectedMunicipal => _selectedMunicipal$;
+  Municipal get currentMunicipal => _selectedMunicipal$.value;
+
   DropDownsMunicipalBloc({
     @required this.dropDownsRepository,
   }) : super(DropDownMunicipalInitial()) {
@@ -41,6 +43,11 @@ class DropDownsMunicipalBloc
     if (event is MunicipalChosen) {
       _selectedMunicipal$.add(event.municipal);
       // yield (DropDownsMunicipalChosen(municipal: event.municipal));
+    }
+    if (event is LoadMunicipalState) {
+      _selectedMunicipal$.add(event.selectedMunicipal);
+
+      yield (event.dropDownsMunicipalSuccess);
     }
 
     if (event is ClearMunicipal) {

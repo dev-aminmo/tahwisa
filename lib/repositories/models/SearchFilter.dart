@@ -10,7 +10,7 @@ class SearchFilter extends Equatable {
       {this.municipalId = '',
       this.stateId = '',
       this.ratingMin = 0,
-      this.ratingMax = 5}); //  SearchFilter({this.name, this.id});
+      this.ratingMax = 5});
   SearchFilter copyWith(
           {String municipalId,
           String stateId,
@@ -25,8 +25,8 @@ class SearchFilter extends Equatable {
   @override
   List<Object> get props => [municipalId, stateId, ratingMin, ratingMax];
   @override
-  String toString() => "municipal=${this.municipalId}"
-      "&state=${this.stateId}"
-      "&rating_min=${this.ratingMin}"
-      "&rating_max=${this.ratingMax}";
+  String toString() => "municipal=${this.municipalId ?? ''}"
+      "&state=${this.stateId ?? ''}"
+      "&rating_min=${this.ratingMin ?? 0}"
+      "&rating_max=${this.ratingMax ?? 5}";
 }

@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tahwisa/blocs/drop_down_municipal_bloc/bloc.dart';
 import 'package:tahwisa/blocs/drop_down_state_bloc/bloc.dart';
-import 'package:tahwisa/cubits/search_filter_cubit/search_filter_cubit.dart';
+import 'package:tahwisa/blocs/search_filter_bloc_state_manager/filter_manager_bloc.dart';
+import 'package:tahwisa/repositories/dropdowns_repository.dart';
 import 'package:tahwisa/screens/profile/widgets/add_place/municipal_dorpdown.dart';
 import 'package:tahwisa/screens/profile/widgets/add_place/state_dropdown.dart';
 import 'package:tahwisa/style/my_colors.dart';
@@ -12,25 +13,61 @@ import 'range_slider_view.dart';
 class FiltersScreen extends StatefulWidget {
   @override
   _FiltersScreenState createState() => _FiltersScreenState();
-  final SearchFilterCubit searchFilterCubit;
-  final DropDownStateBloc _dropDownStateBloc;
-  final DropDownsMunicipalBloc _dropDownsMunicipalBloc;
+  final FilterManagerBloc _filterManagerBloc;
 
-  const FiltersScreen(this.searchFilterCubit, this._dropDownStateBloc,
-      this._dropDownsMunicipalBloc);
+  const FiltersScreen(this._filterManagerBloc);
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
-  SearchFilterCubit searchFilterCubit;
   RangeValues _values;
   double width;
   double height;
+  DropDownStateBloc _dropDownStateBloc;
+  DropDownsMunicipalBloc _dropDownsMunicipalBloc;
 
   @override
   void initState() {
     super.initState();
-    searchFilterCubit = widget.searchFilterCubit;
+    var dropDownsRepository = DropDownsRepository();
+    _dropDownsMunicipalBloc =
+        DropDownsMunicipalBloc(dropDownsRepository: dropDownsRepository);
+    _dropDownStateBloc = DropDownStateBloc(
+        municipalBloc: _dropDownsMunicipalBloc,
+        dropDownsRepository: dropDownsRepository);
+    if (widget._filterManagerBloc.state is FilterManagerLoadedState) {
+      _dropDownStateBloc.add(LoadState(
+        dropDownsStatesSuccess:
+            ((widget._filterManagerBloc.state) as FilterManagerLoadedState)
+                .dropDownsStatesSuccess,
+        selectedState:
+            ((widget._filterManagerBloc.state) as FilterManagerLoadedState)
+                .selectedState,
+      ));
+
+      if ((widget._filterManagerBloc.state as FilterManagerLoadedState)
+              .dropDownsMunicipalSuccess !=
+          null) {
+        print("siiiii municipal success");
+        _dropDownsMunicipalBloc.add(LoadMunicipalState(
+          dropDownsMunicipalSuccess:
+              ((widget._filterManagerBloc.state) as FilterManagerLoadedState)
+                  .dropDownsMunicipalSuccess,
+          selectedMunicipal:
+              ((widget._filterManagerBloc.state) as FilterManagerLoadedState)
+                  .selectedMunicipal,
+        ));
+      }
+    } else {
+      _dropDownStateBloc.add(FetchStates());
+    }
     _initSliderValues();
+  }
+
+  @override
+  void dispose() {
+    _dropDownStateBloc.close();
+    _dropDownsMunicipalBloc.close();
+    super.dispose();
   }
 
   Widget makeDismissible({Widget child}) => GestureDetector(
@@ -67,7 +104,17 @@ class _FiltersScreenState extends State<FiltersScreen> {
                           children: [
                             Expanded(
                               flex: 9,
-                              child: ApplyButton(),
+                              child: ApplyButton(
+                                callback: () {
+                                  print("hello from apply");
+                                  print(_dropDownStateBloc.currentState);
+                                  widget._filterManagerBloc.add(SaveFilterState(
+                                      dropDownsMunicipalBloc:
+                                          _dropDownsMunicipalBloc,
+                                      dropDownStateBloc: _dropDownStateBloc,
+                                      ratingRangeValues: _values));
+                                },
+                              ),
                             ),
                             Expanded(
                               flex: 6,
@@ -76,8 +123,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                   setState(() {
                                     _values = const RangeValues(0, 5);
                                   });
-                                  widget._dropDownStateBloc.add(ClearState());
-                                  searchFilterCubit.clearFilter();
+                                  _dropDownStateBloc.add(ClearState());
+                                  widget._filterManagerBloc
+                                      .add(ClearFilterState());
                                 },
                               ),
                             )
@@ -122,10 +170,10 @@ class _FiltersScreenState extends State<FiltersScreen> {
                   fontWeight: FontWeight.normal),
             ),
             StateDropdown(
-                dropDownStateBloc: widget._dropDownStateBloc, height: height),
+                dropDownStateBloc: _dropDownStateBloc, height: height),
             Center(
               child: MunicipalDropDown(
-                  dropDownsMunicipalBloc: widget._dropDownsMunicipalBloc,
+                  dropDownsMunicipalBloc: _dropDownsMunicipalBloc,
                   height: height),
             ),
           ],
@@ -155,9 +203,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
           padding: const EdgeInsets.all(16.0),
           child: RangeSliderView(
             values: _values,
-            /*   onChangeRangeValues: (values) {
-              _values = values;
-            },*/
             onChangeRangeValues: _setValuesFilter,
           ),
         ),
@@ -169,9 +214,15 @@ class _FiltersScreenState extends State<FiltersScreen> {
   }
 
   void _initSliderValues() {
-    if (searchFilterCubit.state is FilterLoadedState) {
-      _values = RangeValues(searchFilterCubit.state.filter.ratingMin,
-          searchFilterCubit.state.filter.ratingMax);
+    if (widget._filterManagerBloc.state is FilterManagerLoadedState) {
+      _values = RangeValues(
+        ((widget._filterManagerBloc.state) as FilterManagerLoadedState)
+            .ratingRangeValues
+            .start,
+        ((widget._filterManagerBloc.state) as FilterManagerLoadedState)
+            .ratingRangeValues
+            .end,
+      );
     } else {
       _values = const RangeValues(0, 5);
     }
@@ -181,17 +232,12 @@ class _FiltersScreenState extends State<FiltersScreen> {
     setState(() {
       _values = values;
     });
-    searchFilterCubit.setFilter(searchFilterCubit.state.filter.copyWith(
-      ratingMin: double.parse(values.start.toStringAsFixed(1)),
-      ratingMax: double.parse(values.end.toStringAsFixed(1)),
-    ));
   }
 }
 
 class ApplyButton extends StatelessWidget {
-  const ApplyButton({
-    Key key,
-  }) : super(key: key);
+  final Function callback;
+  const ApplyButton({Key key, this.callback}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -215,9 +261,7 @@ class ApplyButton extends StatelessWidget {
           child: InkWell(
             borderRadius: const BorderRadius.all(Radius.circular(24.0)),
             highlightColor: Colors.transparent,
-            onTap: () {
-              Navigator.pop(context);
-            },
+            onTap: callback,
             child: Center(
               child: Text(
                 'Apply',

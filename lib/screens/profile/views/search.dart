@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tahwisa/blocs/drop_down_municipal_bloc/bloc.dart';
-import 'package:tahwisa/blocs/drop_down_state_bloc/bloc.dart';
 import 'package:tahwisa/blocs/search_bloc/search_bloc.dart';
-import 'package:tahwisa/cubits/search_filter_cubit/search_filter_cubit.dart';
-import 'package:tahwisa/cubits/search_query_cubit.dart';
+import 'package:tahwisa/blocs/search_filter_bloc_state_manager/filter_manager_bloc.dart';
 import 'package:tahwisa/cubits/top_tags_cubit/top_tags_cubit.dart';
-import 'package:tahwisa/repositories/dropdowns_repository.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/tag_repository.dart';
@@ -23,51 +19,35 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   PlaceRepository placeRepository;
   SearchBloc _searchBloc;
-  SearchQueryCubit _searchQueryCubit;
   double width;
   double height;
   TextEditingController _searchEditingController;
   TopTagsCubit _topTagsCubit;
-  SearchFilterCubit _searchFilterCubit;
-
-  DropDownStateBloc _dropDownStateBloc;
-  DropDownsMunicipalBloc _dropDownsMunicipalBloc;
   ScrollController innerScrollController;
+  FilterManagerBloc _filterManagerBloc;
+
   bool _canLoadMore = true;
   @override
   void initState() {
     super.initState();
     _searchEditingController = TextEditingController();
     placeRepository = RepositoryProvider.of<PlaceRepository>(context);
-    _searchQueryCubit = SearchQueryCubit();
     TagRepository _tagRepository = TagRepository();
     _topTagsCubit = TopTagsCubit(repository: _tagRepository);
+    _filterManagerBloc = FilterManagerBloc();
 
-    DropDownsRepository _dropDownsRepository = DropDownsRepository();
-    _dropDownsMunicipalBloc =
-        DropDownsMunicipalBloc(dropDownsRepository: _dropDownsRepository);
-    _dropDownStateBloc = DropDownStateBloc(
-        dropDownsRepository: _dropDownsRepository,
-        municipalBloc: _dropDownsMunicipalBloc)
-      ..add(FetchStates());
-
-    _searchFilterCubit = SearchFilterCubit(
-      selectedState: _dropDownStateBloc.selectedState,
-      selectedMunicipal: _dropDownsMunicipalBloc.selectedMunicipal,
-    );
     _searchBloc = SearchBloc(
-        placeRepository: placeRepository,
-        searchQueryCubit: _searchQueryCubit,
-        tagRepository: _tagRepository,
-        searchFilterCubit: _searchFilterCubit);
+      filterManagerBloc: _filterManagerBloc,
+      placeRepository: placeRepository,
+      tagRepository: _tagRepository,
+    );
   }
 
   @override
   void dispose() {
     _searchEditingController.dispose();
     _searchBloc.close();
-    _dropDownStateBloc.close();
-    _dropDownsMunicipalBloc.close();
+    _filterManagerBloc.close();
     innerScrollController = null;
     super.dispose();
   }
@@ -233,15 +213,9 @@ class _SearchScreenState extends State<SearchScreen> {
                           backgroundColor: Colors.transparent,
                           isScrollControlled: true,
                           builder: (BuildContext context) {
-                            return FiltersScreen(
-                              _searchFilterCubit,
-                              _dropDownStateBloc,
-                              _dropDownsMunicipalBloc,
-                            );
+                            return FiltersScreen(_filterManagerBloc);
                           },
                         ).then((value) {
-                          print("hey its closed");
-                          //  print(_searchFilterCubit.state.filter);
                           _searchBloc.add(FilterUpdated());
                         });
                       },
@@ -291,7 +265,6 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void _addSearchFirstPageEvent() {
-    //_searchQueryCubit.setQuery(_searchEditingController.text);
     _searchBloc.add(SearchFirstPageEvent(_searchEditingController.text));
   }
 }

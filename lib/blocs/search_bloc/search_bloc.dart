@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:tahwisa/cubits/search_filter_cubit/search_filter_cubit.dart';
+import 'package:tahwisa/blocs/search_filter_bloc_state_manager/filter_manager_bloc.dart';
 import 'package:tahwisa/repositories/models/SearchFilter.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/models/query_response.dart';
@@ -17,8 +17,7 @@ part 'search_state.dart';
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final PlaceRepository placeRepository;
   final TagRepository tagRepository;
-  final searchQueryCubit;
-  final SearchFilterCubit searchFilterCubit;
+  final FilterManagerBloc filterManagerBloc;
 
   final _places$ = BehaviorSubject<List<Place>>();
   Stream<List<Place>> get places => _places$;
@@ -27,20 +26,18 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   int _page = 1;
   int get page => _page;
 
-  //int _page=1;
+  SearchBloc({
+    @required this.placeRepository,
+    @required this.filterManagerBloc,
+    @required this.tagRepository,
+  })  : assert(placeRepository != null),
+        super(SearchInitial());
   @override
   Future<dynamic> close() {
     _places$.close();
+    filterManagerBloc.close();
     return super.close();
   }
-
-  SearchBloc({
-    @required this.placeRepository,
-    @required this.searchQueryCubit,
-    @required this.tagRepository,
-    @required this.searchFilterCubit,
-  })  : assert(placeRepository != null),
-        super(SearchInitial());
 
   @override
   Stream<SearchState> mapEventToState(
@@ -50,7 +47,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       yield SearchProgress();
       _places.clear();
       final QueryResponse _queryResponse = await placeRepository.search(
-          query: event.query, filter: searchFilterCubit.state.filter);
+          query: event.query, filter: filterManagerBloc.stateToFilter());
       _places.addAll(_queryResponse.results);
       _places$.add(_places);
       //if (places.length == 0) {
@@ -66,8 +63,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
     if (event is SearchPageRequested) {
       _page++;
-      final QueryResponse _queryResponse =
-          await placeRepository.search(query: event.state.query, page: _page);
+      final QueryResponse _queryResponse = await placeRepository.search(
+          query: event.state.query,
+          page: _page,
+          filter: (state as SearchSuccess).filter);
 
       _places.addAll(_queryResponse.results);
 
@@ -83,7 +82,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     if (event is FilterUpdated) {
       if (state is SearchSuccess) {
         var oldFilter = (state as SearchSuccess).filter;
-        var newFilter = searchFilterCubit.state.filter;
+
+        var newFilter = filterManagerBloc.stateToFilter();
         if (oldFilter != newFilter) {
           add(SearchFirstPageEvent((state as SearchSuccess).query));
         }

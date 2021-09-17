@@ -52,7 +52,16 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                   const SizedBox(height: 20),
                   buildLocationRow(),
                   const SizedBox(height: 16),
-                  buildRatingBarReadOnlyRow(),
+                  Row(
+                    children: [
+                      Text(place.reviewsAverage.toString(),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 48,
+                              color: MyColors.darkBlue)),
+                      buildRatingBarReadOnlyRow(),
+                    ],
+                  ),
                   const SizedBox(height: 16),
                   Divider(
                     thickness: 1.5,

@@ -14,6 +14,7 @@ class DropDownStateBloc extends Bloc<DropDownStateEvent, DropDownState> {
 
   final _selectedState$ = BehaviorSubject<MyState>();
   Stream<MyState> get selectedState => _selectedState$;
+  MyState get currentState => _selectedState$.value;
 
   @override
   Future<void> close() {
@@ -42,7 +43,14 @@ class DropDownStateBloc extends Bloc<DropDownStateEvent, DropDownState> {
     }
     if (event is StateChosen) {
       _selectedState$.add(event.state);
+      print(_selectedState$.value);
       municipalBloc.add(FetchMuniciaples(state: event.state));
+    }
+    if (event is LoadState) {
+      _selectedState$.add(event.selectedState);
+
+      yield (event.dropDownsStatesSuccess);
+      /*   municipalBloc.add(FetchMuniciaples(state: event.state));*/
     }
     if (event is ClearState) {
       _selectedState$.add(null);

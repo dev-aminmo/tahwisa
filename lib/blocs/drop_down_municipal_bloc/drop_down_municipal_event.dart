@@ -3,6 +3,8 @@ import 'package:meta/meta.dart';
 import 'package:tahwisa/repositories/models/municipal.dart';
 import 'package:tahwisa/repositories/models/state.dart';
 
+import 'drop_down_municipal_state.dart';
+
 @immutable
 abstract class DropDownMunicipalEvent extends Equatable {
   const DropDownMunicipalEvent();
@@ -30,6 +32,21 @@ class MunicipalChosen extends DropDownMunicipalEvent {
 
   @override
   String toString() => 'MunicipalChosen { municipal: $municipal }';
+}
+
+class LoadMunicipalState extends DropDownMunicipalEvent {
+  final Municipal selectedMunicipal;
+  final DropDownsMunicipalSuccess dropDownsMunicipalSuccess;
+  const LoadMunicipalState({
+    @required this.selectedMunicipal,
+    @required this.dropDownsMunicipalSuccess,
+  });
+
+  @override
+  List<Object> get props => [selectedMunicipal, dropDownsMunicipalSuccess];
+
+  @override
+  String toString() => 'Municipal Loaded { municipal: $selectedMunicipal }';
 }
 
 class ClearMunicipal extends DropDownMunicipalEvent {}
