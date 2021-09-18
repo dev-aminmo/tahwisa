@@ -5,10 +5,13 @@ class TitleTextField extends StatelessWidget {
   const TitleTextField({
     Key key,
     @required TextEditingController titleEditingController,
+    String hint = "enter title of the place",
   })  : _titleEditingController = titleEditingController,
+        hint = hint,
         super(key: key);
 
   final TextEditingController _titleEditingController;
+  final String hint;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +20,7 @@ class TitleTextField extends StatelessWidget {
       decoration: InputDecoration(
           fillColor: MyColors.white,
           filled: true,
-          hintText: "enter title of the place",
+          hintText: hint,
           counterText: "",
           errorStyle: TextStyle(fontSize: 16),
           hintStyle: TextStyle(

@@ -32,7 +32,11 @@ class AddReview extends StatelessWidget {
         const SizedBox(height: 22),
         RatingBar(
           onRatingChanged: (rating) {
-            print(rating);
+            Navigator.pushNamed(
+              context,
+              '/rate_place',
+              arguments: {'initialRate': rating},
+            );
           },
           size: 48,
           filledIcon: Icons.star,

@@ -14,6 +14,7 @@ import 'screens/auth/signup.dart';
 import 'screens/profile/profile_screen.dart';
 import 'screens/profile/views/add_place/add_place_navigator.dart';
 import 'screens/profile/views/place_details.dart';
+import 'screens/profile/views/rate_place.dart';
 
 class SimpleBlocDelegate extends BlocObserver {
   @override
@@ -132,6 +133,12 @@ class _AppState extends State<App> {
         return PlaceDetailsScreen.route(
           place: arguments['place'] as Place,
           heroAnimationTag: arguments['heroAnimationTag'],
+        );
+      case RatePlaceScreen.routeName:
+        Map<String, dynamic> arguments =
+            new Map<String, dynamic>.from(settings.arguments);
+        return RatePlaceScreen.route(
+          initialRate: arguments['initialRate'],
         );
     }
   }
