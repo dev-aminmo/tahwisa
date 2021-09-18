@@ -29,22 +29,23 @@ class ReviewRepository {
     return "";
   }
 
-  Future<dynamic> fetchUserReview(var id) async {
+  Future<dynamic> fetchUserReview(var placeId) async {
     var pref = await SharedPreferences.getInstance();
     String token = pref.getString("token");
-    var response = await Dio().get(Api.tags + "/top",
+    print(Api.user_review + "/$placeId");
+    var response = await Dio().get(Api.user_review + "/$placeId",
         options: Options(
           headers: {"Authorization": "Bearer " + token},
         ));
-    var data = response.data;
-    List<Review> reviews = [];
-
-    for (var jsonReview in data["data"]) {
-      var tag = Review.fromJson(jsonReview);
-      reviews.add(tag);
+    var data = await response.data;
+    Review review;
+    if ((response.statusCode == 200) && data != null) {
+      if (data['data'] != null) review = Review.fromJson(data['data']);
     }
-    print(reviews.length);
 
-    return "reviews";
+    print(data);
+    print(review);
+
+    return review;
   }
 }

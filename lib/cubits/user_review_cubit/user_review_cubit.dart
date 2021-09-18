@@ -14,7 +14,17 @@ class UserReviewCubit extends Cubit<UserReviewState> {
       : super(UserReviewLoading()) {
     fetchUserReview(placeID);
   }
-  void fetchUserReview(var placeID) {}
+  void fetchUserReview(var placeID) async {
+    emit(UserReviewLoading());
+
+    Review review = await repository.fetchUserReview(placeID);
+    if (review != null) {
+      emit(UserReviewLoaded(review));
+    } else {
+      emit(UserReviewEmpty());
+    }
+  }
+
   void updateReview(var reviewID) {}
   void deleteReview(var reviewID) {}
 }
