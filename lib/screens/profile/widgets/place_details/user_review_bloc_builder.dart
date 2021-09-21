@@ -100,22 +100,29 @@ class UserReviewBlocBuilder extends StatelessWidget {
                                       textAlign: TextAlign.left,
                                       softWrap: true,
                                       style: TextStyle(
-                                          fontWeight: FontWeight.w900,
+                                          fontWeight: FontWeight.w400,
                                           fontSize: 14,
-                                          color: MyColors.darkBlue),
+                                          color: MyColors.gray),
                                     ),
                                   ],
                                 )
                               ],
                             ),
                             Spacer(),
-                            IconButton(
-                              icon: Icon(
-                                Icons.more_vert_outlined,
-                                color: MyColors.gray,
-                              ),
-                              onPressed: () {},
-                            )
+                            PopupMenuButton(
+                                padding: EdgeInsets.all(4),
+                                color: MyColors.white,
+                                icon: Icon(Icons.more_vert_outlined,
+                                    color: MyColors.darkBlue),
+                                itemBuilder: (context) => [
+                                      PopupMenuItem(
+                                        child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 4, horizontal: 32),
+                                            child: Text("Delete")),
+                                        value: 1,
+                                      ),
+                                    ]),
                           ]),
                       const SizedBox(
                         height: 8,
