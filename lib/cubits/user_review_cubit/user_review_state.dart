@@ -11,9 +11,13 @@ class UserReviewInitial extends UserReviewState {}
 
 class UserReviewLoading extends UserReviewState {}
 
+class UserReviewPostLoading extends UserReviewState {}
+
 class UserReviewEmpty extends UserReviewState {}
 
 class UserReviewError extends UserReviewState {}
+
+class UserReviewPostSuccess extends UserReviewState {}
 
 class UserReviewLoaded extends UserReviewState {
   UserReviewLoaded(this.review);
