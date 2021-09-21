@@ -1,38 +1,40 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
+import 'user.dart';
+
 class Review extends Equatable {
   var id;
-  var vote;
+  var rating;
   var comment;
   var placeId;
-  var userId;
+  User user;
   var createdAt;
 
   Review({
     @required this.id,
-    @required this.vote,
+    @required this.rating,
     this.comment,
     this.placeId,
-    this.userId,
+    this.user,
     this.createdAt,
   });
 
   Review.fromJson(Map<String, dynamic> json) {
     this.id = json['id'];
-    this.vote = json['vote'];
+    this.rating = json['vote'];
     this.comment = json['comment'];
     this.placeId = json['place_id'];
-    this.userId = json['user_id'];
+    this.user = User.fromJson(json['user']);
     this.createdAt = json['created_at'];
   }
   @override
   List<Object> get props => [
         this.id,
-        this.vote,
+        this.rating,
         this.comment,
         this.placeId,
-        this.userId,
+        this.user,
         this.createdAt,
       ];
 

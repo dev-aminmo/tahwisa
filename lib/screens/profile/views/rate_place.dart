@@ -33,6 +33,7 @@ class _RatePlaceScreenState extends State<RatePlaceScreen> {
   void initState() {
     super.initState();
     initialRate = widget.initialRate;
+
     _textEditingController = TextEditingController();
   }
 

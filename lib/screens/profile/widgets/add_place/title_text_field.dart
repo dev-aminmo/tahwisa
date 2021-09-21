@@ -2,21 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 class TitleTextField extends StatelessWidget {
-  const TitleTextField({
-    Key key,
-    @required TextEditingController titleEditingController,
-    String hint = "enter title of the place",
-  })  : _titleEditingController = titleEditingController,
+  const TitleTextField(
+      {Key key,
+      @required TextEditingController titleEditingController,
+      String hint = "enter title of the place",
+      Function onEditingComplete})
+      : _titleEditingController = titleEditingController,
         hint = hint,
+        onEditingComplete = onEditingComplete,
         super(key: key);
 
   final TextEditingController _titleEditingController;
   final String hint;
+  final Function onEditingComplete;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: _titleEditingController,
+      onEditingComplete: onEditingComplete,
       decoration: InputDecoration(
           fillColor: MyColors.white,
           filled: true,
