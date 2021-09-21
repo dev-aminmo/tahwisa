@@ -114,6 +114,12 @@ class UserReviewBlocBuilder extends StatelessWidget {
                                 color: MyColors.white,
                                 icon: Icon(Icons.more_vert_outlined,
                                     color: MyColors.darkBlue),
+                                onSelected: (value) {
+                                  if (value == 1) {
+                                    _userReviewCubit.deleteReview(
+                                        reviewID: state.review.id);
+                                  }
+                                },
                                 itemBuilder: (context) => [
                                       PopupMenuItem(
                                         child: Padding(
@@ -129,7 +135,7 @@ class UserReviewBlocBuilder extends StatelessWidget {
                       ),
                       Flexible(
                         child: Text(
-                          state.review.comment,
+                         ''?? state.review.comment,
                           textAlign: TextAlign.left,
                           softWrap: true,
                           style: TextStyle(

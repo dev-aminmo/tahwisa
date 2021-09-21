@@ -40,5 +40,17 @@ class UserReviewCubit extends Cubit<UserReviewState> {
     }
   }
 
-  void deleteReview(var reviewID) {}
+  void deleteReview({@required var reviewID}) async {
+    emit(UserReviewLoading());
+    try {
+      var response = await repository.deleteUserReview(reviewID);
+      if (response) {
+        emit(UserReviewEmpty());
+      } else {
+        emit(UserReviewError());
+      }
+    } catch (e) {
+      emit(UserReviewError());
+    }
+  }
 }

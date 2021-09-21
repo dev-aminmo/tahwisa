@@ -52,7 +52,7 @@ class ReviewRepository {
   Future<dynamic> deleteUserReview(var reviewID) async {
     var pref = await SharedPreferences.getInstance();
     String token = pref.getString("token");
-    var response = await Dio().delete(Api.user_review + "/$reviewID",
+    var response = await Dio().delete(Api.delete_user_review + "/$reviewID",
         options: Options(
           headers: {"Authorization": "Bearer " + token},
         ));
