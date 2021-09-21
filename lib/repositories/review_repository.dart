@@ -49,6 +49,19 @@ class ReviewRepository {
     return review;
   }
 
+  Future<dynamic> deleteUserReview(var reviewID) async {
+    var pref = await SharedPreferences.getInstance();
+    String token = pref.getString("token");
+    var response = await Dio().delete(Api.user_review + "/$reviewID",
+        options: Options(
+          headers: {"Authorization": "Bearer " + token},
+        ));
+    if (response.statusCode == 201) {
+      return true;
+    }
+    return false;
+  }
+
   Future<dynamic> postReview({
     @required double rating,
     String comment,
