@@ -29,6 +29,7 @@ class RatePlaceScreen extends StatefulWidget {
 class _RatePlaceScreenState extends State<RatePlaceScreen> {
   var initialRate;
   TextEditingController _textEditingController;
+
   @override
   void initState() {
     super.initState();
@@ -58,7 +59,9 @@ class _RatePlaceScreenState extends State<RatePlaceScreen> {
               ),
               RatingBar(
                 onRatingChanged: (rating) {
-                  print("rating changed");
+                  setState(() {
+                    initialRate = rating;
+                  });
                 },
                 size: 48,
                 filledIcon: Icons.star,
@@ -98,7 +101,12 @@ class _RatePlaceScreenState extends State<RatePlaceScreen> {
                           MediaQuery.of(context).size.width * 0.1,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        widget.userReviewCubit.postReview(
+                          rating: initialRate,
+                          comment: _textEditingController.value.text,
+                        );
+                      },
                       child: Text(
                         "Post",
                         style: TextStyle(

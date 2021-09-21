@@ -25,6 +25,10 @@ class UserReviewCubit extends Cubit<UserReviewState> {
     }
   }
 
-  void updateReview(var reviewID) {}
+  void postReview({@required var rating, var comment}) async {
+    var response = await repository.postReview(
+        rating: rating, comment: comment, placeId: placeID);
+  }
+
   void deleteReview(var reviewID) {}
 }

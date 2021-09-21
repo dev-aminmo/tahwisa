@@ -48,4 +48,33 @@ class ReviewRepository {
 
     return review;
   }
+
+  Future<dynamic> postReview({
+    @required double rating,
+    String comment,
+    int placeId,
+  }) async {
+    try {
+      var pref = await SharedPreferences.getInstance();
+      String token = pref.getString("token");
+      var formData = FormData.fromMap(
+          {"vote": rating, "comment": comment, "place_id": placeId});
+      var response = await Dio().post(Api.post_review,
+          data: formData,
+          options: Options(
+            headers: {
+              "Authorization": "Bearer " + token,
+            },
+            validateStatus: (status) => true,
+          ));
+      var data = response.data;
+      print(data);
+      if (response.statusCode == 201) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      throw (e.toString());
+    }
+  }
 }

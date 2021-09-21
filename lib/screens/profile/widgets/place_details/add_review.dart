@@ -11,9 +11,6 @@ class AddReview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //var bloc = BlocProvider.of<UserReviewCubit>(context);
-
-    print("success");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
