@@ -27,7 +27,7 @@ class SimpleBlocDelegate extends BlocObserver {
 
 void main() {
   Bloc.observer = SimpleBlocDelegate();
-  runApp(App(/*userRepository: UserRepository()*/));
+  runApp(App());
 }
 
 class App extends StatefulWidget {
@@ -75,8 +75,6 @@ class _AppState extends State<App> {
             indicatorColor: MyColors.lightGreen,
             accentColor: MyColors.lightGreen,
             scaffoldBackgroundColor: MyColors.white,
-
-            //  fontFamily: 'Lato',
             backgroundColor: MyColors.white,
           ),
           builder: (context, child) {
@@ -139,6 +137,7 @@ class _AppState extends State<App> {
             new Map<String, dynamic>.from(settings.arguments);
         return RatePlaceScreen.route(
           initialRate: arguments['initialRate'],
+          userReviewCubit: arguments['userReviewCubit'],
         );
     }
   }

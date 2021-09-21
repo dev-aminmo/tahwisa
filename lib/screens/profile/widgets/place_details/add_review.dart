@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rating_bar/rating_bar.dart';
+import 'package:tahwisa/cubits/user_review_cubit/user_review_cubit.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 class AddReview extends StatelessWidget {
@@ -9,6 +11,9 @@ class AddReview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //var bloc = BlocProvider.of<UserReviewCubit>(context);
+
+    print("success");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -35,7 +40,10 @@ class AddReview extends StatelessWidget {
             Navigator.pushNamed(
               context,
               '/rate_place',
-              arguments: {'initialRate': rating},
+              arguments: {
+                'initialRate': rating,
+                'userReviewCubit': context.read<UserReviewCubit>()
+              },
             );
           },
           size: 48,

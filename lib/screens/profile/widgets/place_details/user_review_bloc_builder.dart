@@ -15,18 +15,21 @@ class UserReviewBlocBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserReviewCubit, UserReviewState>(
-      cubit: _userReviewCubit,
-      builder: (context, state) {
-        if (state is UserReviewEmpty) {
-          return AddReview();
-        }
-        if (state is UserReviewLoaded) {
-          return Text("here is  your review ${state.review.vote}");
-        } else {
-          return CircularProgressIndicator();
-        }
-      },
+    return BlocProvider.value(
+      value: _userReviewCubit,
+      child: BlocBuilder<UserReviewCubit, UserReviewState>(
+        //cubit: context.read<UserReviewCubit>(),
+        builder: (context, state) {
+          if (state is UserReviewEmpty) {
+            return AddReview();
+          }
+          if (state is UserReviewLoaded) {
+            return Text("here is  your review ${state.review.vote}");
+          } else {
+            return CircularProgressIndicator();
+          }
+        },
+      ),
     );
   }
 }
