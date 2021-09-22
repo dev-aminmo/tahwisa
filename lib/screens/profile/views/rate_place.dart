@@ -164,8 +164,4 @@ class _RatePlaceScreenState extends State<RatePlaceScreen> {
               )),
         ));
   }
-
-  void _pop() {
-    Navigator.of(context).pop();
-  }
 }

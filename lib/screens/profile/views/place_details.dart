@@ -56,14 +56,15 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
         appBar: buildAppBar(),
         extendBodyBehindAppBar: true,
         backgroundColor: MyColors.white,
-        body: SingleChildScrollView(
-          physics: ClampingScrollPhysics(),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Carousel(place: place, heroAnimationTag: widget.heroAnimationTag),
-            buildPlaceDetails(),
-          ]),
-        ));
+        body: ListView(
+            padding: EdgeInsets.zero,
+            physics: ClampingScrollPhysics(),
+            children: [
+              //  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Carousel(place: place, heroAnimationTag: widget.heroAnimationTag),
+              buildPlaceDetails(),
+            ] //]),
+            ));
   }
 
   Padding buildPlaceDetails() {
@@ -80,7 +81,8 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
           const SizedBox(height: 16),
           const SizedBox(height: 16),
           Divider(
-            thickness: 1.5,
+            indent: 32,
+            endIndent: 32,
           ),
           const SizedBox(height: 8),
           UserRow(place: place),
@@ -90,17 +92,25 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
           TagsList(place: place),
           const SizedBox(height: 16),
           Divider(
-            thickness: 1.5,
+            indent: 32,
+            endIndent: 32,
           ),
-          const SizedBox(height: 8),
-          Text(
-            'Rating and Reviews',
-            style: TextStyle(fontSize: 22, color: Colors.grey.withOpacity(0.8)),
-          ),
-          const SizedBox(height: 16),
+
           const SizedBox(height: 16),
           UserReviewBlocBuilder(userReviewCubit: _userReviewCubit),
-          const SizedBox(height: 32),
+          // const SizedBox(height: 32),
+          const SizedBox(height: 8),
+          Divider(
+            indent: 32,
+            endIndent: 32,
+          ),
+
+          Text(
+            'Ratings and Reviews',
+            style: TextStyle(fontSize: 20, color: Colors.grey.withOpacity(0.8)),
+          ),
+
+          const SizedBox(height: 16),
           ReviewsCountDisplay(place: place),
           BlocProvider<ReviewsCubit>(
             create: (_) =>

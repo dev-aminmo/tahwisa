@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tahwisa/repositories/models/Review.dart';
 
 import 'api/api_endpoints.dart';
+import 'models/reviews_response.dart';
 
 class ReviewRepository {
   /// Mocks fetching Tags from network API with delay of 500ms.
@@ -14,7 +15,7 @@ class ReviewRepository {
   }) async {
     var pref = await SharedPreferences.getInstance();
     String token = pref.getString("token");
-    var response = await Dio().get(Api.reviews + "/$placeId",
+    var response = await Dio().get(Api.reviews + "/$placeId?page=$page",
         options: Options(
           headers: {"Authorization": "Bearer " + token},
         ));
@@ -25,9 +26,13 @@ class ReviewRepository {
         var review = Review.fromJson(jsonReview);
         reviews.add(review);
       }
+      return ReviewsResponse(
+        reviews: reviews,
+        numPages: data['data']['total_pages'],
+        numResults: data['data']['total'],
+      );
     }
-
-    return reviews;
+    return false;
   }
 
   Future<dynamic> fetchUserReview(var placeId) async {

@@ -15,6 +15,7 @@ import 'screens/profile/profile_screen.dart';
 import 'screens/profile/views/add_place/add_place_navigator.dart';
 import 'screens/profile/views/place_details.dart';
 import 'screens/profile/views/rate_place.dart';
+import 'screens/profile/views/reviews_screen.dart';
 
 class SimpleBlocDelegate extends BlocObserver {
   @override
@@ -139,6 +140,12 @@ class _AppState extends State<App> {
           initialRate: arguments['initialRate'],
           userReviewCubit: arguments['userReviewCubit'],
           initialComment: arguments['initialComment'],
+        );
+      case ReviewsScreen.routeName:
+        Map<String, dynamic> arguments =
+            new Map<String, dynamic>.from(settings.arguments);
+        return ReviewsScreen.route(
+          reviewsCubit: arguments['reviewsCubit'],
         );
     }
   }
