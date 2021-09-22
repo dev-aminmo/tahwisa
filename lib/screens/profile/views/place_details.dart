@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tahwisa/cubits/reviews_cubit/reviews_cubit.dart';
 import 'package:tahwisa/cubits/user_review_cubit/user_review_cubit.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/review_repository.dart';
@@ -32,11 +34,12 @@ class PlaceDetailsScreen extends StatefulWidget {
 class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
   Place place;
   UserReviewCubit _userReviewCubit;
+  ReviewRepository _reviewRepository = ReviewRepository();
   @override
   void initState() {
     super.initState();
     place = widget.place;
-    ReviewRepository _reviewRepository = ReviewRepository();
+
     _userReviewCubit =
         UserReviewCubit(repository: _reviewRepository, placeID: place.id);
   }
@@ -67,7 +70,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
     return Padding(
       padding: EdgeInsets.all(18),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -97,8 +100,14 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
           const SizedBox(height: 16),
           const SizedBox(height: 16),
           UserReviewBlocBuilder(userReviewCubit: _userReviewCubit),
-          const SizedBox(height: 62),
-          ReviewsCountDisplay(place: place)
+          const SizedBox(height: 32),
+          ReviewsCountDisplay(place: place),
+          BlocProvider<ReviewsCubit>(
+            create: (_) =>
+                ReviewsCubit(repository: _reviewRepository, placeID: place.id),
+            child: ReviewBlocBuilder(),
+          )
+          //    ReviewBlocBuilder(reviewCubit: _userReviewCubit),
         ],
       ),
     );

@@ -20,13 +20,14 @@ class ReviewRepository {
         ));
     var data = response.data;
     List<Review> reviews = [];
-
-    for (var jsonReview in data) {
-      var tag = Review.fromJson(jsonReview);
-      reviews.add(tag);
+    if (response.statusCode == 200) {
+      for (var jsonReview in data['data']['reviews']) {
+        var review = Review.fromJson(jsonReview);
+        reviews.add(review);
+      }
     }
 
-    return "";
+    return reviews;
   }
 
   Future<dynamic> fetchUserReview(var placeId) async {
