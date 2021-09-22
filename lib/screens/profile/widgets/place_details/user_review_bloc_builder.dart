@@ -135,7 +135,7 @@ class UserReviewBlocBuilder extends StatelessWidget {
                       ),
                       Flexible(
                         child: Text(
-                         ''?? state.review.comment,
+                          state.review.comment ?? '',
                           textAlign: TextAlign.left,
                           softWrap: true,
                           style: TextStyle(
@@ -144,6 +144,36 @@ class UserReviewBlocBuilder extends StatelessWidget {
                               color: MyColors.gray),
                         ),
                       ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/rate_place',
+                            arguments: {
+                              'initialRate': state.review.rating + 0.0,
+                              'userReviewCubit':
+                                  context.read<UserReviewCubit>(),
+                              'initialComment': state.review.comment
+                            },
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            minimumSize: Size(50, 30),
+                            alignment: Alignment.centerLeft),
+                        child: Text(
+                          "Edit your review",
+                          textAlign: TextAlign.left,
+                          softWrap: true,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 16,
+                              color: MyColors.lightGreen),
+                        ),
+                      )
                     ]),
               ),
             );

@@ -9,17 +9,26 @@ import 'package:tahwisa/style/my_colors.dart';
 class RatePlaceScreen extends StatefulWidget {
   static const String routeName = '/rate_place';
 
-  static Route route({double initialRate, UserReviewCubit userReviewCubit}) {
+  static Route route(
+      {double initialRate,
+      UserReviewCubit userReviewCubit,
+      String initialComment}) {
     return MaterialPageRoute(
       builder: (_) => RatePlaceScreen(
-          initialRate: initialRate, userReviewCubit: userReviewCubit),
+          initialRate: initialRate,
+          userReviewCubit: userReviewCubit,
+          initialComment: initialComment),
       settings: RouteSettings(name: routeName),
     );
   }
 
   final double initialRate;
   final UserReviewCubit userReviewCubit;
-  RatePlaceScreen({@required this.initialRate, @required this.userReviewCubit});
+  final String initialComment;
+  RatePlaceScreen(
+      {@required this.initialRate,
+      @required this.userReviewCubit,
+      this.initialComment});
 
   @override
   _RatePlaceScreenState createState() => _RatePlaceScreenState();
@@ -34,7 +43,7 @@ class _RatePlaceScreenState extends State<RatePlaceScreen> {
     super.initState();
     initialRate = widget.initialRate;
 
-    _textEditingController = TextEditingController();
+    _textEditingController = TextEditingController(text: widget.initialComment);
   }
 
   @override

@@ -138,6 +138,7 @@ class _AppState extends State<App> {
         return RatePlaceScreen.route(
           initialRate: arguments['initialRate'],
           userReviewCubit: arguments['userReviewCubit'],
+          initialComment: arguments['initialComment'],
         );
     }
   }
