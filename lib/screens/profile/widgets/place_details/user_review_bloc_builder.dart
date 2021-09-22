@@ -6,7 +6,7 @@ import 'package:tahwisa/style/my_colors.dart';
 import '../rating_bar_stars_read_only.dart';
 import 'add_review.dart';
 
-class UserReviewBlocBuilder extends StatelessWidget {
+class UserReviewBlocBuilder extends StatefulWidget {
   const UserReviewBlocBuilder({
     Key key,
     @required UserReviewCubit userReviewCubit,
@@ -16,14 +16,19 @@ class UserReviewBlocBuilder extends StatelessWidget {
   final UserReviewCubit _userReviewCubit;
 
   @override
+  _UserReviewBlocBuilderState createState() => _UserReviewBlocBuilderState();
+}
+
+class _UserReviewBlocBuilderState extends State<UserReviewBlocBuilder> {
+  @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: _userReviewCubit,
+      value: widget._userReviewCubit,
       child: BlocConsumer<UserReviewCubit, UserReviewState>(
         //cubit: context.read<UserReviewCubit>(),
         listener: (context, state) {
           if (state is UserReviewPostSuccess) {
-            _userReviewCubit.fetchUserReview();
+            widget._userReviewCubit.fetchUserReview();
           }
         },
         builder: (context, state) {
@@ -116,7 +121,7 @@ class UserReviewBlocBuilder extends StatelessWidget {
                                     color: MyColors.darkBlue),
                                 onSelected: (value) {
                                   if (value == 1) {
-                                    _userReviewCubit.deleteReview(
+                                    widget._userReviewCubit.deleteReview(
                                         reviewID: state.review.id);
                                   }
                                 },
@@ -183,5 +188,11 @@ class UserReviewBlocBuilder extends StatelessWidget {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    widget._userReviewCubit.close();
+    super.dispose();
   }
 }

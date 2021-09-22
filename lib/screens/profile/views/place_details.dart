@@ -42,6 +42,12 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
   }
 
   @override
+  void dispose() {
+    _userReviewCubit.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: buildAppBar(),

@@ -48,6 +48,7 @@ class _RatePlaceScreenState extends State<RatePlaceScreen> {
 
   @override
   void dispose() {
+    widget.userReviewCubit.close();
     super.dispose();
   }
 
