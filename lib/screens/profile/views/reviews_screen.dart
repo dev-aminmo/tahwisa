@@ -59,7 +59,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                         16,
                       ),
                       shrinkWrap: true,
-                      physics: ClampingScrollPhysics(),
+                      physics: BouncingScrollPhysics(),
                       itemCount: state.reviews.length,
                       itemBuilder: (context, index) =>
                           ReviewItem(state.reviews[index]));

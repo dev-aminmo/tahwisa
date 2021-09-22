@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tahwisa/cubits/reviews_cubit/reviews_cubit.dart';
+import 'package:tahwisa/style/my_colors.dart';
 
 import 'review_item.dart';
 
@@ -44,25 +45,26 @@ class _UserReviewBlocBuilderState extends State<ReviewBlocBuilder> {
           return Center(child: CircularProgressIndicator());
         }
         if (state is ReviewsSuccess) {
-          var length = state.reviews.length;
-          if (length > 5) {
-            return ListView.separated(
-                separatorBuilder: (_, __) {
-                  return Divider(
-                    indent: 32,
-                    endIndent: 32,
-                    height: 16,
-                  );
-                },
-                padding: EdgeInsets.all(
-                  16,
-                ),
-                shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  if (index == 2) {
-                    return Align(
+          return ListView.separated(
+              separatorBuilder: (_, index) {
+                if (state.reviews.length > 5 && index == 1) {
+                  return SizedBox();
+                }
+                return Divider(
+                  indent: 32,
+                  endIndent: 32,
+                  height: 16,
+                );
+              },
+              padding: EdgeInsets.symmetric(
+                vertical: 16,
+              ),
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              itemCount: state.reviews.length > 5 ? 3 : state.reviews.length,
+              itemBuilder: (context, index) {
+                if (state.reviews.length > 5 && index == 2) {
+                  return Align(
                       alignment: Alignment.centerLeft,
                       child: TextButton(
                         onPressed: () {
@@ -74,30 +76,22 @@ class _UserReviewBlocBuilderState extends State<ReviewBlocBuilder> {
                             },
                           );
                         },
-                        child: Text("See all reviews"),
-                      ),
-                    );
-                  }
-                  return ReviewItem(state.reviews[index]);
-                });
-          } else {
-            return ListView.separated(
-                separatorBuilder: (_, __) {
-                  return Divider(
-                    indent: 32,
-                    endIndent: 32,
-                    height: 16,
-                  );
-                },
-                padding: EdgeInsets.all(
-                  16,
-                ),
-                shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
-                itemCount: state.reviews.length,
-                itemBuilder: (context, index) =>
-                    ReviewItem(state.reviews[index]));
-          }
+                        style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            minimumSize: Size(50, 30),
+                            alignment: Alignment.centerLeft),
+                        child: Text(
+                          "See all reviews",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 16,
+                              color: MyColors.lightGreen),
+                        ),
+                      ));
+                }
+                return ReviewItem(state.reviews[index]);
+              });
         } else {
           return SizedBox();
         }

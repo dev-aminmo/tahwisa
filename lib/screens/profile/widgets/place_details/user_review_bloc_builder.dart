@@ -172,7 +172,6 @@ class _UserReviewBlocBuilderState extends State<UserReviewBlocBuilder> {
                         child: Text(
                           "Edit your review",
                           textAlign: TextAlign.left,
-                          softWrap: true,
                           style: TextStyle(
                               fontWeight: FontWeight.w900,
                               fontSize: 16,
