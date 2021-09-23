@@ -60,7 +60,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           numPages: _queryResponse.numPages,
           numResults: _queryResponse.numResults,
           filter: _queryResponse.filter,
-          tagName: event.tag?.name);
+          tag: event.tag);
       //  } else {
       //     yield SearchSuccess(places: places);
       //   }
@@ -68,9 +68,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     if (event is SearchPageRequested) {
       _page++;
       final QueryResponse _queryResponse = await placeRepository.search(
-          query: event.state.query,
-          page: _page,
-          filter: (state as SearchSuccess).filter);
+        query: event.state.query,
+        page: _page,
+        filter: (state as SearchSuccess).filter,
+        tagId: (state as SearchSuccess).tag?.id,
+      );
 
       _places.addAll(_queryResponse.results);
 
@@ -81,6 +83,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         numPages: _queryResponse.numPages,
         numResults: _queryResponse.numResults,
         filter: _queryResponse.filter,
+        tag: event.state.tag,
       );
     }
     if (event is FilterUpdated) {

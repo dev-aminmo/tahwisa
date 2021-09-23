@@ -14,7 +14,7 @@ class SearchSuccess extends SearchState {
   final int numPages;
   final int numResults;
   final SearchFilter filter;
-  final String tagName;
+  final Tag tag;
 
   SearchSuccess({
     @required this.query,
@@ -22,7 +22,7 @@ class SearchSuccess extends SearchState {
     @required this.numPages,
     @required this.numResults,
     @required this.filter,
-    this.tagName,
+    this.tag,
   });
 
   /// Whether or not there are more pages to load based off

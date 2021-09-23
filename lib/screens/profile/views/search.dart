@@ -120,7 +120,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                             child: CircularProgressIndicator()))
                                     : const SizedBox();
                               }
-                              if (index == 0 && (state.tagName != null)) {
+                              if ((index == 0) && (state.tag?.name != null)) {
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -129,7 +129,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                           horizontal: width * 0.025,
                                           vertical: 8),
                                       child: FittedBox(
-                                        child: Text("#${state.tagName}",
+                                        child: Text("#${state.tag.name}",
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w900,
