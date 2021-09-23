@@ -25,12 +25,17 @@ class UserReviewCubit extends Cubit<UserReviewState> {
     }
   }
 
-  void postReview({@required var rating, var comment}) async {
+  Future<void> postReview({@required var rating, var comment}) async {
     emit(UserReviewPostLoading());
+
     try {
       var response = await repository.postReview(
           rating: rating, comment: comment, placeId: placeID);
+      print("response");
+      print((response) ? true : false);
+      print(response);
       if (response) {
+        print("emitted");
         emit(UserReviewPostSuccess());
       } else {
         emit(UserReviewError());

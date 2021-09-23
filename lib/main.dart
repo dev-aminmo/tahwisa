@@ -141,7 +141,7 @@ class _AppState extends State<App> {
           userReviewCubit: arguments['userReviewCubit'],
           initialComment: arguments['initialComment'],
         );
-      case ReviewsScreen.routeName:
+        case ReviewsScreen.routeName:
         Map<String, dynamic> arguments =
             new Map<String, dynamic>.from(settings.arguments);
         return ReviewsScreen.route(

@@ -47,12 +47,6 @@ class _RatePlaceScreenState extends State<RatePlaceScreen> {
   }
 
   @override
-  void dispose() {
-    widget.userReviewCubit.close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -71,15 +65,38 @@ class _RatePlaceScreenState extends State<RatePlaceScreen> {
                       useRootNavigator: false,
                       barrierDismissible: true, // user must tap button!
                       builder: (BuildContext context) => AlertDialog(
-                              content: Column(
+                          backgroundColor: Colors.white,
+                          content: Column(
                             mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text("Thanks for sharing"),
+                              Icon(
+                                Icons.star_outlined,
+                                color: MyColors.darkBlue,
+                                size: 72,
+                              ),
+                              const SizedBox(height: 16),
                               Text(
-                                  "your feedback helps others make better decisions about which place to visit"),
+                                "Thanks for sharing",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 22,
+                                    color: MyColors.darkBlue),
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                "your feedback helps others make better decisions about which place to visit",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 16,
+                                    color: MyColors.gray),
+                              )
                             ],
-                          ))).then((value) => Navigator.of(context)
-                      .popUntil(ModalRoute.withName('/place_details')));
+                          ))).then((value) {
+                    Navigator.of(context)
+                        .popUntil(ModalRoute.withName('/place_details'));
+                  });
                 }
               },
               child: SingleChildScrollView(

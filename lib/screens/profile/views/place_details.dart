@@ -107,7 +107,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
 
           Text(
             'Ratings and Reviews',
-            style: TextStyle(fontSize: 20, color: Colors.grey.withOpacity(0.8)),
+            style: TextStyle(fontSize: 22, color: Colors.grey.withOpacity(0.8)),
           ),
 
           const SizedBox(height: 16),
