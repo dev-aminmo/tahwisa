@@ -20,19 +20,16 @@ class ReviewBlocBuilder extends StatefulWidget {
 
 class _UserReviewBlocBuilderState extends State<ReviewBlocBuilder> {
   ReviewsCubit _reviewsCubit;
-  ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
     _reviewsCubit = context.read<ReviewsCubit>();
-    _scrollController = ScrollController();
   }
 
   @override
   void dispose() {
     _reviewsCubit.close();
-    _scrollController.dispose();
     super.dispose();
   }
 
@@ -45,6 +42,7 @@ class _UserReviewBlocBuilderState extends State<ReviewBlocBuilder> {
           return Center(child: CircularProgressIndicator());
         }
         if (state is ReviewsSuccess) {
+          print("reviews length ${state.reviews.length}");
           return ListView.separated(
               separatorBuilder: (_, index) {
                 if (state.reviews.length > 5 && index == 1) {

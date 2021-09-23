@@ -94,9 +94,6 @@ class _SearchScreenState extends State<SearchScreen> {
                         stream: _searchBloc.places,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            for (var place in snapshot.data) {
-                              print(place.id);
-                            }
                             return ListView.builder(
                                 controller: innerScrollController
                                   ..addListener(() {

@@ -38,7 +38,6 @@ class ReviewRepository {
   Future<dynamic> fetchUserReview(var placeId) async {
     var pref = await SharedPreferences.getInstance();
     String token = pref.getString("token");
-    print(Api.user_review + "/$placeId");
     var response = await Dio().get(Api.user_review + "/$placeId",
         options: Options(
           headers: {"Authorization": "Bearer " + token},
@@ -48,10 +47,6 @@ class ReviewRepository {
     if ((response.statusCode == 200) && data != null) {
       if (data['data'] != null) review = Review.fromJson(data['data']);
     }
-
-    print(data);
-    print(review);
-
     return review;
   }
 
