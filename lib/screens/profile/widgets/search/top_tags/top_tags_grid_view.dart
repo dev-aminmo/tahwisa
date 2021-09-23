@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tahwisa/blocs/search_bloc/search_bloc.dart';
 import 'package:tahwisa/repositories/models/tag.dart';
 
 import 'tag_card.dart';
@@ -25,7 +27,12 @@ class TopTagsGridView extends StatelessWidget {
               childAspectRatio: 1.4,
               mainAxisSpacing: 16),
           itemBuilder: (context, index) {
-            return TagCard(tags[index]);
+            return TagCard(tags[index], () {
+              context.read<SearchBloc>().add(SearchFirstPageEvent(
+                    query: '',
+                    tag: tags[index],
+                  ));
+            });
           }),
     );
   }

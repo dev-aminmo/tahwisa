@@ -126,14 +126,14 @@ class _SearchScreenState extends State<SearchScreen> {
                                   children: [
                                     Padding(
                                       padding: EdgeInsets.symmetric(
-                                        horizontal: width * 0.025,
-                                      ),
+                                          horizontal: width * 0.025,
+                                          vertical: 8),
                                       child: FittedBox(
                                         child: Text("#${state.tagName}",
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w900,
-                                                fontSize: 48,
+                                                fontSize: 36,
                                                 color: MyColors.darkBlue)),
                                       ),
                                     ),
