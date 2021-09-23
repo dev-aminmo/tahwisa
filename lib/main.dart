@@ -10,6 +10,7 @@ import 'package:tahwisa/screens/welcome.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 import 'repositories/models/place.dart';
+import 'repositories/review_repository.dart';
 import 'screens/auth/signup.dart';
 import 'screens/profile/profile_screen.dart';
 import 'screens/profile/views/add_place/add_place_navigator.dart';
@@ -63,8 +64,11 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return BlocProvider<AuthenticationBloc>(
         create: (context) => authenticationBloc,
-        child: RepositoryProvider(
-          create: (context) => PlaceRepository(),
+        child: MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider(create: (_) => PlaceRepository()),
+            RepositoryProvider(create: (_) => ReviewRepository()),
+          ],
           child: MaterialApp(
             navigatorKey: _navigatorKey,
             title: 'Tahwisa',

@@ -33,9 +33,8 @@ class PlaceDetailsScreen extends StatefulWidget {
 }
 
 class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
-  // Place place;
   UserReviewCubit _userReviewCubit;
-  ReviewRepository _reviewRepository = ReviewRepository();
+  ReviewRepository _reviewRepository;
   PlaceDetailsCubit _detailsCubit;
 
   @override
@@ -51,6 +50,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
           placeID: widget.placeId,
           placeRepository: context.read<PlaceRepository>());
     }
+    _reviewRepository = context.read<ReviewRepository>();
     _userReviewCubit = UserReviewCubit(
         repository: _reviewRepository,
         placeID: widget.place?.id ?? widget.placeId);
