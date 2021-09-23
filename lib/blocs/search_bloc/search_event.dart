@@ -9,15 +9,16 @@ abstract class SearchEvent extends Equatable {
 
 class SearchFirstPageEvent extends SearchEvent {
   final String query;
+  final Tag tag;
 
-  const SearchFirstPageEvent(this.query);
+  const SearchFirstPageEvent({this.query, this.tag});
 
   @override
   List<Object> get props => [query];
 
   @override
   String toString() {
-    return 'SearchStarted { query: $query }';
+    return 'SearchStarted { query: $query ,tag:$tag }';
   }
 }
 

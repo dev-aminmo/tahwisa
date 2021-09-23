@@ -12,6 +12,7 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
     @required this.width,
     @required this.height,
     @required this.onEditingComplete,
+    @required this.onSuggestionSelected,
   })  : _searchEditingController = searchEditingController,
         super(key: key);
 
@@ -19,88 +20,81 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
   final double width;
   final double height;
   final Function onEditingComplete;
+  final Function onSuggestionSelected;
 
   @override
   Widget build(BuildContext context) {
     return TypeAheadField(
-      hideOnEmpty: true,
-      hideOnLoading: false,
-      debounceDuration: const Duration(milliseconds: 150),
-      //Todo  hideOnError: true, in production
-      hideOnError: false,
-      textFieldConfiguration: TextFieldConfiguration(
-        onEditingComplete: onEditingComplete,
-        controller: _searchEditingController,
-        //autofocus: true,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(
-              left: width * 0.07,
-              top: height * 0.025,
-              bottom: height * 0.025,
-            ),
-            hintText: "search for a place",
-            counterText: "",
-            errorStyle: TextStyle(fontSize: 16),
-            hintStyle: TextStyle(
-                fontWeight: FontWeight.w400,
-                color: Color(0xff8FA0B3),
-                fontSize: 20),
-            border: OutlineInputBorder(),
-            enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(width * 0.1),
-                borderSide: BorderSide(
-                    color: Colors.grey.withOpacity(0.8), width: 1.5)),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(width * 0.1),
-                borderSide: BorderSide(
-                    color: Colors.grey.withOpacity(0.8), width: 2.5))),
-        cursorColor: MyColors.lightGreen,
-        style: DefaultTextStyle.of(context).style.copyWith(
-            color: MyColors.darkBlue,
-            fontWeight: FontWeight.w400,
-            fontSize: 20),
-      ),
-      suggestionsCallback: (pattern) async {
-        return (pattern.length > 1)
-            ? await PlaceRepository().autocomplete(pattern)
-            : [];
-      },
-      itemBuilder: (context, suggestion) {
-        if (suggestion is Place) {
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Icon(Icons.place),
-                SizedBox(width: 20),
-                Text(suggestion.title),
-                SizedBox(width: 5),
-              ],
-            ),
-          );
-        }
-        if (suggestion is Tag) {
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Icon(Icons.tag),
-                SizedBox(width: 20),
-                Text(suggestion.name),
-                SizedBox(width: 5),
-              ],
-            ),
-          );
-        }
-        return SizedBox();
-      },
-      onSuggestionSelected: (suggestion) {
-        /*Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProductPage(product: suggestion)));
-          */
-        //  _searchEditingController.text = suggestion.title;
-        //   print("hello");
-      },
-    );
+        hideOnEmpty: true,
+        hideOnLoading: true,
+        debounceDuration: const Duration(milliseconds: 150),
+        //Todo  hideOnError: true, in production
+        hideOnError: true,
+        textFieldConfiguration: TextFieldConfiguration(
+          onEditingComplete: onEditingComplete,
+          controller: _searchEditingController,
+          decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(
+                left: width * 0.07,
+                top: height * 0.025,
+                bottom: height * 0.025,
+              ),
+              hintText: "search for a place",
+              counterText: "",
+              errorStyle: TextStyle(fontSize: 16),
+              hintStyle: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xff8FA0B3),
+                  fontSize: 20),
+              border: OutlineInputBorder(),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(width * 0.1),
+                  borderSide: BorderSide(
+                      color: Colors.grey.withOpacity(0.8), width: 1.5)),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(width * 0.1),
+                  borderSide: BorderSide(
+                      color: Colors.grey.withOpacity(0.8), width: 2.5))),
+          cursorColor: MyColors.lightGreen,
+          style: DefaultTextStyle.of(context).style.copyWith(
+              color: MyColors.darkBlue,
+              fontWeight: FontWeight.w400,
+              fontSize: 20),
+        ),
+        suggestionsCallback: (pattern) async {
+          return (pattern.length > 1)
+              ? await PlaceRepository().autocomplete(pattern)
+              : [];
+        },
+        itemBuilder: (context, suggestion) {
+          if (suggestion is Place) {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Icon(Icons.place),
+                  SizedBox(width: 20),
+                  Text(suggestion.title),
+                  SizedBox(width: 5),
+                ],
+              ),
+            );
+          }
+          if (suggestion is Tag) {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Icon(Icons.tag),
+                  SizedBox(width: 20),
+                  Text(suggestion.name),
+                  SizedBox(width: 5),
+                ],
+              ),
+            );
+          }
+          return SizedBox();
+        },
+        onSuggestionSelected: onSuggestionSelected);
   }
 }

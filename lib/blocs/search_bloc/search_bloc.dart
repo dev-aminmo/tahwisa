@@ -8,6 +8,7 @@ import 'package:tahwisa/blocs/search_filter_bloc_state_manager/filter_manager_bl
 import 'package:tahwisa/repositories/models/SearchFilter.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/models/query_response.dart';
+import 'package:tahwisa/repositories/models/tag.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/tag_repository.dart';
 
@@ -48,16 +49,18 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       yield SearchProgress();
       _places.clear();
       final QueryResponse _queryResponse = await placeRepository.search(
-          query: event.query, filter: filterManagerBloc.stateToFilter());
+          query: event.query,
+          filter: filterManagerBloc.stateToFilter(),
+          tagId: event.tag?.id);
       _places.addAll(_queryResponse.results);
       _places$.add(_places);
       //if (places.length == 0) {
       yield SearchSuccess(
-        query: event.query,
-        numPages: _queryResponse.numPages,
-        numResults: _queryResponse.numResults,
-        filter: _queryResponse.filter,
-      );
+          query: event.query,
+          numPages: _queryResponse.numPages,
+          numResults: _queryResponse.numResults,
+          filter: _queryResponse.filter,
+          tagName: event.tag?.name);
       //  } else {
       //     yield SearchSuccess(places: places);
       //   }
@@ -86,7 +89,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
         var newFilter = filterManagerBloc.stateToFilter();
         if (oldFilter != newFilter) {
-          add(SearchFirstPageEvent((state as SearchSuccess).query));
+          add(SearchFirstPageEvent(query: (state as SearchSuccess).query));
         }
       }
     }

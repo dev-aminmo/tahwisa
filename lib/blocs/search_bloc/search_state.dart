@@ -14,12 +14,15 @@ class SearchSuccess extends SearchState {
   final int numPages;
   final int numResults;
   final SearchFilter filter;
+  final String tagName;
+
   SearchSuccess({
     @required this.query,
     //  @required this.page,
     @required this.numPages,
     @required this.numResults,
     @required this.filter,
+    this.tagName,
   });
 
   /// Whether or not there are more pages to load based off

@@ -37,13 +37,15 @@ class PlaceRepository {
   Future<dynamic> search(
       {@required String query,
       int page = 1,
-      @required SearchFilter filter}) async {
+      @required SearchFilter filter,
+      tagId = ''}) async {
     try {
       var pref = await SharedPreferences.getInstance();
-      print("?query=$query&page=$page&${filter.toString()}");
+      print("?query=$query&page=$page&${filter.toString()}&tag=${tagId ?? ''}");
       String token = pref.getString("token");
       var response = await Dio().get(
-          Api.search_places + "?query=$query&page=$page&${filter.toString()}",
+          Api.search_places +
+              "?query=$query&page=$page&${filter.toString()}&tag=${tagId ?? ''}",
           options: Options(
             headers: {"Authorization": "Bearer " + token},
             validateStatus: (status) => true,

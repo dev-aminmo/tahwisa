@@ -4,6 +4,7 @@ import 'package:tahwisa/blocs/search_bloc/search_bloc.dart';
 import 'package:tahwisa/blocs/search_filter_bloc_state_manager/filter_manager_bloc.dart';
 import 'package:tahwisa/cubits/top_tags_cubit/top_tags_cubit.dart';
 import 'package:tahwisa/repositories/models/place.dart';
+import 'package:tahwisa/repositories/models/tag.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/tag_repository.dart';
 import 'package:tahwisa/screens/profile/widgets/hide_keyboard_ontap.dart';
@@ -57,92 +58,116 @@ class _SearchScreenState extends State<SearchScreen> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     return HideKeyboardOnTap(
-      child: SafeArea(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: NestedScrollView(
+        child: SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: BlocProvider.value(
+          value: _searchBloc,
+          child: NestedScrollView(
             floatHeaderSlivers: true,
             headerSliverBuilder: (context, innerBoxIsScrolled) =>
                 [buildSliverAppBar(context)],
             body: BlocConsumer<SearchBloc, SearchState>(
-                cubit: _searchBloc,
+                //      cubit: _searchBloc,
                 listenWhen: (prev, next) {
-                  if (next is SearchSuccess) {
-                    return true;
-                  }
-                  return false;
-                },
-                listener: (context, state) {
-                  if (state is SearchSuccess) {
-                    setState(() {
-                      _canLoadMore = state.canLoadMore(_searchBloc.page);
+              if (next is SearchSuccess) {
+                return true;
+              }
+              return false;
+            }, listener: (context, state) {
+              if (state is SearchSuccess) {
+                setState(() {
+                  _canLoadMore = state.canLoadMore(_searchBloc.page);
+                });
+              }
+            }, builder: (context, state) {
+              final innerScrollController = PrimaryScrollController.of(context);
+              if (state is SearchInitial) {
+                return TopTagsView(topTagsCubit: _topTagsCubit);
+              }
+              if (state is SearchProgress) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (state is SearchSuccess) {
+                _searchBloc..isFetching = false;
+                return StreamBuilder<List<Place>>(
+                    stream: _searchBloc.places,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                            controller: innerScrollController
+                              ..addListener(() {
+                                if ((innerScrollController.offset ==
+                                            innerScrollController
+                                                .position.maxScrollExtent &&
+                                        !_searchBloc.isFetching) &&
+                                    _canLoadMore) {
+                                  _searchBloc
+                                    ..isFetching = true
+                                    ..add(SearchPageRequested(state));
+                                }
+                              }),
+                            physics: BouncingScrollPhysics(),
+                            itemCount: snapshot.data.length + 1,
+                            padding: const EdgeInsets.only(top: 8),
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (ctx, index) {
+                              if (index == snapshot.data.length) {
+                                return (_canLoadMore)
+                                    ? Container(
+                                        padding: const EdgeInsets.all(25),
+                                        child: const Center(
+                                            child: CircularProgressIndicator()))
+                                    : const SizedBox();
+                              }
+                              if (index == 0 && (state.tagName != null)) {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: width * 0.025,
+                                      ),
+                                      child: FittedBox(
+                                        child: Text("#${state.tagName}",
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w900,
+                                                fontSize: 48,
+                                                color: MyColors.darkBlue)),
+                                      ),
+                                    ),
+                                    PlaceCard(
+                                      place: snapshot.data[index],
+                                      heroAnimationTag: 'search',
+                                      callback: () {},
+                                      width: width,
+                                    ),
+                                  ],
+                                );
+                              }
+                              return PlaceCard(
+                                place: snapshot.data[index],
+                                heroAnimationTag: 'search',
+                                callback: () {},
+                                width: width,
+                              );
+                            });
+                      }
+                      return SizedBox();
                     });
-                  }
-                },
-                builder: (context, state) {
-                  final innerScrollController =
-                      PrimaryScrollController.of(context);
-                  if (state is SearchInitial) {
-                    return TopTagsView(topTagsCubit: _topTagsCubit);
-                  }
-                  if (state is SearchProgress) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (state is SearchSuccess) {
-                    _searchBloc..isFetching = false;
-                    return StreamBuilder<List<Place>>(
-                        stream: _searchBloc.places,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return ListView.builder(
-                                controller: innerScrollController
-                                  ..addListener(() {
-                                    if ((innerScrollController.offset ==
-                                                innerScrollController
-                                                    .position.maxScrollExtent &&
-                                            !_searchBloc.isFetching) &&
-                                        _canLoadMore) {
-                                      _searchBloc
-                                        ..isFetching = true
-                                        ..add(SearchPageRequested(state));
-                                    }
-                                  }),
-                                physics: BouncingScrollPhysics(),
-                                itemCount: snapshot.data.length + 1,
-                                padding: const EdgeInsets.only(top: 8),
-                                scrollDirection: Axis.vertical,
-                                itemBuilder: (ctx, index) {
-                                  if (index == snapshot.data.length) {
-                                    return (_canLoadMore)
-                                        ? Container(
-                                            padding: const EdgeInsets.all(25),
-                                            child: const Center(
-                                                child:
-                                                    CircularProgressIndicator()))
-                                        : const SizedBox();
-                                  }
-                                  return PlaceCard(
-                                    place: snapshot.data[index],
-                                    heroAnimationTag: 'search',
-                                    callback: () {},
-                                    width: width,
-                                  );
-                                });
-                          }
-                          return SizedBox();
-                        });
-                  } else {
-                    return Container(
-                        height: 100,
-                        child: Text(
-                          "State 0",
-                        ));
-                  }
-                }),
+              } else {
+                return Container(
+                    height: 100,
+                    child: Text(
+                      "State 0",
+                    ));
+              }
+            }),
           ),
         ),
       ),
-    );
+    ));
   }
 
   SliverToBoxAdapter buildSliverAppBar(BuildContext context) {
@@ -244,9 +269,9 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  BlocBuilder<SearchBloc, SearchState> _buildSearchTextField() {
+  Widget _buildSearchTextField() {
     return BlocBuilder<SearchBloc, SearchState>(
-        cubit: _searchBloc,
+        //cubit: _searchBloc,
         builder: (context, state) => Expanded(
                 child: SearchForPlacesTypeAheadField(
               searchEditingController: _searchEditingController,
@@ -255,6 +280,14 @@ class _SearchScreenState extends State<SearchScreen> {
               onEditingComplete: () {
                 _dismissKeyboard(context);
                 _addSearchFirstPageEvent();
+              },
+              onSuggestionSelected: (suggestion) {
+                if (suggestion is Tag) {
+                  context.read<SearchBloc>().add(SearchFirstPageEvent(
+                        query: '',
+                        tag: suggestion,
+                      ));
+                }
               },
             )));
   }
@@ -267,7 +300,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void _addSearchFirstPageEvent() {
-    _searchBloc.add(SearchFirstPageEvent(_searchEditingController.text));
+    _searchBloc.add(SearchFirstPageEvent(query: _searchEditingController.text));
   }
 }
 
