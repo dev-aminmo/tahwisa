@@ -24,9 +24,10 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TypeAheadField(
       hideOnEmpty: true,
-      hideOnLoading: true,
+      hideOnLoading: false,
       debounceDuration: const Duration(milliseconds: 150),
       //Todo  hideOnError: true, in production
+      hideOnError: false,
       textFieldConfiguration: TextFieldConfiguration(
         onEditingComplete: onEditingComplete,
         controller: _searchEditingController,

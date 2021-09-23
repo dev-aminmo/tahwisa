@@ -16,7 +16,7 @@ class ReviewsCountDisplay extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.baseline,
         textBaseline: TextBaseline.alphabetic,
         children: [
-          Text(place.reviewsAverage.toString(),
+          Text(place.reviewsAverage.toStringAsFixed(1),
               style: TextStyle(
                   height: 0.7,
                   textBaseline: TextBaseline.alphabetic,

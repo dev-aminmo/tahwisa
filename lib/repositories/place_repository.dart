@@ -84,18 +84,25 @@ class PlaceRepository {
 
           );
       var data = response.data;
+
       List<dynamic> suggestions = [];
       for (var jsonPlace in data['data']) {
         var suggestion;
         if (jsonPlace["model"] == "place") {
+          print("its a place");
+
           suggestion = Place.fromJson(jsonPlace);
         } else if (jsonPlace["model"] == "tag") {
+          print("its a tag");
+
           suggestion = Tag.fromJson(jsonPlace);
         }
         suggestions.add(suggestion);
       }
+
       return suggestions;
     } catch (e) {
+      print(e);
       throw (e.toString());
     }
   }

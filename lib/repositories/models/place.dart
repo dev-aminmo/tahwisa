@@ -34,21 +34,23 @@ class Place extends Equatable {
     this.tags,
     this.user,
   });
-
   Place.fromJson(Map<String, dynamic> json) {
     this.id = json['id'];
     this.title = json['title'];
     this.description = json['description'];
     this.latitude = json['latitude'];
     this.longitude = json['longitude'];
-    this.municipal = json['municipal_id']['name_fr'];
-    this.state = json['municipal_id']['state']['name_fr'];
+    this.municipal =
+        json['municipal_id'] == null ? null : json['municipal_id']['name_fr'];
+    this.state = json['municipal_id'] == null
+        ? null
+        : json['municipal_id']['state']['name_fr'];
     this.reviewsAverage = (json['reviews_avg_vote'] == null)
         ? 0.0
         : double.parse(json['reviews_avg_vote']);
     this.reviewsCount = json['reviews_count'];
     this.wished = json['wished'];
-    this.user = User.fromJson(json['user']);
+    this.user = (json['user'] != null) ? User.fromJson(json['user']) : null;
     if (json['tags'] != null) {
       this.tags = [];
       json['tags'].forEach((tag) {

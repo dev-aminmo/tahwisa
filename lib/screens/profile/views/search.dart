@@ -267,9 +267,6 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void _addSearchFirstPageEvent() {
-    /* setState(() {
-      _canLoadMore = true;
-    });*/
     _searchBloc.add(SearchFirstPageEvent(_searchEditingController.text));
   }
 }

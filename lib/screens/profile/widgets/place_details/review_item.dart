@@ -34,7 +34,7 @@ class ReviewItem extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      review.user.name + "${review.id}",
+                      review.user.name,
                       textAlign: TextAlign.left,
                       softWrap: true,
                       style: TextStyle(
