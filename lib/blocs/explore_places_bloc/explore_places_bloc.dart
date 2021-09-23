@@ -21,18 +21,18 @@ class ExplorePlacesBloc extends Bloc<ExplorePlacesEvent, ExplorePlacesState> {
       if (page == 1) {
         yield ExplorePlacesProgress();
       }
-      try {
-        final places = await placeRepository.fetchPlaces(page);
-        if (places.length == 0) {
-          yield ExplorePlacesEmpty();
-        } else {
-          page++;
-          yield ExplorePlacesSuccess(places: places);
-        }
-      } catch (error) {
+      //   try {
+      final places = await placeRepository.fetchPlaces(page);
+      if (places.length == 0) {
+        yield ExplorePlacesEmpty();
+      } else {
+        page++;
+        yield ExplorePlacesSuccess(places: places);
+      }
+      /* } catch (error) {
         print("error");
         yield ExplorePlacesFailure(error: error.toString());
-      }
+      }*/
     }
   }
 }

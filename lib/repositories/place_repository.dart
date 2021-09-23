@@ -20,7 +20,6 @@ class PlaceRepository {
             headers: {"Authorization": "Bearer " + token},
             validateStatus: (status) => true,
           ) // options.headers["Authorization"] = "Bearer " + token;
-
           );
       var data = response.data;
       List<Place> places = [];
@@ -29,6 +28,29 @@ class PlaceRepository {
         places.add(place);
       }
       return places;
+    } catch (e) {
+      throw (e.toString());
+    }
+  }
+
+  Future<dynamic> fetchPlace(var placeID) async {
+    print("fetching place");
+    try {
+      var pref = await SharedPreferences.getInstance();
+      String token = pref.getString("token");
+      print(Api.place_index + "/$placeID");
+      var response = await Dio().get(Api.place_index + "/$placeID",
+          options: Options(
+            headers: {"Authorization": "Bearer " + token},
+            validateStatus: (status) => true,
+          ) // options.headers["Authorization"] = "Bearer " + token;
+          );
+      var data = response.data;
+      Place place;
+      for (var jsonPlace in data['data']) {
+        place = Place.fromJson(jsonPlace);
+      }
+      return place;
     } catch (e) {
       throw (e.toString());
     }

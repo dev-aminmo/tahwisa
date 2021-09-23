@@ -63,49 +63,52 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return BlocProvider<AuthenticationBloc>(
         create: (context) => authenticationBloc,
-        child: MaterialApp(
-          navigatorKey: _navigatorKey,
-          title: 'Tahwisa',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            //primarySwatch: Colors.blue,
-            textTheme: GoogleFonts.latoTextTheme(
-              Theme.of(context).textTheme,
-            ),
-            primaryColor: MyColors.darkBlue,
-            indicatorColor: MyColors.lightGreen,
-            accentColor: MyColors.lightGreen,
-            scaffoldBackgroundColor: MyColors.white,
-            backgroundColor: MyColors.white,
-          ),
-          builder: (context, child) {
-            return RepositoryProvider(
-              create: (_) => userRepository,
-              child: BlocListener<AuthenticationBloc, AuthenticationState>(
-                listener: (context, state) {
-                  if (state is AuthenticationAuthenticated) {
-                    _navigator.pushAndRemoveUntil<void>(
-                      //HomePage.route(),
-                      MaterialPageRoute<void>(
-                          builder: (context) => RepositoryProvider(
-                              create: (_) => placeRepository,
-                              child: ProfileScreen())),
-                      (route) => false,
-                    );
-                  } else if (state is AuthenticationUnauthenticated) {
-                    _navigator.pushAndRemoveUntil<void>(
-                      //  LoginPage.route(),
-                      MaterialPageRoute<void>(
-                          builder: (context) => WelcomeScreen()),
-                      (route) => false,
-                    );
-                  }
-                },
-                child: child,
+        child: RepositoryProvider(
+          create: (context) => PlaceRepository(),
+          child: MaterialApp(
+            navigatorKey: _navigatorKey,
+            title: 'Tahwisa',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              //primarySwatch: Colors.blue,
+              textTheme: GoogleFonts.latoTextTheme(
+                Theme.of(context).textTheme,
               ),
-            );
-          },
-          onGenerateRoute: _getRoute,
+              primaryColor: MyColors.darkBlue,
+              indicatorColor: MyColors.lightGreen,
+              accentColor: MyColors.lightGreen,
+              scaffoldBackgroundColor: MyColors.white,
+              backgroundColor: MyColors.white,
+            ),
+            builder: (context, child) {
+              return RepositoryProvider(
+                create: (_) => userRepository,
+                child: BlocListener<AuthenticationBloc, AuthenticationState>(
+                  listener: (context, state) {
+                    if (state is AuthenticationAuthenticated) {
+                      _navigator.pushAndRemoveUntil<void>(
+                        //HomePage.route(),
+                        MaterialPageRoute<void>(
+                            builder: (context) => RepositoryProvider(
+                                create: (_) => placeRepository,
+                                child: ProfileScreen())),
+                        (route) => false,
+                      );
+                    } else if (state is AuthenticationUnauthenticated) {
+                      _navigator.pushAndRemoveUntil<void>(
+                        //  LoginPage.route(),
+                        MaterialPageRoute<void>(
+                            builder: (context) => WelcomeScreen()),
+                        (route) => false,
+                      );
+                    }
+                  },
+                  child: child,
+                ),
+              );
+            },
+            onGenerateRoute: _getRoute,
+          ),
         ));
   }
 
@@ -132,6 +135,7 @@ class _AppState extends State<App> {
         return PlaceDetailsScreen.route(
           place: arguments['place'] as Place,
           heroAnimationTag: arguments['heroAnimationTag'],
+          placeId: arguments['placeId'],
         );
       case RatePlaceScreen.routeName:
         Map<String, dynamic> arguments =
@@ -141,7 +145,7 @@ class _AppState extends State<App> {
           userReviewCubit: arguments['userReviewCubit'],
           initialComment: arguments['initialComment'],
         );
-        case ReviewsScreen.routeName:
+      case ReviewsScreen.routeName:
         Map<String, dynamic> arguments =
             new Map<String, dynamic>.from(settings.arguments);
         return ReviewsScreen.route(

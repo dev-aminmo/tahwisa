@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tahwisa/cubits/place_details_cubit/place_details_cubit.dart';
 import 'package:tahwisa/cubits/reviews_cubit/reviews_cubit.dart';
 import 'package:tahwisa/cubits/user_review_cubit/user_review_cubit.dart';
 import 'package:tahwisa/repositories/models/place.dart';
+import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/review_repository.dart';
 import 'package:tahwisa/screens/profile/widgets/place_details/widgets.dart';
 import 'package:tahwisa/style/my_colors.dart';
@@ -12,41 +14,52 @@ class PlaceDetailsScreen extends StatefulWidget {
   static const String routeName = '/place_details';
 
   static Route route(
-      {@required Place place, String heroAnimationTag = "explore"}) {
+      {Place place, String heroAnimationTag = "explore", var placeId}) {
     return MaterialPageRoute(
       builder: (_) => PlaceDetailsScreen(
-        place: place,
-        heroAnimationTag: heroAnimationTag,
-      ),
+          place: place, heroAnimationTag: heroAnimationTag, placeId: placeId),
       settings: RouteSettings(name: routeName),
     );
   }
 
   final Place place;
   final String heroAnimationTag;
+  final placeId;
 
-  const PlaceDetailsScreen({@required this.place, this.heroAnimationTag});
+  const PlaceDetailsScreen({this.place, this.heroAnimationTag, this.placeId});
 
   @override
   _PlaceDetailsScreenState createState() => _PlaceDetailsScreenState();
 }
 
 class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
-  Place place;
+  // Place place;
   UserReviewCubit _userReviewCubit;
   ReviewRepository _reviewRepository = ReviewRepository();
+  PlaceDetailsCubit _detailsCubit;
+
   @override
   void initState() {
     super.initState();
-    place = widget.place;
-
-    _userReviewCubit =
-        UserReviewCubit(repository: _reviewRepository, placeID: place.id);
+    if (widget.place != null) {
+      _detailsCubit = PlaceDetailsCubit(
+          place: widget.place,
+          placeRepository: context.read<PlaceRepository>());
+    } else {
+      print("null");
+      _detailsCubit = PlaceDetailsCubit(
+          placeID: widget.placeId,
+          placeRepository: context.read<PlaceRepository>());
+    }
+    _userReviewCubit = UserReviewCubit(
+        repository: _reviewRepository,
+        placeID: widget.place?.id ?? widget.placeId);
   }
 
   @override
   void dispose() {
     _userReviewCubit.close();
+    _detailsCubit.close();
     super.dispose();
   }
 
@@ -56,18 +69,30 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
         appBar: buildAppBar(),
         extendBodyBehindAppBar: true,
         backgroundColor: MyColors.white,
-        body: ListView(
-            padding: EdgeInsets.zero,
-            physics: ClampingScrollPhysics(),
-            children: [
-              //  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Carousel(place: place, heroAnimationTag: widget.heroAnimationTag),
-              buildPlaceDetails(),
-            ] //]),
-            ));
+        body: BlocBuilder(
+          cubit: _detailsCubit,
+          builder: (context, state) {
+            if (state is PlaceDetailsSuccess) {
+              return ListView(
+                  padding: EdgeInsets.zero,
+                  physics: ClampingScrollPhysics(),
+                  children: [
+                    Carousel(
+                        place: state.place,
+                        heroAnimationTag: widget.heroAnimationTag),
+                    buildPlaceDetails(state.place),
+                  ] //]),
+                  );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ));
   }
 
-  Padding buildPlaceDetails() {
+  Padding buildPlaceDetails(Place place) {
     return Padding(
       padding: EdgeInsets.all(18),
       child: Column(

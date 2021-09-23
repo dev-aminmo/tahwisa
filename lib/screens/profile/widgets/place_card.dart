@@ -29,7 +29,10 @@ class PlaceCard extends StatelessWidget {
           Navigator.pushNamed(
             context,
             '/place_details',
-            arguments: {'place': place, 'heroAnimationTag': heroAnimationTag},
+            arguments: {
+              'place': place,
+              'heroAnimationTag': heroAnimationTag,
+            },
           );
         },
         child: Container(

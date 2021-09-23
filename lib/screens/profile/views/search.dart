@@ -288,6 +288,16 @@ class _SearchScreenState extends State<SearchScreen> {
                         tag: suggestion,
                       ));
                 }
+                if (suggestion is Place) {
+                  Navigator.pushNamed(
+                    context,
+                    '/place_details',
+                    arguments: {
+                      'placeId': suggestion.id,
+                      'heroAnimationTag': 'heroAnimationTag',
+                    },
+                  );
+                }
               },
             )));
   }
