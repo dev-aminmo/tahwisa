@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundationnfig.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tahwisa/repositories/models/query_response.dart';
 
@@ -34,11 +34,9 @@ class PlaceRepository {
   }
 
   Future<dynamic> fetchPlace(var placeID) async {
-    print("fetching place");
     try {
       var pref = await SharedPreferences.getInstance();
       String token = pref.getString("token");
-      print(Api.place_index + "/$placeID");
       var response = await Dio().get(Api.place_index + "/$placeID",
           options: Options(
             headers: {"Authorization": "Bearer " + token},

@@ -1,5 +1,10 @@
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def geoAPIKEY = properties.getProperty('geo.API_KEY')
+
 if (localPropertiesFile.exists()) {
     localPropertiesFile.withReader('UTF-8') { reader ->
         localProperties.load(reader)
@@ -47,6 +52,7 @@ android {
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        manifestPlaceholders = [geoAPIKEY: geoAPIKEY]
     }
 
     buildTypes {

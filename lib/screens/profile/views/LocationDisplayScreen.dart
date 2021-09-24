@@ -50,9 +50,12 @@ class LocationDisplayScreenState extends State<LocationDisplayScreen> {
               print(e);
             }
           },
-          label: Text(
-            "Open in maps",
-            style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
+          label: FittedBox(
+            child: Text(
+              "Open in maps",
+              style:
+                  TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
+            ),
           ),
           icon: Icon(Icons.directions, size: 36, color: Colors.white),
           isExtended: true,

@@ -63,6 +63,7 @@ class LocationPickerScreenState extends State<LocationPickerScreen> {
                 markerId: MarkerId("1"));
           });
         },
+        mapToolbarEnabled: false,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },

@@ -65,31 +65,37 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: buildAppBar(),
-        extendBodyBehindAppBar: true,
-        backgroundColor: MyColors.white,
-        body: BlocBuilder(
-          cubit: _detailsCubit,
-          builder: (context, state) {
-            if (state is PlaceDetailsSuccess) {
-              return ListView(
-                  padding: EdgeInsets.zero,
-                  physics: ClampingScrollPhysics(),
-                  children: [
-                    Carousel(
-                        place: state.place,
-                        heroAnimationTag: widget.heroAnimationTag),
-                    buildPlaceDetails(state.place),
-                  ] //]),
-                  );
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
-        ));
+    return RefreshIndicator(
+      strokeWidth: 3,
+      onRefresh: () async {
+        _detailsCubit.refresh();
+      },
+      child: Scaffold(
+          appBar: buildAppBar(),
+          extendBodyBehindAppBar: true,
+          backgroundColor: MyColors.white,
+          body: BlocBuilder(
+            cubit: _detailsCubit,
+            builder: (context, state) {
+              if (state is PlaceDetailsSuccess) {
+                return ListView(
+                    padding: EdgeInsets.zero,
+                    physics: ClampingScrollPhysics(),
+                    children: [
+                      Carousel(
+                          place: state.place,
+                          heroAnimationTag: widget.heroAnimationTag),
+                      buildPlaceDetails(state.place),
+                    ] //]),
+                    );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          )),
+    );
   }
 
   Padding buildPlaceDetails(Place place) {

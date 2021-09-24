@@ -29,4 +29,14 @@ class PlaceDetailsCubit extends Cubit<PlaceDetailsState> {
       }
     }
   }
+
+  void refresh() async {
+    emit(PlaceDetailsProgress());
+    var response = await placeRepository.fetchPlace(placeID ?? place?.id);
+    if (response is Place) {
+      emit(PlaceDetailsSuccess(place: response));
+    } else {
+      emit(PlaceDetailsFailure(error: response));
+    }
+  }
 }
