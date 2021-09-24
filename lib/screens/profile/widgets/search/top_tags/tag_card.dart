@@ -32,6 +32,7 @@ class TagCard extends StatelessWidget {
               child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   //   color: Colors.black.withOpacity(0.05),
+
                   alignment: Alignment.center,
                   child: FittedBox(
                     fit: BoxFit.contain,

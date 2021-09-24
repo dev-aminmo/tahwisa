@@ -21,6 +21,7 @@ class LocationRow extends StatelessWidget {
                 builder: (_) => LocationDisplayScreen(
                       latitude: place.latitude,
                       longitude: place.longitude,
+                      title: place.title,
                     )));
       },
       child: Row(

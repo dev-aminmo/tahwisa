@@ -2,15 +2,20 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:tahwisa/utilities/map_utils.dart';
 
 class LocationDisplayScreen extends StatefulWidget {
   final latitude;
   final longitude;
+  final title;
 
   @override
   State<LocationDisplayScreen> createState() => LocationDisplayScreenState();
 
-  LocationDisplayScreen({@required this.latitude, @required this.longitude});
+  LocationDisplayScreen(
+      {@required this.latitude,
+      @required this.longitude,
+      @required this.title});
 }
 
 class LocationDisplayScreenState extends State<LocationDisplayScreen> {
@@ -35,6 +40,25 @@ class LocationDisplayScreenState extends State<LocationDisplayScreen> {
     print("latitude ${widget.latitude}");
     return new Scaffold(
       extendBodyBehindAppBar: true,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FittedBox(
+        child: FloatingActionButton.extended(
+          onPressed: () {
+            try {
+              MapUtils.openMap(widget.latitude, widget.longitude);
+            } catch (e) {
+              print(e);
+            }
+          },
+          label: Text(
+            "Open in maps",
+            style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
+          ),
+          icon: Icon(Icons.directions, size: 36, color: Colors.white),
+          isExtended: true,
+          elevation: 10,
+        ),
+      ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -60,15 +84,7 @@ class LocationDisplayScreenState extends State<LocationDisplayScreen> {
         markers: (_marker != null) ? {_marker} : {},
         mapType: MapType.normal,
         initialCameraPosition: _initialPosition,
-        onTap: (l) {
-          /*print(l.latitude);
-          print(l.longitude);
-          setState(() {
-            _marker = Marker(
-                position: LatLng(l.latitude, l.longitude),
-                markerId: MarkerId("1"));
-          });*/
-        },
+        zoomControlsEnabled: false,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
