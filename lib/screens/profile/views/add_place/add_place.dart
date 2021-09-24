@@ -119,7 +119,7 @@ class _AddPlaceState extends State<AddPlace> {
     _dropDownsMunicipalBloc.close();
     _imagePickerBloc.close();
     _dropDownStateBloc.close();
-
+    _locationPickerBloc.close();
     super.dispose();
   }
 }

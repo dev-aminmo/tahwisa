@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tahwisa/repositories/models/place.dart';
+import 'package:tahwisa/screens/profile/views/LocationDisplayScreen.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 class LocationRow extends StatelessWidget {
@@ -14,7 +15,13 @@ class LocationRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print("hello fron wilaya");
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => LocationDisplayScreen(
+                      latitude: place.latitude,
+                      longitude: place.longitude,
+                    )));
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
