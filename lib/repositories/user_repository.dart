@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tahwisa/repositories/models/user.dart';
 
 import 'api/api_endpoints.dart';
 
@@ -93,9 +94,18 @@ class UserRepository {
 
   Future<dynamic> user() async {
     try {
-      print(Api.user);
-      Response response = await Dio().get(Api.user);
-      print(response);
+      var pref = await SharedPreferences.getInstance();
+      String token = pref.getString("token");
+      var response = await Dio().get(Api.user,
+          options: Options(
+            headers: {"Authorization": "Bearer " + token},
+            validateStatus: (status) => true,
+          ) // options.headers["Authorization"] = "Bearer " + token;
+          );
+      var data = response.data;
+
+      User user = User.fromJson(data['data']);
+      return user;
     } catch (e) {
       throw (e);
     }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tahwisa/blocs/authentication_bloc/bloc.dart';
+import 'package:tahwisa/cubits/user_cubit/user_cubit.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
+import 'package:tahwisa/repositories/user_repository.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 import 'views/explore.dart';
@@ -20,6 +22,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   PageController _pageController;
   int _currentIndex;
   List<Widget> children;
+  UserRepository userRepository;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,52 +97,65 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
       drawer: Drawer(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            UserAccountsDrawerHeader(
-              accountName: Text('Mohammed'),
-              accountEmail: Text("mostefaoui@gmail.com"),
-              decoration: BoxDecoration(color: MyColors.darkBlue),
-              currentAccountPicture: CircleAvatar(
-                radius: 152,
-                backgroundImage: NetworkImage(
-                  "https://source.unsplash.com/random/100x100?profil",
-                ),
-                backgroundColor: Colors.grey,
-              ),
-            ),
-            LayoutBuilder(
-              builder: (ctx, constraints) {
-                print(constraints.maxWidth);
-                return GestureDetector(
-                  onTap: () {
-                    authenticationBloc.add(LoggedOut());
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    margin: EdgeInsets.symmetric(horizontal: 48, vertical: 12),
-                    decoration: BoxDecoration(
-                        color: MyColors.lightGreen,
-                        borderRadius: BorderRadius.all(Radius.circular(25))),
-                    child: Row(
-                      children: [
-                        Spacer(),
-                        Text("Logout",
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 22)),
-                        Spacer(),
-                        Icon(Icons.logout, color: Colors.white),
-                        Spacer(),
-                      ],
+          child: BlocProvider(
+        create: (_) => UserCubit(userRepository: userRepository),
+        child: BlocBuilder<UserCubit, UserState>(builder: (context, state) {
+          if (state is UserSuccess) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                UserAccountsDrawerHeader(
+                  accountName: Text(state.user.name),
+                  accountEmail: Text(state.user.email),
+                  decoration: BoxDecoration(color: MyColors.darkBlue),
+                  currentAccountPicture: CircleAvatar(
+                    radius: 152,
+                    backgroundImage: NetworkImage(
+                      state.user.profilePicture.replaceFirstMapped(
+                          "image/upload/",
+                          (match) => "image/upload/w_150,f_auto/"),
                     ),
+                    backgroundColor: Colors.grey,
                   ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+                ),
+                LayoutBuilder(
+                  builder: (ctx, constraints) {
+                    print(constraints.maxWidth);
+                    return GestureDetector(
+                      onTap: () {
+                        authenticationBloc.add(LoggedOut());
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 48, vertical: 12),
+                        decoration: BoxDecoration(
+                            color: MyColors.lightGreen,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(25))),
+                        child: Row(
+                          children: [
+                            Spacer(),
+                            Text("Logout",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 22)),
+                            Spacer(),
+                            Icon(Icons.logout, color: Colors.white),
+                            Spacer(),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        }),
+      )),
     );
   }
 
@@ -155,6 +172,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       Notifications(),
     ];
     placeRepository = RepositoryProvider.of<PlaceRepository>(context);
+    userRepository = RepositoryProvider.of<UserRepository>(context);
     authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
   }
 
