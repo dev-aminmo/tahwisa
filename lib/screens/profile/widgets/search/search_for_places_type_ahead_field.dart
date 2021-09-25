@@ -73,7 +73,11 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
                 children: [
                   Icon(Icons.place),
                   SizedBox(width: 20),
-                  Text(suggestion.title),
+                  Flexible(
+                      child: Text(
+                    suggestion?.title ?? '',
+                    softWrap: true,
+                  )),
                   SizedBox(width: 5),
                 ],
               ),
@@ -86,7 +90,11 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
                 children: [
                   Icon(Icons.tag),
                   SizedBox(width: 20),
-                  Text(suggestion.name),
+                  Flexible(
+                      child: Text(
+                    suggestion?.name ?? '',
+                    softWrap: true,
+                  )),
                   SizedBox(width: 5),
                 ],
               ),
