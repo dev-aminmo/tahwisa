@@ -6,6 +6,7 @@ import 'package:tahwisa/blocs/login_bloc/bloc.dart';
 import 'package:tahwisa/repositories/user_repository.dart';
 import 'package:tahwisa/screens/auth/widgets/auth_button.dart';
 import 'package:tahwisa/screens/auth/widgets/auth_input.dart';
+import 'package:tahwisa/screens/profile/widgets/hide_keyboard_ontap.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 import 'reset_password.dart';
@@ -68,7 +69,9 @@ class _LoginFormState extends State<LoginForm> {
                   ]),
                   suffix:
                       Icon(Icons.person_outline, color: MyColors.lightGreen)),
-              SizedBox(height: 25),
+              Spacer(
+                flex: 2,
+              ),
               AuthInput(
                 hint: "password",
                 controller: _passwordController,
@@ -180,10 +183,13 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: LoginForm(
-        authenticationBloc: _authenticationBloc,
-        loginBloc: _loginBloc,
+    return HideKeyboardOnTap(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: LoginForm(
+          authenticationBloc: _authenticationBloc,
+          loginBloc: _loginBloc,
+        ),
       ),
     );
   }

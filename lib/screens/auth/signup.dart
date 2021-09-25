@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tahwisa/repositories/user_repository.dart';
+import 'package:tahwisa/screens/profile/widgets/hide_keyboard_ontap.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 import './widgets/auth_button.dart';
@@ -63,92 +64,92 @@ class _SignUPScreenState extends State<SignUPScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-    return Scaffold(
-        backgroundColor: MyColors.white,
-        body: BlocBuilder<SignupBloc, SignupState>(
-          //  create: _loginBloc,
-          cubit: _signupBloc,
-          // listener: (ctx, state) {},
-          builder: (
-            BuildContext context,
-            SignupState state,
-          ) {
-            if (state is SignupFailure) {
-              _onWidgetDidBuild(() {
-                Scaffold.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('${state.error}'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              });
-            }
-            return Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    SizedBox(height: height * 0.1),
-                    AuthInput(
-                        controller: _usernameController,
-                        hint: "username",
-                        suffix: Icon(Icons.person_outline,
-                            color: MyColors.lightGreen)),
-                    AuthInput(
-                        controller: _emailController,
-                        hint: "email",
-                        suffix: Icon(Icons.mail_outlined,
-                            color: MyColors.lightGreen)),
-                    AuthInput(
-                      controller: _passwordController,
-                      hint: "password",
-                      suffix: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              obscured = !obscured;
-                            });
-                          },
-                          child: obscured
-                              ? Icon(Icons.remove_red_eye_outlined,
-                                  color: MyColors.lightGreen)
-                              : Icon(Icons.visibility_off_outlined,
-                                  color: MyColors.lightGreen)),
-                      obscured: obscured,
-                    ),
-                    Spacer(
-                      flex: 5,
-                    ),
-                    AuthButton(
-                      title: "Sign up",
-                      withBackgroundColor: true,
-                      onTap: state is! SignupLoading
-                          ? _onSignupButtonPressed
-                          : null,
-                      isLoading: state is SignupLoading ? true : false,
-                    ),
-                    Spacer(),
-                    Text("-or-",
-                        style: TextStyle(
-                            fontSize: 22,
-                            color: MyColors.darkBlue,
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.bold)),
-                    Spacer(),
-                    AuthButton(
-                      title: "Sign up with Google",
-                      onTap: state is! SignupLoading
-                          ? _onGoogleButtonPressed
-                          : null,
-                      isGoogle: true,
-                    ),
-                    Spacer(
-                      flex: 5,
-                    )
-                  ],
-                ));
-          },
-        ));
+    return HideKeyboardOnTap(
+        child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor: MyColors.white,
+            body: BlocBuilder<SignupBloc, SignupState>(
+              cubit: _signupBloc,
+              builder: (
+                BuildContext context,
+                SignupState state,
+              ) {
+                if (state is SignupFailure) {
+                  _onWidgetDidBuild(() {
+                    Scaffold.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('${state.error}'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  });
+                }
+                return Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Spacer(flex: 3),
+                        AuthInput(
+                            controller: _usernameController,
+                            hint: "username",
+                            suffix: Icon(Icons.person_outline,
+                                color: MyColors.lightGreen)),
+                        Spacer(),
+                        AuthInput(
+                            controller: _emailController,
+                            hint: "email",
+                            suffix: Icon(Icons.mail_outlined,
+                                color: MyColors.lightGreen)),
+                        Spacer(),
+                        AuthInput(
+                          controller: _passwordController,
+                          hint: "password",
+                          suffix: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  obscured = !obscured;
+                                });
+                              },
+                              child: obscured
+                                  ? Icon(Icons.remove_red_eye_outlined,
+                                      color: MyColors.lightGreen)
+                                  : Icon(Icons.visibility_off_outlined,
+                                      color: MyColors.lightGreen)),
+                          obscured: obscured,
+                        ),
+                        Spacer(
+                          flex: 5,
+                        ),
+                        AuthButton(
+                          title: "Sign up",
+                          withBackgroundColor: true,
+                          onTap: state is! SignupLoading
+                              ? _onSignupButtonPressed
+                              : null,
+                          isLoading: state is SignupLoading ? true : false,
+                        ),
+                        Spacer(),
+                        Text("-or-",
+                            style: TextStyle(
+                                fontSize: 22,
+                                color: MyColors.darkBlue,
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.bold)),
+                        Spacer(),
+                        AuthButton(
+                          title: "Sign up with Google",
+                          onTap: state is! SignupLoading
+                              ? _onGoogleButtonPressed
+                              : null,
+                          isGoogle: true,
+                        ),
+                        Spacer(
+                          flex: 5,
+                        )
+                      ],
+                    ));
+              },
+            )));
   }
 }

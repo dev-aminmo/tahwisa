@@ -4,7 +4,7 @@ import 'package:tahwisa/style/my_colors.dart';
 class AuthInput extends StatelessWidget {
   final hint;
   final suffix;
-  bool obscured;
+  final bool obscured;
   final controller;
   final validator;
 
@@ -17,8 +17,6 @@ class AuthInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     return Container(
         margin: EdgeInsets.symmetric(horizontal: 20),
         child: TextFormField(
@@ -28,9 +26,9 @@ class AuthInput extends StatelessWidget {
           obscureText: obscured,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.only(
-                left: width * 0.05,
-                top: height * 0.03,
-                bottom: height * 0.03,
+                left: 16,
+                top: 22,
+                bottom: 22,
               ),
               hintText: hint,
               suffixIcon: suffix,

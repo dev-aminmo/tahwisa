@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 //import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:tahwisa/style/my_colors.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
-class AuthButton extends StatelessWidget {
+class AuthButton extends StatefulWidget {
   final String title;
   final Function onTap;
   final bool withBackgroundColor;
@@ -18,62 +18,79 @@ class AuthButton extends StatelessWidget {
       this.isLoading = false});
 
   @override
+  _AuthButtonState createState() => _AuthButtonState();
+}
+
+class _AuthButtonState extends State<AuthButton> {
+  @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.7,
-      height: MediaQuery.of(context).size.height * 0.08,
-      child: RaisedButton(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-            MediaQuery.of(context).size.width * 0.1,
-          ),
-          /*side: BorderSide(
-                color: (withBackgroundColor)
-                    ? Colors.transparent
-                    : MyColors.greenBorder,
-                width: 2)*/
+    return Row(
+      children: [
+        Spacer(
+          flex: 1,
         ),
-        onPressed: onTap,
-        child: isGoogle
-            ? Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Spacer(),
-                  SvgPicture.asset("assets/images/google.svg",
-                      width: 24, height: 24),
-                  Spacer(),
-                  FittedBox(
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                          color: (withBackgroundColor)
-                              ? MyColors.white
-                              : MyColors.greenBorder,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic,
-                          letterSpacing: 1.5),
-                    ),
-                  ),
-                  Spacer(),
-                ],
-              )
-            : (!isLoading)
-                ? Text(
-                    title,
-                    style: TextStyle(
-                        color: (withBackgroundColor)
-                            ? MyColors.white
-                            : MyColors.greenBorder,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic,
-                        letterSpacing: 1.5),
+        Expanded(
+          flex: 8,
+          child: MaterialButton(
+            elevation: 4,
+            //   minWidth: double.maxFinite,
+            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                MediaQuery.of(context).size.width * 0.1,
+              ),
+            ),
+            onPressed: widget.onTap,
+            child: widget.isGoogle
+                ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(width: 8),
+                      SvgPicture.asset("assets/images/google.svg",
+                          width: 24, height: 24),
+                      const SizedBox(width: 16),
+                      Flexible(
+                        child: FittedBox(
+                          child: Text(
+                            widget.title,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: (widget.withBackgroundColor)
+                                    ? MyColors.white
+                                    : MyColors.greenBorder,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic,
+                                letterSpacing: 1.5),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                    ],
                   )
-                : CircularProgressIndicator(),
-        color: (withBackgroundColor) ? MyColors.greenBorder : MyColors.white,
-      ),
+                : (!widget.isLoading)
+                    ? Text(
+                        widget.title,
+                        style: TextStyle(
+                            color: (widget.withBackgroundColor)
+                                ? MyColors.white
+                                : MyColors.greenBorder,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
+                            letterSpacing: 1.5),
+                      )
+                    : CircularProgressIndicator(),
+            color: (widget.withBackgroundColor)
+                ? MyColors.greenBorder
+                : MyColors.white,
+          ),
+        ),
+        Spacer(
+          flex: 1,
+        )
+      ],
     );
   }
 }
