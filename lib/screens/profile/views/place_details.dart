@@ -118,6 +118,9 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
           const SizedBox(height: 8),
           UserRow(place: place),
           const SizedBox(height: 8),
+          
+          const SizedBox(height: 8),
+
           DescriptionShowMoreText(text: place.description),
           const SizedBox(height: 8),
           TagsList(place: place),

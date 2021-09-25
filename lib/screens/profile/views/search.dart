@@ -36,7 +36,6 @@ class _SearchScreenState extends State<SearchScreen> {
     TagRepository _tagRepository = TagRepository();
     _topTagsCubit = TopTagsCubit(repository: _tagRepository);
     _filterManagerBloc = FilterManagerBloc();
-
     _searchBloc = SearchBloc(
       filterManagerBloc: _filterManagerBloc,
       placeRepository: placeRepository,
@@ -274,6 +273,11 @@ class _SearchScreenState extends State<SearchScreen> {
         //cubit: _searchBloc,
         builder: (context, state) => Expanded(
                 child: SearchForPlacesTypeAheadField(
+              suggestionsCallback: (pattern) async {
+                return (pattern.length > 1)
+                    ? await placeRepository.autocomplete(pattern)
+                    : [];
+              },
               searchEditingController: _searchEditingController,
               width: width,
               height: height,

@@ -35,24 +35,18 @@ class FAB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 80,
-      height: 80,
+      width: 60,
+      height: 60,
       child: FloatingActionButton(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         onPressed: () async {
-          print("pressed***********************");
-          // var municipal = await _dropDownsMunicipalBloc.selectedMunicipal.first;
-          // print(municipal);
           var errors = [];
           if (_formKey.currentState.validate()) {
-            print("form valid***********************");
             var municipal =
                 await _dropDownsMunicipalBloc.selectedMunicipal.first;
             if (municipal != null) {
               if (_imagePickerBloc.state is ImagesPicked) {
-                print("image ***********************");
                 if (_locationPickerBloc.state is LocationPicked) {
-                  print("location ***********************");
                   final image = _imagePickerBloc.state as ImagesPicked;
                   final location = _locationPickerBloc.state as LocationPicked;
                   _placeUploadBloc.add(UploadPlaceButtonPressed(
@@ -73,19 +67,12 @@ class FAB extends StatelessWidget {
               print("municipal not chosen ***********************");
             }
           }
-          /*final image = _imagePickerBloc.state as ImagesPicked;
-          _placeUploadBloc.add(UploadPlaceButtonPressed(
-            title: "hello",
-            description: "Mister johnson",
-            picture: image.images,
-            latitude: 4.1,
-            longitude: 3.1,
-            municipalID: 24,
-          ));*/
         },
-        child: Icon(
-          Icons.send,
-          size: 36,
+        child: FittedBox(
+          child: Icon(
+            Icons.send,
+            size: 36,
+          ),
         ),
       ),
     );

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/models/tag.dart';
-import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 class SearchForPlacesTypeAheadField extends StatelessWidget {
@@ -13,6 +12,7 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
     @required this.height,
     @required this.onEditingComplete,
     @required this.onSuggestionSelected,
+    @required this.suggestionsCallback,
   })  : _searchEditingController = searchEditingController,
         super(key: key);
 
@@ -21,6 +21,7 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
   final double height;
   final Function onEditingComplete;
   final Function onSuggestionSelected;
+  final Function suggestionsCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +63,7 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
               fontSize: 20),
         ),
         suggestionsCallback: (pattern) async {
-          return (pattern.length > 1)
-              ? await PlaceRepository().autocomplete(pattern)
-              : [];
+          return await suggestionsCallback(pattern);
         },
         itemBuilder: (context, suggestion) {
           if (suggestion is Place) {

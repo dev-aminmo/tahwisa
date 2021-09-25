@@ -9,6 +9,7 @@ import 'package:tahwisa/screens/auth/login.dart';
 import 'package:tahwisa/screens/welcome.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
+import 'repositories/maps_repository.dart';
 import 'repositories/models/place.dart';
 import 'repositories/review_repository.dart';
 import 'screens/auth/signup.dart';
@@ -28,6 +29,7 @@ class SimpleBlocDelegate extends BlocObserver {
 }
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = SimpleBlocDelegate();
   runApp(App());
 }
@@ -68,6 +70,9 @@ class _AppState extends State<App> {
           providers: [
             RepositoryProvider(create: (_) => PlaceRepository()),
             RepositoryProvider(create: (_) => ReviewRepository()),
+            RepositoryProvider(create: (_) {
+              return MapsRepository();
+            }),
           ],
           child: MaterialApp(
             navigatorKey: _navigatorKey,
