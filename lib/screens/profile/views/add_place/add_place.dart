@@ -78,7 +78,7 @@ class _AddPlaceState extends State<AddPlace> {
                       height: height,
                       imagePickerBloc: _imagePickerBloc,
                       locationPickerBloc: _locationPickerBloc),
-                  SizedBox(height: height * 0.05),
+                  SizedBox(height: height * 0.2),
                   Container(
                     padding: EdgeInsets.only(
                         bottom: MediaQuery.of(context).viewInsets.bottom),

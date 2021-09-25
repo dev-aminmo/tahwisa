@@ -54,6 +54,7 @@ class LocationPickerScreenState extends State<LocationPickerScreen> {
             color: MyColors.white, fontWeight: FontWeight.w400, fontSize: 16),
       ),
       suggestionsCallback: (pattern) async {
+        print(pattern);
         return (pattern.length > 1)
             ? await _mapsRepository.autocomplete(pattern)
             : [];
