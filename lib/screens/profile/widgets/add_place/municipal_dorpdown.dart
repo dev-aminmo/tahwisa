@@ -8,12 +8,10 @@ class MunicipalDropDown extends StatelessWidget {
   const MunicipalDropDown({
     Key key,
     @required DropDownsMunicipalBloc dropDownsMunicipalBloc,
-    @required this.height,
   })  : _dropDownsMunicipalBloc = dropDownsMunicipalBloc,
         super(key: key);
 
   final DropDownsMunicipalBloc _dropDownsMunicipalBloc;
-  final double height;
 
   @override
   Widget build(BuildContext context) {

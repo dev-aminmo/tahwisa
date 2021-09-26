@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tahwisa/blocs/location_picker_bloc/bloc.dart';
 
 import '../LocationPickerScreen.dart';
-import 'add_place.dart';
+import '../stepper.dart';
 
 class AddPlaceNavigator extends StatefulWidget {
   @override
@@ -25,7 +25,7 @@ class _AddPlaceNavigatorState extends State<AddPlaceNavigator> {
             child: Navigator(
               key: _navigatorKey,
               pages: [
-                MaterialPage(child: AddPlace()),
+                MaterialPage(child: AddPlaceStepper()),
                 if (state is LocationPickerLoading)
                   MaterialPage(child: LocationPickerScreen())
               ],

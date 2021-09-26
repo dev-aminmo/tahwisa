@@ -13,6 +13,7 @@ class LocationPickerBloc
     LocationPickerEvent event,
   ) async* {
     if (event is PickLocation) {
+      print("event_is heree");
       yield (LocationPickerLoading());
     }
     if (event is PickCanceled) {

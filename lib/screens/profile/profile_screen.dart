@@ -42,7 +42,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: FloatingActionButton(
             backgroundColor: MyColors.darkBlue,
             onPressed: () {
-              // Navigator.of(context).pushNamed('/add_place');
               Navigator.of(context).pushNamed('/add_place_navigator');
             },
             child: Icon(Icons.add,
@@ -51,7 +50,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         bottomNavigationBar: BottomAppBar(
           color: Colors.white,
-          //   shape: CircularNotchedRectangle(),
           notchMargin: 6,
           clipBehavior: Clip.antiAlias,
           child: Container(

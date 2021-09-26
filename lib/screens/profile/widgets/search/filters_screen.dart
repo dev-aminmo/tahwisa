@@ -20,8 +20,6 @@ class FiltersScreen extends StatefulWidget {
 
 class _FiltersScreenState extends State<FiltersScreen> {
   RangeValues _values;
-  double width;
-  double height;
   DropDownStateBloc _dropDownStateBloc;
   DropDownsMunicipalBloc _dropDownsMunicipalBloc;
 
@@ -79,8 +77,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
       ));
   @override
   Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
-    height = MediaQuery.of(context).size.height;
     return makeDismissible(
         child: DraggableScrollableSheet(
             initialChildSize: 0.7,
@@ -169,11 +165,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
                   fontWeight: FontWeight.normal),
             ),
             StateDropdown(
-                dropDownStateBloc: _dropDownStateBloc, height: height),
+                dropDownStateBloc: _dropDownStateBloc),
             Center(
               child: MunicipalDropDown(
                   dropDownsMunicipalBloc: _dropDownsMunicipalBloc,
-                  height: height),
+              ),
             ),
           ],
         ));

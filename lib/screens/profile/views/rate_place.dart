@@ -105,22 +105,25 @@ class _RatePlaceScreenState extends State<RatePlaceScreen> {
                     SizedBox(
                       height: 32,
                     ),
-                    RatingBar(
-                      onRatingChanged: (rating) {
-                        setState(() {
-                          initialRate = rating;
-                        });
-                      },
-                      size: 48,
-                      filledIcon: Icons.star,
-                      emptyIcon: Icons.star_border,
-                      halfFilledIcon: Icons.star_half,
-                      emptyColor: MyColors.darkBlue,
-                      filledColor: MyColors.darkBlue,
-                      halfFilledColor: MyColors.darkBlue,
-                      initialRating: initialRate,
-                      maxRating: 5,
-                      isHalfAllowed: true,
+                    Hero(
+                      tag: "rate",
+                      child: RatingBar(
+                        onRatingChanged: (rating) {
+                          setState(() {
+                            initialRate = rating;
+                          });
+                        },
+                        size: 48,
+                        filledIcon: Icons.star,
+                        emptyIcon: Icons.star_border,
+                        halfFilledIcon: Icons.star_half,
+                        emptyColor: MyColors.darkBlue,
+                        filledColor: MyColors.darkBlue,
+                        halfFilledColor: MyColors.darkBlue,
+                        initialRating: initialRate,
+                        maxRating: 5,
+                        isHalfAllowed: true,
+                      ),
                     ),
                     SizedBox(
                       height: 32,

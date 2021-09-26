@@ -32,27 +32,30 @@ class AddReview extends StatelessWidget {
               color: MyColors.gray.withOpacity(0.7)),
         ),
         const SizedBox(height: 22),
-        RatingBar(
-          onRatingChanged: (rating) {
-            Navigator.pushNamed(
-              context,
-              '/rate_place',
-              arguments: {
-                'initialRate': rating,
-                'userReviewCubit': context.read<UserReviewCubit>()
-              },
-            );
-          },
-          size: 48,
-          filledIcon: Icons.star,
-          emptyIcon: Icons.star_border,
-          halfFilledIcon: Icons.star_half,
-          emptyColor: MyColors.darkBlue,
-          filledColor: MyColors.darkBlue,
-          halfFilledColor: MyColors.darkBlue,
-          initialRating: 0.0,
-          maxRating: 5,
-          isHalfAllowed: true,
+        Hero(
+          tag: "rate",
+          child: RatingBar(
+            onRatingChanged: (rating) {
+              Navigator.pushNamed(
+                context,
+                '/rate_place',
+                arguments: {
+                  'initialRate': rating,
+                  'userReviewCubit': context.read<UserReviewCubit>()
+                },
+              );
+            },
+            size: 48,
+            filledIcon: Icons.star,
+            emptyIcon: Icons.star_border,
+            halfFilledIcon: Icons.star_half,
+            emptyColor: MyColors.darkBlue,
+            filledColor: MyColors.darkBlue,
+            halfFilledColor: MyColors.darkBlue,
+            initialRating: 0.0,
+            maxRating: 5,
+            isHalfAllowed: true,
+          ),
         ),
       ],
     );

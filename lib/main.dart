@@ -9,6 +9,7 @@ import 'package:tahwisa/screens/auth/login.dart';
 import 'package:tahwisa/screens/welcome.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
+import 'repositories/dropdowns_repository.dart';
 import 'repositories/maps_repository.dart';
 import 'repositories/models/place.dart';
 import 'repositories/review_repository.dart';
@@ -70,25 +71,27 @@ class _AppState extends State<App> {
           providers: [
             RepositoryProvider(create: (_) => PlaceRepository()),
             RepositoryProvider(create: (_) => ReviewRepository()),
-            RepositoryProvider(create: (_) {
-              return MapsRepository();
-            }),
+            RepositoryProvider(create: (_) => MapsRepository()),
+            RepositoryProvider(create: (_) => DropDownsRepository()),
           ],
           child: MaterialApp(
             navigatorKey: _navigatorKey,
             title: 'Tahwisa',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              //primarySwatch: Colors.blue,
-              textTheme: GoogleFonts.latoTextTheme(
-                Theme.of(context).textTheme,
-              ),
-              primaryColor: MyColors.darkBlue,
-              indicatorColor: MyColors.lightGreen,
-              accentColor: MyColors.lightGreen,
-              scaffoldBackgroundColor: MyColors.white,
-              backgroundColor: MyColors.white,
-            ),
+                //primarySwatch: Colors.blue,
+                textTheme: GoogleFonts.latoTextTheme(
+                  Theme.of(context).textTheme,
+                ),
+                primaryColor: MyColors.darkBlue,
+                indicatorColor: MyColors.lightGreen,
+                accentColor: MyColors.lightGreen,
+                scaffoldBackgroundColor: MyColors.white,
+                backgroundColor: MyColors.white,
+                // brightness: Brightness.light,
+                appBarTheme: AppBarTheme(
+                  brightness: Brightness.dark,
+                )),
             builder: (context, child) {
               return RepositoryProvider(
                 create: (_) => userRepository,

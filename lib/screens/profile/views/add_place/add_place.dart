@@ -62,11 +62,9 @@ class _AddPlaceState extends State<AddPlace> {
                       selectedTags: _selectedTags,
                       tagRepository: _tagRepository),
                   SizedBox(height: height * 0.05),
-                  StateDropdown(
-                      dropDownStateBloc: _dropDownStateBloc, height: height),
+                  StateDropdown(dropDownStateBloc: _dropDownStateBloc),
                   MunicipalDropDown(
-                      dropDownsMunicipalBloc: _dropDownsMunicipalBloc,
-                      height: height),
+                      dropDownsMunicipalBloc: _dropDownsMunicipalBloc),
                   SizedBox(height: height * 0.05),
                   TitleTextField(
                       titleEditingController: _titleEditingController),

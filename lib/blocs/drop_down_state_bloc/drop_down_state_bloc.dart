@@ -27,8 +27,6 @@ class DropDownStateBloc extends Bloc<DropDownStateEvent, DropDownState> {
       {@required this.dropDownsRepository, @required this.municipalBloc})
       : super(DropDownStateInitial());
   @override
-  DropDownState get initialState => DropDownStateInitial();
-  @override
   Stream<DropDownState> mapEventToState(
     DropDownStateEvent event,
   ) async* {

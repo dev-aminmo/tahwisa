@@ -8,12 +8,10 @@ class StateDropdown extends StatelessWidget {
   const StateDropdown({
     Key key,
     @required DropDownStateBloc dropDownStateBloc,
-    @required this.height,
   })  : _dropDownStateBloc = dropDownStateBloc,
         super(key: key);
 
   final DropDownStateBloc _dropDownStateBloc;
-  final double height;
 
   @override
   Widget build(BuildContext context) {

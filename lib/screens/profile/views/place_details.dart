@@ -4,11 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tahwisa/cubits/place_details_cubit/place_details_cubit.dart';
 import 'package:tahwisa/cubits/reviews_cubit/reviews_cubit.dart';
 import 'package:tahwisa/cubits/user_review_cubit/user_review_cubit.dart';
-import 'package:tahwisa/repositories/maps_repository.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/review_repository.dart';
 import 'package:tahwisa/screens/profile/widgets/place_details/widgets.dart';
+import 'package:tahwisa/screens/profile/widgets/static_map_view.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 import 'LocationDisplayScreen.dart';
@@ -39,7 +39,6 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
   UserReviewCubit _userReviewCubit;
   ReviewRepository _reviewRepository;
   PlaceDetailsCubit _detailsCubit;
-  MapsRepository _mapsRepository;
 
   @override
   void initState() {
@@ -49,7 +48,6 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
           place: widget.place,
           placeRepository: context.read<PlaceRepository>());
     } else {
-      print("null");
       _detailsCubit = PlaceDetailsCubit(
           placeID: widget.placeId,
           placeRepository: context.read<PlaceRepository>());
@@ -58,7 +56,6 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
     _userReviewCubit = UserReviewCubit(
         repository: _reviewRepository,
         placeID: widget.place?.id ?? widget.placeId);
-    _mapsRepository = RepositoryProvider.of<MapsRepository>(context);
   }
 
   @override
@@ -198,40 +195,5 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
         statusBarIconBrightness: Brightness.light,
       ),
     );
-  }
-}
-
-class StaticMapView extends StatefulWidget {
-  final latitude;
-  final longitude;
-
-  StaticMapView({@required this.latitude, @required this.longitude});
-
-  @override
-  _StaticMapViewState createState() => _StaticMapViewState();
-}
-
-class _StaticMapViewState extends State<StaticMapView> {
-  String _staticMapUrl;
-  @override
-  Widget build(BuildContext context) {
-    return _staticMapUrl == null
-        ? SizedBox()
-        : SizedBox(
-            width: double.infinity,
-            child: Image.network(_staticMapUrl,
-                // height: 200,
-                width: double.infinity),
-          );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    RepositoryProvider.of<MapsRepository>(context)
-        .getStaticMapUrl(widget.latitude, widget.longitude)
-        .then((value) => setState(() {
-              _staticMapUrl = value;
-            }));
   }
 }
