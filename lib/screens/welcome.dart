@@ -1,12 +1,11 @@
 import "package:flutter/material.dart";
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tahwisa/repositories/user_repository.dart';
-import 'package:tahwisa/style/my_colors.dart';
-import 'auth/widgets/auth_button.dart';
 import 'package:video_player/video_player.dart';
 
-class WelcomeScreen extends StatefulWidget {
+import 'auth/widgets/auth_button.dart';
 
+class WelcomeScreen extends StatefulWidget {
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
@@ -19,7 +18,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   void initState() {
     super.initState();
-    userRepository=RepositoryProvider.of<UserRepository>(context);
+    userRepository = RepositoryProvider.of<UserRepository>(context);
 
     _controller = VideoPlayerController.network(
         'https://res.cloudinary.com/dtvc2pr8i/video/upload/eo_21,so_0/v1614644723/vid_aq0vw7.mp4')
@@ -41,16 +40,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         children: [
           Center(
               child: SizedBox.expand(
-            //   aspectRatio: 16 / 9,
-            child: FittedBox(
-                fit: BoxFit.cover,
-                child: SizedBox(
-                  height: height,
-                  width: width,
-                  child: _controller.value.initialized
-                      ? VideoPlayer(_controller)
-                      : Image.asset('assets/images/video_place_holder.jpg'),
-                )),
+            child: _controller.value.initialized
+                ? FittedBox(
+                    fit: BoxFit.cover,
+                    child: SizedBox(
+                        width: _controller.value.size?.width ?? 0,
+                        height: _controller.value.size?.height ?? 0,
+                        child: VideoPlayer(_controller)))
+                : Image.asset('assets/images/video_place_holder.jpg',
+                    fit: BoxFit.cover, width: width, height: height),
           )),
           SizedBox.expand(
             child: Column(
@@ -60,16 +58,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 AuthButton(
                   title: "Sign in",
                   onTap: () {
-                    Navigator.of(context).pushNamed("/login",
-                        arguments: [userRepository]);
+                    Navigator.of(context)
+                        .pushNamed("/login", arguments: [userRepository]);
                   },
                 ),
                 SizedBox(height: height * 0.1),
                 AuthButton(
                   title: "Sign up",
                   onTap: () {
-                    Navigator.of(context).pushNamed("/sign_up",
-                        arguments: [userRepository]);
+                    Navigator.of(context)
+                        .pushNamed("/sign_up", arguments: [userRepository]);
                   },
                   withBackgroundColor: true,
                 ),

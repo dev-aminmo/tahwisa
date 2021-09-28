@@ -11,6 +11,8 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="tahwisa"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"
         >
