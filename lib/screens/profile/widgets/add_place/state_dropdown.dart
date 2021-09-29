@@ -18,7 +18,7 @@ class StateDropdown extends StatelessWidget {
     return Align(
       alignment: Alignment.topCenter,
       child: BlocBuilder(
-          cubit: _dropDownStateBloc,
+          bloc: _dropDownStateBloc,
           builder: (context, state) {
             if (state is DropDownsStatesSuccess)
               return StreamBuilder<MyState>(

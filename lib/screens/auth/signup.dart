@@ -69,7 +69,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
             resizeToAvoidBottomInset: false,
             backgroundColor: MyColors.white,
             body: BlocBuilder<SignupBloc, SignupState>(
-              cubit: _signupBloc,
+              bloc: _signupBloc,
               builder: (
                 BuildContext context,
                 SignupState state,

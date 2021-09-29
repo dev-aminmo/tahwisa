@@ -16,7 +16,7 @@ class MunicipalDropDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
-        cubit: _dropDownsMunicipalBloc,
+        bloc: _dropDownsMunicipalBloc,
         builder: (context, state) {
           if (state is DropDownsMunicipalSuccess) {
             return StreamBuilder<Municipal>(

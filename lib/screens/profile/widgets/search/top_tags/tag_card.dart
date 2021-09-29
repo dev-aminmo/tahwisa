@@ -25,14 +25,14 @@ class TagCard extends StatelessWidget {
           child: ClipRRect(
             clipBehavior: Clip.antiAlias,
             child: BackdropFilter(
-              // filter: ImageFilter.blur(sigmaX: .8, sigmaY: .4),
-              filter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.1), BlendMode.hardLight),
+              filter: ImageFilter.blur(sigmaX: .8, sigmaY: .4),
 
+              /*  filter:  ColorFilter.mode(
+                      Colors.black.withOpacity(0.1), BlendMode.hardLight),
+*/
               child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   //   color: Colors.black.withOpacity(0.05),
-
                   alignment: Alignment.center,
                   child: FittedBox(
                     fit: BoxFit.contain,

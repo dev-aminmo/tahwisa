@@ -29,7 +29,7 @@ class _LoginPageState extends State<ResetPasswordPage> {
     return Scaffold(
         body: BlocBuilder<ResetPasswordBloc, ResetPasswordState>(
       //  create: _loginBloc,
-      cubit: _resetPasswordBloc,
+      bloc: _resetPasswordBloc,
       // listener: (ctx, state) {},
       builder: (
         BuildContext context,

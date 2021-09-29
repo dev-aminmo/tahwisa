@@ -1,11 +1,9 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tahwisa/style/my_colors.dart';
-
 import 'package:tahwisa/blocs/image_picker_bloc/bloc.dart';
 import 'package:tahwisa/blocs/location_picker_bloc/bloc.dart';
+import 'package:tahwisa/style/my_colors.dart';
 
 class DescriptionPicturesLocationInput extends StatelessWidget {
   const DescriptionPicturesLocationInput({
@@ -15,7 +13,10 @@ class DescriptionPicturesLocationInput extends StatelessWidget {
     @required this.height,
     @required ImagePickerBloc imagePickerBloc,
     @required LocationPickerBloc locationPickerBloc,
-  }) : _descriptionEditingController = descriptionEditingController, _imagePickerBloc = imagePickerBloc, _locationPickerBloc = locationPickerBloc, super(key: key);
+  })  : _descriptionEditingController = descriptionEditingController,
+        _imagePickerBloc = imagePickerBloc,
+        _locationPickerBloc = locationPickerBloc,
+        super(key: key);
 
   final double width;
   final TextEditingController _descriptionEditingController;
@@ -51,12 +52,12 @@ class DescriptionPicturesLocationInput extends StatelessWidget {
                 border: OutlineInputBorder(),
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                        color: Colors.transparent, width: 1.5)),
+                    borderSide:
+                        BorderSide(color: Colors.transparent, width: 1.5)),
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                        color: Colors.transparent, width: 2.5))),
+                    borderSide:
+                        BorderSide(color: Colors.transparent, width: 2.5))),
             cursorColor: MyColors.lightGreen,
             style: TextStyle(
                 fontWeight: FontWeight.w400,
@@ -71,8 +72,7 @@ class DescriptionPicturesLocationInput extends StatelessWidget {
           ),
           SizedBox(height: height * 0.01),
           Container(
-            margin: EdgeInsets.symmetric(
-                horizontal: 19, vertical: 12),
+            margin: EdgeInsets.symmetric(horizontal: 19, vertical: 12),
             child: Row(
               children: [
                 GestureDetector(
@@ -84,14 +84,12 @@ class DescriptionPicturesLocationInput extends StatelessWidget {
                       SizedBox(width: width * 0.02),
                       Text("Pictures",
                           style: TextStyle(
-                              color: MyColors.darkBlue,
-                              fontSize: 18)),
+                              color: MyColors.darkBlue, fontSize: 18)),
                     ],
                   ),
                 ),
                 Spacer(),
-                BlocBuilder<LocationPickerBloc,
-                    LocationPickerState>(
+                BlocBuilder<LocationPickerBloc, LocationPickerState>(
                   builder: (context, state) {
                     if (state is LocationPicked) {
                       return FittedBox(
@@ -100,8 +98,7 @@ class DescriptionPicturesLocationInput extends StatelessWidget {
                       );
                     }
                     return GestureDetector(
-                      onTap: () =>
-                          _locationPickerBloc.add(PickLocation()),
+                      onTap: () => _locationPickerBloc.add(PickLocation()),
                       child: Row(
                         children: [
                           Icon(CupertinoIcons.location_solid,
@@ -109,8 +106,7 @@ class DescriptionPicturesLocationInput extends StatelessWidget {
                           SizedBox(width: width * 0.02),
                           Text("Location",
                               style: TextStyle(
-                                  color: MyColors.darkBlue,
-                                  fontSize: 18)),
+                                  color: MyColors.darkBlue, fontSize: 18)),
                         ],
                       ),
                     );

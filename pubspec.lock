@@ -21,7 +21,7 @@ packages:
       name: bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.1"
+    version: "7.2.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -64,13 +64,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0"
-  convert:
-    dependency: transitive
-    description:
-      name: convert
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.1"
   crypto:
     dependency: transitive
     description:
@@ -138,7 +131,7 @@ packages:
       name: flutter_bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.2"
+    version: "7.3.0"
   flutter_keyboard_visibility:
     dependency: transitive
     description:
@@ -167,13 +160,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-  flutter_native_image:
-    dependency: "direct main"
-    description:
-      name: flutter_native_image
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.6"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -187,7 +173,7 @@ packages:
       name: flutter_svg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.19.3"
+    version: "0.22.0"
   flutter_tagging:
     dependency: "direct main"
     description:
@@ -310,20 +296,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
-  multi_image_picker:
+  multi_image_picker2:
     dependency: "direct main"
     description:
-      name: multi_image_picker
+      name: multi_image_picker2
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.8.00"
+    version: "5.0.02"
   nested:
     dependency: transitive
     description:
       name: nested
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.4"
+    version: "1.0.0"
   path:
     dependency: transitive
     description:
@@ -337,14 +323,14 @@ packages:
       name: path_drawing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.1+1"
+    version: "0.5.1"
   path_parsing:
     dependency: transitive
     description:
       name: path_parsing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.4"
+    version: "0.2.1"
   path_provider:
     dependency: transitive
     description:
@@ -393,7 +379,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.0"
+    version: "4.1.0"
   photo_view:
     dependency: "direct main"
     description:
@@ -428,7 +414,7 @@ packages:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.3.3"
+    version: "6.0.1"
   queen_validators:
     dependency: "direct main"
     description:
@@ -629,21 +615,21 @@ packages:
       name: video_player
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "2.2.3"
   video_player_platform_interface:
     dependency: transitive
     description:
       name: video_player_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0"
+    version: "4.2.0"
   video_player_web:
     dependency: transitive
     description:
       name: video_player_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.4+1"
+    version: "2.0.4"
   win32:
     dependency: transitive
     description:
@@ -664,7 +650,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.5.1"
+    version: "5.1.2"
 sdks:
   dart: ">=2.12.0 <3.0.0"
   flutter: ">=2.0.0"

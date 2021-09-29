@@ -77,7 +77,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
           extendBodyBehindAppBar: true,
           backgroundColor: MyColors.white,
           body: BlocBuilder(
-            cubit: _detailsCubit,
+            bloc: _detailsCubit,
             builder: (context, state) {
               if (state is PlaceDetailsSuccess) {
                 return ListView(

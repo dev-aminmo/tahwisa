@@ -206,7 +206,7 @@ class _SearchScreenState extends State<SearchScreen> {
               child: Row(
                 children: [
                   BlocBuilder<SearchBloc, SearchState>(
-                    cubit: _searchBloc,
+                    bloc: _searchBloc,
                     builder: (context, state) {
                       if (state is SearchSuccess) {
                         return Text("${state.numResults} places found",
@@ -330,7 +330,7 @@ class TopTagsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TopTagsCubit, TopTagsState>(
-      cubit: _topTagsCubit,
+      bloc: _topTagsCubit,
       builder: (context, state) {
         if (state is TagsLoadingState) {
           return Center(child: CircularProgressIndicator());

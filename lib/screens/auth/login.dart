@@ -36,7 +36,7 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
-      cubit: _loginBloc,
+      bloc: _loginBloc,
       builder: (
         BuildContext context,
         LoginState state,

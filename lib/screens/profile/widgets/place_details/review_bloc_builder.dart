@@ -36,7 +36,7 @@ class _UserReviewBlocBuilderState extends State<ReviewBlocBuilder> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ReviewsCubit, ReviewsState>(
-      cubit: _reviewsCubit,
+      bloc: _reviewsCubit,
       builder: (context, state) {
         if (state is ReviewsLoading) {
           return Center(child: CircularProgressIndicator());

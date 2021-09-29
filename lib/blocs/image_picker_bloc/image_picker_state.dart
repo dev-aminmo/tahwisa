@@ -21,6 +21,13 @@ class ImagesPicked extends ImagePickerState {
   List<Object> get props => [images];
 }
 
+class AssetsPicked extends ImagePickerState {
+  final List<File> images;
+  AssetsPicked({@required this.images});
+  @override
+  List<Object> get props => [images];
+}
+
 class ImagePickerFailure extends ImagePickerState {
   final String error;
 

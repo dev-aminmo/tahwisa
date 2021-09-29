@@ -98,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         drawer: Drawer(
           child: BlocBuilder<UserCubit, UserState>(
-              cubit: _userCubit,
+              bloc: _userCubit,
               builder: (context, state) {
                 if (state is UserSuccess) {
                   return Column(

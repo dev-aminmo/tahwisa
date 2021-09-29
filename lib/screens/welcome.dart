@@ -40,7 +40,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         children: [
           Center(
               child: SizedBox.expand(
-            child: _controller.value.initialized
+            child: _controller.value.isInitialized
                 ? FittedBox(
                     fit: BoxFit.cover,
                     child: SizedBox(
