@@ -48,12 +48,13 @@ class _LocationPageState extends State<LocationPage>
                       latitude: state.latitude, longitude: state.longitude),
                   SizedBox(height: 12),
                   MaterialButton(
-                    color: MyColors.darkBlue,
+                    color: MyColors.lightGreen,
                     onPressed: () {
                       widget.locationPickerBloc.add(PickLocation());
                     },
                     child: Padding(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 2),
                       child: Text(
                         "Re-Pick Location",
                         style: TextStyle(color: Colors.white, fontSize: 18),

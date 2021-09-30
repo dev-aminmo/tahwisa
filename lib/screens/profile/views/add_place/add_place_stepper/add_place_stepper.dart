@@ -11,6 +11,7 @@ import 'package:tahwisa/repositories/dropdowns_repository.dart';
 import 'package:tahwisa/repositories/models/tag.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/tag_repository.dart';
+import 'package:tahwisa/style/my_colors.dart';
 
 import './views/views.dart';
 
@@ -118,11 +119,15 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
         children: <Widget>[
           TextButton(
             onPressed: _canGoBack() ? _precedentPage : null,
-            child: const Text('BACK'),
+            child: const Text('BACK', style: TextStyle(color: MyColors.gray)),
           ),
-          ElevatedButton(
+          MaterialButton(
             onPressed: _nextPage,
-            child: const Text('NEXT'),
+            color: MyColors.darkBlue,
+            child: const Text(
+              'NEXT',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ],
       ),

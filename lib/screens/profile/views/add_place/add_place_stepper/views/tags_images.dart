@@ -67,12 +67,13 @@ class _TagsImagesPageState extends State<TagsImagesPage>
                         }),
                     SizedBox(height: 16),
                     MaterialButton(
-                      color: MyColors.darkBlue,
+                      color: MyColors.lightGreen,
                       onPressed: () {
                         widget.imagePickerBloc.add(PickImages());
                       },
                       child: Padding(
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
                         child: Text(
                           "Re-Pick Images",
                           style: TextStyle(color: Colors.white, fontSize: 18),
