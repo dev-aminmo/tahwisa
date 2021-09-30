@@ -16,7 +16,7 @@ class ExplorePlacesBloc extends Bloc<ExplorePlacesEvent, ExplorePlacesState> {
   Stream<ExplorePlacesState> mapEventToState(
     ExplorePlacesEvent event,
   ) async* {
-    if (event is PlaceFetched) {
+    if (event is FetchPlaces) {
       if (event.refresh) page = 1;
       if (page == 1) {
         yield ExplorePlacesProgress();

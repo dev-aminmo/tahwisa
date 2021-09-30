@@ -21,7 +21,7 @@ import 'screens/profile/views/rate_place.dart';
 import 'screens/profile/views/reviews_screen.dart';
 
 class SimpleBlocDelegate extends BlocObserver {
- /* @override
+  /* @override
   void onChange(Cubit cubit, Change change) {
     print(change.toString());
 
@@ -32,6 +32,12 @@ class SimpleBlocDelegate extends BlocObserver {
   void onEvent(Bloc bloc, Object event) {
     print(event.toString());
     super.onEvent(bloc, event);
+  }
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    print(transition.toString());
+    super.onTransition(bloc, transition);
   }
 }
 

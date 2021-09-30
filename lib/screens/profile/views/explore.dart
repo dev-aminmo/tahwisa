@@ -17,7 +17,7 @@ class _ExploreState extends State<Explore>
   PlaceRepository placeRepository;
   Future<void> refreshPlacesList(ExplorePlacesBloc bloc) async {
     _places.clear();
-    bloc.add(PlaceFetched(refresh: true));
+    bloc.add(FetchPlaces(refresh: true));
   }
 
   // Setting to true will force the tab to never be disposed.
@@ -42,7 +42,7 @@ class _ExploreState extends State<Explore>
     final height = MediaQuery.of(context).size.height;
     return BlocProvider(
       create: (_) => ExplorePlacesBloc(placeRepository: placeRepository)
-        ..add(PlaceFetched()),
+        ..add(FetchPlaces()),
       child: BlocBuilder<ExplorePlacesBloc, ExplorePlacesState>(
         buildWhen: (previousState, currentState) {
           if (currentState is ExplorePlacesEmpty) {
@@ -88,7 +88,7 @@ class _ExploreState extends State<Explore>
                 !bloc.isFetching) {
               bloc
                 ..isFetching = true
-                ..add(PlaceFetched());
+                ..add(FetchPlaces());
               print("fetch more places");
             }
           }),

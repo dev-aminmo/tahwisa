@@ -8,8 +8,8 @@ abstract class ExplorePlacesEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class PlaceFetched extends ExplorePlacesEvent {
+class FetchPlaces extends ExplorePlacesEvent {
   final bool refresh;
 
-  PlaceFetched({this.refresh = false});
+  FetchPlaces({this.refresh = false});
 }

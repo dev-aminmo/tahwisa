@@ -64,6 +64,7 @@ class _WishListState extends State<WishList> {
       bloc..isFetching = false;
       _places.addAll(state.places);
       return ListView.builder(
+        physics: BouncingScrollPhysics(),
         controller: _scrollController
           ..addListener(() {
             if (_scrollController.offset ==
