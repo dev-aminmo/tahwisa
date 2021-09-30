@@ -91,6 +91,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         var oldFilter = (state as SearchSuccess).filter;
 
         var newFilter = filterManagerBloc.stateToFilter();
+        print("oldFilter $oldFilter");
+        print("newFilter $newFilter");
         if (oldFilter != newFilter) {
           add(SearchFirstPageEvent(query: (state as SearchSuccess).query));
         }

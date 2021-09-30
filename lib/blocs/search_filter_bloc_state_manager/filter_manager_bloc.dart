@@ -37,6 +37,10 @@ class FilterManagerBloc extends Bloc<FilterManagerEvent, FilterManagerState> {
             ratingRangeValues: event.ratingRangeValues,
           ));
         }
+      } else {
+        yield (FilterManagerLoadedState(
+          ratingRangeValues: event.ratingRangeValues,
+        ));
       }
     }
     if (event is ClearFilterState) {

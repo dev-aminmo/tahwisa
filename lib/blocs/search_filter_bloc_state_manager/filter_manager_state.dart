@@ -28,6 +28,7 @@ class FilterManagerLoadedState extends FilterManagerState {
         dropDownsStatesSuccess,
         selectedState,
         dropDownsMunicipalSuccess,
-        selectedMunicipal
+        selectedMunicipal,
+        ratingRangeValues
       ];
 }

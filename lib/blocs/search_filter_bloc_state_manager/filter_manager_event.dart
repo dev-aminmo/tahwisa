@@ -19,11 +19,16 @@ class SaveFilterState extends FilterManagerEvent {
   });
 
   @override
-  List<Object> get props => [dropDownsMunicipalBloc, dropDownStateBloc];
+  List<Object> get props => [
+        dropDownsMunicipalBloc,
+        dropDownStateBloc,
+        ratingRangeValues?.start,
+        ratingRangeValues?.end
+      ];
 
   @override
   String toString() =>
-      'DropDownStateBloc { state: $dropDownStateBloc } ,DropDownsMunicipalBloc { state: $dropDownsMunicipalBloc }';
+      'DropDownStateBloc { state: $dropDownStateBloc } ,DropDownsMunicipalBloc { state: $dropDownsMunicipalBloc ,ratingRangeValues { state: $ratingRangeValues }';
 }
 
 class ClearFilterState extends FilterManagerEvent {}
