@@ -6,21 +6,27 @@ class TitleTextField extends StatelessWidget {
       {Key key,
       @required TextEditingController titleEditingController,
       String hint = "enter title of the place",
-      Function onEditingComplete})
+      Function onEditingComplete,
+      var validator})
       : _titleEditingController = titleEditingController,
         hint = hint,
         onEditingComplete = onEditingComplete,
+        validator = validator,
         super(key: key);
 
   final TextEditingController _titleEditingController;
   final String hint;
   final Function onEditingComplete;
+  final validator;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: _titleEditingController,
       onEditingComplete: onEditingComplete,
+      maxLines: 2,
+      keyboardType: TextInputType.text,
+      validator: validator,
       decoration: InputDecoration(
           fillColor: MyColors.white,
           filled: true,

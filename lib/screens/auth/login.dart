@@ -63,8 +63,8 @@ class _LoginFormState extends State<LoginForm> {
                   controller: _emailController,
                   hint: "email",
                   validator: qValidator([
-                    // IsRequired(msg: 'email is required'),
-                    // IsEmail(),
+                    IsRequired(msg: 'email is required'),
+                    IsEmail(),
                     //  MinLength(3),
                   ]),
                   suffix:

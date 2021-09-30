@@ -19,7 +19,6 @@ class AddPlace extends StatefulWidget {
 }
 
 class _AddPlaceState extends State<AddPlace> {
-  String path;
   PlaceUploadBloc _placeUploadBloc;
   PlaceRepository _placeRepository;
   TagRepository _tagRepository;
@@ -31,7 +30,6 @@ class _AddPlaceState extends State<AddPlace> {
   TextEditingController _titleEditingController;
   TextEditingController _descriptionEditingController;
   final _formKey = GlobalKey<FormState>();
-
   List<Tag> _selectedTags;
 
   @override

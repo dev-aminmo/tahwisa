@@ -21,8 +21,6 @@ class DropDownsMunicipalBloc
   }) : super(DropDownMunicipalInitial()) {
     _selectedMunicipal$.add(null);
   }
-  @override
-  DropDownMunicipalState get initialState => DropDownMunicipalInitial();
 
   @override
   Stream<DropDownMunicipalState> mapEventToState(

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tahwisa/blocs/location_picker_bloc/bloc.dart';
 
+import './add_place_stepper/add_place_stepper.dart';
 import '../LocationPickerScreen.dart';
-import '../stepper.dart';
 
 class AddPlaceNavigator extends StatefulWidget {
   @override
@@ -22,6 +22,7 @@ class _AddPlaceNavigatorState extends State<AddPlaceNavigator> {
           return WillPopScope(
             //this will override the back button behavior so when the button is clicked onPopPage will be called
             onWillPop: () async => !await _navigatorKey.currentState.maybePop(),
+
             child: Navigator(
               key: _navigatorKey,
               pages: [

@@ -14,7 +14,7 @@ class TagPicker extends StatelessWidget {
         super(key: key);
 
   final List<Tag> _selectedTags;
-  final _tagRepository;
+  final TagRepository _tagRepository;
   @override
   Widget build(BuildContext context) {
     return FlutterTagging<Tag>(
@@ -56,14 +56,14 @@ class TagPicker extends StatelessWidget {
               fontSize: 14.0,
               fontWeight: FontWeight.w300,
             ),
-            backgroundColor: MyColors.greenBorder,
+            backgroundColor: MyColors.darkBlue,
           ),
         );
       },
       configureChip: (tag) {
         return ChipConfiguration(
           label: Text(tag.name),
-          backgroundColor: MyColors.lightGreen,
+          backgroundColor: MyColors.darkBlue,
           labelStyle: TextStyle(
             color: MyColors.white,
           ),
