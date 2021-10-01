@@ -13,8 +13,7 @@ class PlaceUploadBloc extends Bloc<PlaceUploadEvent, PlaceUploadState> {
     @required this.placeRepository,
   })  : assert(placeRepository != null),
         super(PlaceUploadInitial());
-  @override
-  PlaceUploadState get initialState => PlaceUploadInitial();
+
   @override
   Stream<PlaceUploadState> mapEventToState(
     PlaceUploadEvent event,
@@ -28,7 +27,8 @@ class PlaceUploadBloc extends Bloc<PlaceUploadEvent, PlaceUploadState> {
             pictures: event.picture,
             municipalID: event.municipalID,
             latitude: event.latitude,
-            longitude: event.longitude);
+            longitude: event.longitude,
+            tags: event.tags);
         if (response) {
           yield (PlaceUploadSuccess());
         }

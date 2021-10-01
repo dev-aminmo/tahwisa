@@ -6,9 +6,7 @@ class Tag extends Taggable {
   var picture;
 
   /// Creates Tag
-  Tag({
-    final this.name = "",
-  });
+  Tag({this.name, this.id});
   Tag.fromJson(Map<String, dynamic> json) {
     this.id = json['id'] ?? json['tag_id'];
     this.name = json['name'];
@@ -19,5 +17,11 @@ class Tag extends Taggable {
   List<Object> get props => [name];
 
   @override
-  String toString() => name;
+  String toString() => "$id, $name";
+
+  Map<String, dynamic> toJson() {
+    return (this.id == null)
+        ? {"name": this.name}
+        : {"name": this.name, "id": this.id};
+  }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:tahwisa/repositories/models/tag.dart';
 
 @immutable
 abstract class PlaceUploadEvent extends Equatable {
@@ -15,14 +16,17 @@ class UploadPlaceButtonPressed extends PlaceUploadEvent {
   final int municipalID;
   final double latitude;
   final double longitude;
+  final List<Tag> tags;
 
-  UploadPlaceButtonPressed(
-      {@required this.title,
-      @required this.description,
-      @required this.picture,
-      @required this.municipalID,
-      @required this.latitude,
-      @required this.longitude}) {
+  UploadPlaceButtonPressed({
+    @required this.title,
+    @required this.description,
+    @required this.picture,
+    @required this.municipalID,
+    @required this.latitude,
+    @required this.longitude,
+    @required this.tags,
+  }) {
     print(this.toString());
   }
 

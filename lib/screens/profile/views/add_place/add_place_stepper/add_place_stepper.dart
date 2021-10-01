@@ -98,10 +98,21 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(title: const Text('Add place')),
+        // appBar: AppBar(title: const Text('Add place')),
         body: Column(
           children: [
             buildPageView(),
+            BlocBuilder<PlaceUploadBloc, PlaceUploadState>(
+              bloc: _placeUploadBloc,
+              builder: (context, state) {
+                if (state is PlaceUploadLoading) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return SizedBox();
+              },
+            ),
             KeyboardVisibilityBuilder(
               builder: (context, isKeyboardVisible) =>
                   (isKeyboardVisible) ? SizedBox() : buildBackAndNextButtons(),
@@ -201,8 +212,15 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
         if (_imagePickerBloc.state is! ImagesPicked) {
           showErrorSnackBar("Pick images of the place");
         } else {
-          print("you can submit form");
-          //Submit Form
+          _placeUploadBloc.add(UploadPlaceButtonPressed(
+              title: _titleEditingController.value.text,
+              description: _descriptionEditingController.value.text,
+              picture: (_imagePickerBloc.state as ImagesPicked).images,
+              latitude: (_locationPickerBloc.state as LocationPicked).latitude,
+              longitude:
+                  (_locationPickerBloc.state as LocationPicked).longitude,
+              municipalID: _dropDownsMunicipalBloc.currentMunicipal.id,
+              tags: _selectedTags));
         }
         break;
       default:

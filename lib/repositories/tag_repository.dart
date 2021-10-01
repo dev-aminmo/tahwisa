@@ -9,6 +9,7 @@ class TagRepository {
   List<Tag> tags = [];
   Future<List<Tag>> getTags(String query) async {
     if (query == '' && (this.tags.length != 0)) {
+      print(this.tags.first);
       return this.tags;
     }
     var pref = await SharedPreferences.getInstance();

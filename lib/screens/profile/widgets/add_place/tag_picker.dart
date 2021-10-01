@@ -39,7 +39,8 @@ class TagPicker extends StatelessWidget {
         );
       },
       onAdded: (tag) {
-        return Tag(name: tag.name);
+        print(tag);
+        return Tag(id: tag?.id, name: tag.name);
       },
       configureSuggestion: (tag) {
         return SuggestionConfiguration(
@@ -72,6 +73,8 @@ class TagPicker extends StatelessWidget {
       },
       onChanged: () {
         print(_selectedTags);
+        var jsonTags = _selectedTags.map((t) => t.toJson()).toList();
+        print(jsonTags);
       },
     );
   }

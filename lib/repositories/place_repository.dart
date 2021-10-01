@@ -160,8 +160,12 @@ class PlaceRepository {
     int municipalID,
     double latitude,
     double longitude,
+    List<Tag> tags,
   }) async {
     try {
+      var jsonTags = tags.map((t) => t.toJson()).toList();
+      print(jsonTags);
+      print("json");
       var pref = await SharedPreferences.getInstance();
       String token = pref.getString("token");
       var formData = FormData.fromMap({
@@ -170,9 +174,18 @@ class PlaceRepository {
           "description": description,
           "latitude": latitude,
           "longitude": longitude,
-          "municipal_id": municipalID
+          "municipal_id": municipalID,
+          "tags": jsonTags
         },
         'file[]': await _picturesToMultipartFile(pictures)
+      });
+      print({
+        "title": title,
+        "description": description,
+        "latitude": latitude,
+        "longitude": longitude,
+        "municipal_id": municipalID,
+        "tags": jsonTags
       });
       var response = await Dio().post(Api.add_place,
           data: formData,
