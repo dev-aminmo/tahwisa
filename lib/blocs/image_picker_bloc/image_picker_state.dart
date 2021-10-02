@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:multi_image_picker2/multi_image_picker2.dart';
 
 @immutable
 abstract class ImagePickerState extends Equatable {
@@ -14,7 +15,10 @@ class ImagePickerInitial extends ImagePickerState {}
 
 class ImagesPicked extends ImagePickerState {
   final List<File> images;
-  ImagesPicked({@required this.images}) {
+  final List<Asset> assets;
+  ImagesPicked({@required this.images,
+  @required this.assets
+  }) {
     print("${images.length}***************************");
   }
   @override

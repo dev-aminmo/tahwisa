@@ -31,9 +31,10 @@ class PlaceUploadBloc extends Bloc<PlaceUploadEvent, PlaceUploadState> {
             tags: event.tags);
         if (response) {
           yield (PlaceUploadSuccess());
+        } else {
+          yield PlaceUploadFailure(error: "An error occurred");
         }
       } catch (error) {
-        yield PlaceUploadInitial();
         yield PlaceUploadFailure(error: error.toString());
       }
     }

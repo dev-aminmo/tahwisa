@@ -50,7 +50,9 @@ class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
           ),
         );
         var _fileImageArray = await _castAssetsToFiles(resultList);
-        yield (ImagesPicked(images: _fileImageArray));
+        yield (ImagesPicked(images: _fileImageArray,
+            assets:resultList
+        ));
       } on Exception catch (e) {
         yield (ImagePickerFailure(error: e.toString()));
       }

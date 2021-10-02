@@ -50,13 +50,13 @@ class FAB extends StatelessWidget {
                   final image = _imagePickerBloc.state as ImagesPicked;
                   final location = _locationPickerBloc.state as LocationPicked;
                   _placeUploadBloc.add(UploadPlaceButtonPressed(
-                    title: _titleEditingController.value.text,
-                    description: _descriptionEditingController.value.text,
-                    picture: image.images,
-                    latitude: location.latitude,
-                    longitude: location.longitude,
-                    municipalID: municipal.id,
-                  ));
+                      title: _titleEditingController.value.text,
+                      description: _descriptionEditingController.value.text,
+                      picture: image.images,
+                      latitude: location.latitude,
+                      longitude: location.longitude,
+                      municipalID: municipal.id,
+                      tags: []));
                 } else {
                   print("please pick location ***********************");
                 }

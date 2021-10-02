@@ -175,7 +175,7 @@ class PlaceRepository {
           "latitude": latitude,
           "longitude": longitude,
           "municipal_id": municipalID,
-          "tags": jsonTags
+          "tags": jsonTags ?? "[]"
         },
         'file[]': await _picturesToMultipartFile(pictures)
       });
@@ -185,7 +185,7 @@ class PlaceRepository {
         "latitude": latitude,
         "longitude": longitude,
         "municipal_id": municipalID,
-        "tags": jsonTags
+        "tags": jsonTags ?? "[]"
       });
       var response = await Dio().post(Api.add_place,
           data: formData,

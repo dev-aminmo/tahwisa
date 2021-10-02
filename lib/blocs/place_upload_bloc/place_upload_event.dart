@@ -32,9 +32,9 @@ class UploadPlaceButtonPressed extends PlaceUploadEvent {
 
   @override
   List<Object> get props =>
-      [title, description, picture, municipalID, latitude, longitude];
+      [title, description, picture, municipalID, latitude, longitude, tags];
 
   @override
   String toString() =>
-      'LoginButtonPressed { $title, $description,$picture,$municipalID, $latitude, $longitude }';
+      'UploadPlaceButtonPressed { $title, $description,$picture,$municipalID, $latitude, $longitude ,$tags}';
 }
