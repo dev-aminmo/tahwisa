@@ -99,7 +99,7 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('Are you sure?'),
-            content: const Text('Do you want to exit an App'),
+            content: const Text('Your post will be discarded'),
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
@@ -273,10 +273,6 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
     });
   }
 
-  bool _canGoNext() {
-    return _position < _children.length - 1;
-  }
-
   bool _canGoBack() {
     return _position > 0;
   }
@@ -293,17 +289,17 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
   }
 
   void _nextPage() {
+    FocusScope.of(context).requestFocus(FocusNode());
+
     void _goToNextPage() {
       _pageController.animateToPage(++_position,
           duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
     }
 
-    //  if (!_canGoNext()) return;
     switch (_position) {
       case 0:
         if (_formKey.currentState.validate()) {
           _formKey.currentState.save();
-          FocusScope.of(context).requestFocus(FocusNode());
           _goToNextPage();
         }
         break;
