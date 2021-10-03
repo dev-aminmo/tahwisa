@@ -27,7 +27,27 @@ class LocationPickerScreenState extends State<LocationPickerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: buildTypeAheadTextField(context),
+        title: GoogleMapsAutoCompleteTextField(
+          suggestionsCallback: (pattern) async {
+            return (pattern.length > 1)
+                ? await _mapsRepository.autocomplete(pattern)
+                : [];
+          },
+          onSuggestionSelected: (suggestion) async {
+            var location =
+                await _mapsRepository.getLocationByPlaceId(suggestion?.placeId);
+            if (location != null) {
+              var latLng = LatLng(location.lat, location.lng);
+
+              setState(() {
+                _marker = Marker(position: latLng, markerId: MarkerId("1"));
+              });
+
+              final GoogleMapController controller = await _controller.future;
+              controller.animateCamera(CameraUpdate.newLatLng(latLng));
+            }
+          },
+        ),
         actions: [_buildActions(context)],
       ),
       body: buildGoogleMap(),
@@ -171,5 +191,59 @@ class LocationPickerScreenState extends State<LocationPickerScreen> {
   void dispose() {
     _controller.future.then((value) => value.dispose());
     super.dispose();
+  }
+}
+
+class GoogleMapsAutoCompleteTextField extends StatelessWidget {
+  final Function suggestionsCallback;
+  final Function onSuggestionSelected;
+
+  const GoogleMapsAutoCompleteTextField(
+      {@required this.suggestionsCallback,
+      @required this.onSuggestionSelected});
+
+  @override
+  Widget build(BuildContext context) {
+    return TypeAheadField(
+      hideOnEmpty: true,
+      hideOnLoading: true,
+      debounceDuration: const Duration(milliseconds: 150),
+      hideOnError: true,
+      textFieldConfiguration: TextFieldConfiguration(
+        decoration: const InputDecoration(
+            hintText: "search for a place",
+            counterText: "",
+            errorStyle: const TextStyle(fontSize: 16),
+            hintStyle: const TextStyle(
+                fontWeight: FontWeight.w400, color: Colors.white, fontSize: 16),
+            border: InputBorder.none),
+        cursorColor: MyColors.white,
+        style: DefaultTextStyle.of(context).style.copyWith(
+            color: MyColors.white, fontWeight: FontWeight.w400, fontSize: 16),
+      ),
+      suggestionsCallback: (pattern) async =>
+          await suggestionsCallback(pattern),
+      onSuggestionSelected: onSuggestionSelected,
+      itemBuilder: (context, suggestion) {
+        return suggestion != null
+            ? Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    Icon(Icons.location_on),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Flexible(
+                        child: Text(
+                      suggestion?.description ?? '',
+                      softWrap: true,
+                    )),
+                  ],
+                ),
+              )
+            : SizedBox();
+      },
+    );
   }
 }

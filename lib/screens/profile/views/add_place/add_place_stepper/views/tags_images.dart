@@ -36,7 +36,7 @@ class _TagsImagesPageState extends State<TagsImagesPage>
         TagPicker(
             selectedTags: widget.selectedTags,
             tagRepository: widget.tagRepository),
-        SizedBox(height: 48),
+        SizedBox(height: 72),
         BlocBuilder<ImagePickerBloc, ImagePickerState>(
             bloc: widget.imagePickerBloc,
             builder: (context, state) {
@@ -85,14 +85,25 @@ class _TagsImagesPageState extends State<TagsImagesPage>
               }
               return GestureDetector(
                 onTap: () => widget.imagePickerBloc.add(PickImages()),
-                child: Row(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.photo_library_rounded,
-                        color: MyColors.darkBlue, size: 32),
-                    SizedBox(width: 72),
-                    Text("Pictures",
-                        style:
-                            TextStyle(color: MyColors.darkBlue, fontSize: 18)),
+                    Icon(Icons.add_photo_alternate_outlined,
+                        color: MyColors.darkBlue, size: 72),
+                    SizedBox(height: 12),
+                    MaterialButton(
+                      color: MyColors.darkBlue,
+                      onPressed: () {
+                        widget.imagePickerBloc.add(PickImages());
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Text(
+                          "Pick Pictures",
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               );
