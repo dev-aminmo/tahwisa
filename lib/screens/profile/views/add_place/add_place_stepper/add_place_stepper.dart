@@ -97,17 +97,17 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
-          builder: (context) => new AlertDialog(
-            title: new Text('Are you sure?'),
-            content: new Text('Do you want to exit an App'),
+          builder: (context) => AlertDialog(
+            title: const Text('Are you sure?'),
+            content: const Text('Do you want to exit an App'),
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
-                child: new Text('No'),
+                child: const Text('No'),
               ),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(true),
-                child: new Text('Yes'),
+                child: const Text('Yes'),
               ),
             ],
           ),
@@ -130,12 +130,14 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
                     context: context,
                     useRootNavigator: false,
                     barrierDismissible: false, // user must tap button!
-                    builder: (BuildContext context) => AlertDialog(
-                        backgroundColor: Colors.white,
-                        content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [CircularProgressIndicator()])));
+                    builder: (BuildContext context) => WillPopScope(
+                        onWillPop: () async => false,
+                        child: AlertDialog(
+                            backgroundColor: Colors.white,
+                            content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [CircularProgressIndicator()]))));
               }
               if (state is PlaceUploadSuccess) {
                 Navigator.of(context).pop();
@@ -172,7 +174,9 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
                                   color: MyColors.gray),
                             )
                           ],
-                        )));
+                        ))).then((value) {
+                  Navigator.of(context, rootNavigator: true).pop();
+                });
               }
               if (state is PlaceUploadFailure) {
                 Navigator.of(context).pop();
@@ -255,7 +259,7 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
   Expanded buildPageView() {
     return Expanded(
       child: PageView(
-        //  physics: const NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         children: _children ?? [],
         onPageChanged: _positionChanged,
         controller: _pageController,
