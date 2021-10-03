@@ -29,9 +29,9 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
         hideOnEmpty: true,
         hideOnLoading: true,
         debounceDuration: const Duration(milliseconds: 150),
-        //Todo  hideOnError: true, in production
         hideOnError: true,
         textFieldConfiguration: TextFieldConfiguration(
+          textInputAction: TextInputAction.search,
           onEditingComplete: onEditingComplete,
           controller: _searchEditingController,
           decoration: InputDecoration(

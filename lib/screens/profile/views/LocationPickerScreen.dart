@@ -210,6 +210,7 @@ class GoogleMapsAutoCompleteTextField extends StatelessWidget {
       debounceDuration: const Duration(milliseconds: 150),
       hideOnError: true,
       textFieldConfiguration: TextFieldConfiguration(
+        onEditingComplete: () => FocusNode().unfocus(),
         decoration: const InputDecoration(
             hintText: "search for a place",
             counterText: "",

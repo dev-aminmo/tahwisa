@@ -23,6 +23,7 @@ class TitleTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: _titleEditingController,
+      textInputAction: TextInputAction.done,
       onEditingComplete: onEditingComplete,
       maxLines: 2,
       keyboardType: TextInputType.text,

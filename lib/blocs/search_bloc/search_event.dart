@@ -14,11 +14,11 @@ class SearchFirstPageEvent extends SearchEvent {
   const SearchFirstPageEvent({this.query, this.tag});
 
   @override
-  List<Object> get props => [query];
+  List<Object> get props => [query, tag];
 
   @override
   String toString() {
-    return 'SearchStarted { query: $query ,tag:$tag }';
+    return 'SearchFirstPage { query: $query ,tag:$tag }';
   }
 }
 

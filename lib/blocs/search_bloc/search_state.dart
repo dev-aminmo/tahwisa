@@ -28,6 +28,9 @@ class SearchSuccess extends SearchState {
   /// Whether or not there are more pages to load based off
   /// the current `page` and server-provided `numPages`.
   bool canLoadMore(int page) => page + 1 <= numPages;
+  @override
+  String toString() =>
+      'SearchSuccess query:$query ,numPages: $numPages,numResults: $numResults ,filter:$filter, tag:$tag ';
 }
 
 class SearchFailure extends SearchState {
