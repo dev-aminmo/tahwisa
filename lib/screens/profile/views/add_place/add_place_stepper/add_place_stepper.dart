@@ -106,11 +106,89 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
               showDialog<void>(
                   context: context,
                   useRootNavigator: false,
-                  barrierDismissible: (state is PlaceUploadLoading)
-                      ? false
-                      : true, // user must tap button!
-                  builder: (BuildContext context) =>
-                      MyDialog(_placeUploadBloc));
+                  barrierDismissible: false, // user must tap button!
+                  builder: (BuildContext context) => AlertDialog(
+                      backgroundColor: Colors.white,
+                      content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [CircularProgressIndicator()])));
+            }
+            if (state is PlaceUploadSuccess) {
+              Navigator.of(context).pop();
+              showDialog<void>(
+                  context: context,
+                  useRootNavigator: false,
+                  barrierDismissible: true, // user must tap button!
+                  builder: (BuildContext context) => AlertDialog(
+                      backgroundColor: Colors.white,
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.check_circle_outlined,
+                            color: Colors.green,
+                            size: 72,
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            "Place added successfully",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w900,
+                                fontSize: 22,
+                                color: MyColors.darkBlue),
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            "your publication will be reviewed by an admin to valid it",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                                color: MyColors.gray),
+                          )
+                        ],
+                      )));
+            }
+            if (state is PlaceUploadFailure) {
+              Navigator.of(context).pop();
+              showDialog<void>(
+                  context: context,
+                  useRootNavigator: false,
+                  barrierDismissible: true, // user must tap button!
+                  builder: (BuildContext context) => AlertDialog(
+                      backgroundColor: Colors.white,
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.error_outline_rounded,
+                            color: Colors.red,
+                            size: 72,
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            "An error has occurred",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 1.2,
+                              fontSize: 18,
+                              color: Colors.red,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            "You can retry",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 1.2,
+                                fontSize: 16,
+                                color: MyColors.darkBlue),
+                          ),
+                        ],
+                      )));
             }
           },
           child: Column(
@@ -118,7 +196,7 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
               buildPageView(),
               KeyboardVisibilityBuilder(
                 builder: (context, isKeyboardVisible) => (isKeyboardVisible)
-                    ? SizedBox()
+                    ? const SizedBox()
                     : buildBackAndNextButtons(),
               ),
               const SizedBox(height: 4)
@@ -236,90 +314,5 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
       _pageController.animateToPage(--_position,
           duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
     }
-  }
-}
-
-class MyDialog extends StatefulWidget {
-  final _placeUploadBloc;
-
-  MyDialog(this._placeUploadBloc);
-
-  @override
-  _MyDialogState createState() => new _MyDialogState();
-}
-
-class _MyDialogState extends State<MyDialog> {
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-        backgroundColor: Colors.white,
-        content: BlocBuilder<PlaceUploadBloc, PlaceUploadState>(
-            bloc: widget._placeUploadBloc,
-            builder: (context, state) {
-              return (state is PlaceUploadLoading)
-                  ? Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [CircularProgressIndicator()])
-                  : (state is PlaceUploadFailure)
-                      ? Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.error_outline_rounded,
-                              color: Colors.red,
-                              size: 72,
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              "An error has occurred",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 1.2,
-                                fontSize: 18,
-                                color: Colors.red,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              "You can retry",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 1.2,
-                                  fontSize: 16,
-                                  color: MyColors.darkBlue),
-                            ),
-                          ],
-                        )
-                      : Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.check_circle_outlined,
-                              color: Colors.green,
-                              size: 72,
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              "Place added successfully",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 22,
-                                  color: MyColors.darkBlue),
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              "your publication will be reviewed by an admin to valid it",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 16,
-                                  color: MyColors.gray),
-                            )
-                          ],
-                        );
-            }));
   }
 }

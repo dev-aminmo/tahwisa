@@ -24,6 +24,7 @@ class TagPicker extends StatelessWidget {
             padding: EdgeInsets.all(16), child: Text("No tags found"));
       },
       textFieldConfiguration: TextFieldConfiguration(
+        autofocus: false,
         decoration: InputDecoration(
           border: InputBorder.none,
           filled: true,
