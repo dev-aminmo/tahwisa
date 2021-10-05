@@ -129,30 +129,6 @@ class PlaceRepository {
     }
   }
 
-  Future<dynamic> fetchWishListPlaces(int page) async {
-    try {
-      var pref = await SharedPreferences.getInstance();
-      String token = pref.getString("token");
-      var response = await Dio().get(Api.wishes + "?page=$page",
-          options: Options(
-            headers: {"Authorization": "Bearer " + token},
-            validateStatus: (status) => true,
-          ) // options.headers["Authorization"] = "Bearer " + token;
-
-          );
-      var data = response.data;
-      List<Place> places = [];
-      for (var jsonPlace in data['data']) {
-        var place = Place.fromJson(jsonPlace);
-        places.add(place);
-      }
-
-      return places;
-    } catch (e) {
-      throw (e.toString());
-    }
-  }
-
   Future<dynamic> add({
     String title,
     String description,
@@ -215,5 +191,76 @@ class PlaceRepository {
       list.add(i);
     }
     return list;
+  }
+
+  Future<dynamic> fetchWishListPlaces(int page) async {
+    try {
+      var pref = await SharedPreferences.getInstance();
+      String token = pref.getString("token");
+      var response = await Dio().get(Api.wishes + "?page=$page",
+          options: Options(
+            headers: {"Authorization": "Bearer " + token},
+            validateStatus: (status) => true,
+          ) // options.headers["Authorization"] = "Bearer " + token;
+
+          );
+      var data = response.data;
+      List<Place> places = [];
+      for (var jsonPlace in data['data']) {
+        var place = Place.fromJson(jsonPlace);
+        places.add(place);
+      }
+
+      return places;
+    } catch (e) {
+      throw (e.toString());
+    }
+  }
+
+  Future<dynamic> addToWishList({@required var placeId}) async {
+    try {
+      var pref = await SharedPreferences.getInstance();
+      String token = pref.getString("token");
+      var formData = FormData.fromMap({'place_id': placeId});
+
+      var response = await Dio().post(Api.add_to_wishlist,
+          data: formData,
+          options: Options(
+            headers: {
+              "Authorization": "Bearer " + token,
+            },
+            validateStatus: (status) => true,
+          ));
+      var data = response.data;
+      print(data);
+      if (response.statusCode == 201) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      throw (e.toString());
+    }
+  }
+
+  Future<dynamic> deleteFromWishList({@required var placeId}) async {
+    try {
+      var pref = await SharedPreferences.getInstance();
+      String token = pref.getString("token");
+      var response = await Dio().delete(Api.remove_from_wishlist + "/$placeId",
+          options: Options(
+            headers: {
+              "Authorization": "Bearer " + token,
+            },
+            validateStatus: (status) => true,
+          ));
+      var data = response.data;
+      print(data);
+      if (response.statusCode == 200) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      throw (e.toString());
+    }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tahwisa/blocs/wishlist_bloc/bloc.dart';
 import 'package:tahwisa/cubits/place_details_cubit/place_details_cubit.dart';
 import 'package:tahwisa/cubits/reviews_cubit/reviews_cubit.dart';
 import 'package:tahwisa/cubits/user_review_cubit/user_review_cubit.dart';
@@ -108,7 +109,12 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TitleAndWishRow(title: place.title, wished: place.wished),
+          TitleAndWishRow(
+            title: place.title,
+            wished: place.wished,
+            placeId: place.id,
+            wishListBloc: context.read<WishListBloc>(),
+          ),
           const SizedBox(height: 20),
           GestureDetector(
               onTap: () {

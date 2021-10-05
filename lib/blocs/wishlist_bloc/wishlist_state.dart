@@ -15,6 +15,10 @@ class WishListProgress extends WishListState {}
 
 class WishListEmpty extends WishListState {}
 
+class AddedToWishListSuccess extends WishListState {}
+
+class RemovedFromWishListSuccess extends WishListState {}
+
 class WishListSuccess extends WishListState {
   final List<Place> places;
   WishListSuccess({@required this.places});
@@ -22,14 +26,14 @@ class WishListSuccess extends WishListState {
   List<Object> get props => [places];
 }
 
-class ExplorePlacesFailure extends WishListState {
+class WishListFailure extends WishListState {
   final String error;
 
-  const ExplorePlacesFailure({@required this.error});
+  const WishListFailure({@required this.error});
 
   @override
   List<Object> get props => [error];
 
   @override
-  String toString() => 'ExplorePlacesFailure { error: $error }';
+  String toString() => 'WishListFailure { error: $error }';
 }

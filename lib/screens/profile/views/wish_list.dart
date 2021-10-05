@@ -14,6 +14,7 @@ class WishList extends StatefulWidget {
 class _WishListState extends State<WishList> {
   final List<Place> _places = [];
   final ScrollController _scrollController = ScrollController();
+  WishListBloc _wishListBloc;
   PlaceRepository placeRepository;
 
   Future<void> getData(WishListBloc bloc) async {
@@ -25,25 +26,22 @@ class _WishListState extends State<WishList> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return BlocProvider(
-      create: (_) =>
-          WishListBloc(placeRepository: placeRepository)..add(PlaceFetched()),
-      child: BlocBuilder<WishListBloc, WishListState>(
-        buildWhen: (previousState, currentState) {
-          if (currentState is WishListEmpty) {
-            return false;
-          } else
-            return true;
-        },
-        builder: (context, state) {
-          return RefreshIndicator(
-              strokeWidth: 3,
-              onRefresh: () async {
-                getData(context.read<WishListBloc>());
-              },
-              child: child(state, height, width, context.read<WishListBloc>()));
-        },
-      ),
+    return BlocBuilder<WishListBloc, WishListState>(
+      bloc: _wishListBloc,
+      buildWhen: (previousState, currentState) {
+        if (currentState is WishListEmpty) {
+          return false;
+        } else
+          return true;
+      },
+      builder: (context, state) {
+        return RefreshIndicator(
+            strokeWidth: 3,
+            onRefresh: () async {
+              getData(context.read<WishListBloc>());
+            },
+            child: child(state, height, width, context.read<WishListBloc>()));
+      },
     );
   }
 
@@ -99,29 +97,11 @@ class _WishListState extends State<WishList> {
     }
   }
 
-  /*@override
-  Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
-
-    */ /*return ListView.builder(
-      itemCount: 20,
-      itemBuilder: (ctx, index) {
-        return WishCard(
-          height: height,
-          width: width,
-          index: index,
-        );
-      },
-    );
-    */ /*
-
-  }*/
   @override
   void initState() {
     super.initState();
-    //scrollController.position.maxScrollExtent == scrollController.offset
     placeRepository = RepositoryProvider.of<PlaceRepository>(context);
+    _wishListBloc = context.read<WishListBloc>()..add(PlaceFetched());
   }
 
   @override

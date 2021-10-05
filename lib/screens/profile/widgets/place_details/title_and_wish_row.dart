@@ -1,15 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:tahwisa/blocs/wishlist_bloc/bloc.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
-class TitleAndWishRow extends StatelessWidget {
+class TitleAndWishRow extends StatefulWidget {
   const TitleAndWishRow({
     Key key,
     @required this.title,
+    @required this.placeId,
     @required this.wished,
+    @required this.wishListBloc,
   }) : super(key: key);
 
   final String title;
   final bool wished;
+  final WishListBloc wishListBloc;
+  final placeId;
+
+  @override
+  _TitleAndWishRowState createState() => _TitleAndWishRowState();
+}
+
+class _TitleAndWishRowState extends State<TitleAndWishRow> {
+  bool wished;
+
+  @override
+  void initState() {
+    super.initState();
+    wished = widget.wished;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +37,7 @@ class TitleAndWishRow extends StatelessWidget {
       children: <Widget>[
         Flexible(
           child: Text(
-            title,
+            widget.title,
             textAlign: TextAlign.left,
             softWrap: true,
             style: TextStyle(
@@ -37,7 +55,20 @@ class TitleAndWishRow extends StatelessWidget {
             borderRadius: const BorderRadius.all(
               Radius.circular(32.0),
             ),
-            onTap: () {},
+            onTap: () {
+              if (!wished) {
+                setState(() {
+                  wished = true;
+                });
+                widget.wishListBloc.add(AddToWishList(placeId: widget.placeId));
+              } else {
+                setState(() {
+                  wished = false;
+                });
+                widget.wishListBloc
+                    .add(RemoveFromWishList(placeId: widget.placeId));
+              }
+            },
             child: Icon(
               //Icons.favorite_outlined,
               (wished) ? Icons.favorite_outlined : Icons.favorite_border,

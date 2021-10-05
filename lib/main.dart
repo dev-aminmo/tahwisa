@@ -9,6 +9,7 @@ import 'package:tahwisa/screens/auth/login.dart';
 import 'package:tahwisa/screens/welcome.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
+import 'blocs/wishlist_bloc/bloc.dart';
 import 'repositories/dropdowns_repository.dart';
 import 'repositories/maps_repository.dart';
 import 'repositories/models/place.dart';
@@ -86,52 +87,62 @@ class _AppState extends State<App> {
             RepositoryProvider(create: (_) => MapsRepository()),
             RepositoryProvider(create: (_) => DropDownsRepository()),
           ],
-          child: MaterialApp(
-            navigatorKey: _navigatorKey,
-            title: 'Tahwisa',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-                //primarySwatch: Colors.blue,
-                textTheme: GoogleFonts.latoTextTheme(
-                  Theme.of(context).textTheme,
-                ),
-                primaryColor: MyColors.darkBlue,
-                indicatorColor: MyColors.lightGreen,
-                accentColor: MyColors.lightGreen,
-                scaffoldBackgroundColor: MyColors.white,
-                backgroundColor: MyColors.white,
-                // brightness: Brightness.light,
-                appBarTheme: AppBarTheme(
-                  brightness: Brightness.dark,
-                )),
-            builder: (context, child) {
-              return RepositoryProvider(
-                create: (_) => userRepository,
-                child: BlocListener<AuthenticationBloc, AuthenticationState>(
-                  listener: (context, state) {
-                    if (state is AuthenticationAuthenticated) {
-                      _navigator.pushAndRemoveUntil<void>(
-                        //HomePage.route(),
-                        MaterialPageRoute<void>(
-                            builder: (context) => RepositoryProvider(
-                                create: (_) => placeRepository,
-                                child: ProfileScreen())),
-                        (route) => false,
-                      );
-                    } else if (state is AuthenticationUnauthenticated) {
-                      _navigator.pushAndRemoveUntil<void>(
-                        //  LoginPage.route(),
-                        MaterialPageRoute<void>(
-                            builder: (context) => WelcomeScreen()),
-                        (route) => false,
-                      );
-                    }
-                  },
-                  child: child,
-                ),
-              );
-            },
-            onGenerateRoute: _getRoute,
+          child: Builder(
+            builder: (ctx) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                    create: (_) => WishListBloc(
+                        placeRepository: ctx.read<PlaceRepository>()))
+              ],
+              child: MaterialApp(
+                navigatorKey: _navigatorKey,
+                title: 'Tahwisa',
+                debugShowCheckedModeBanner: false,
+                theme: ThemeData(
+                    //primarySwatch: Colors.blue,
+                    textTheme: GoogleFonts.latoTextTheme(
+                      Theme.of(context).textTheme,
+                    ),
+                    primaryColor: MyColors.darkBlue,
+                    indicatorColor: MyColors.lightGreen,
+                    accentColor: MyColors.lightGreen,
+                    scaffoldBackgroundColor: MyColors.white,
+                    backgroundColor: MyColors.white,
+                    // brightness: Brightness.light,
+                    appBarTheme: AppBarTheme(
+                      brightness: Brightness.dark,
+                    )),
+                builder: (context, child) {
+                  return RepositoryProvider(
+                    create: (_) => userRepository,
+                    child:
+                        BlocListener<AuthenticationBloc, AuthenticationState>(
+                      listener: (context, state) {
+                        if (state is AuthenticationAuthenticated) {
+                          _navigator.pushAndRemoveUntil<void>(
+                            //HomePage.route(),
+                            MaterialPageRoute<void>(
+                                builder: (context) => RepositoryProvider(
+                                    create: (_) => placeRepository,
+                                    child: ProfileScreen())),
+                            (route) => false,
+                          );
+                        } else if (state is AuthenticationUnauthenticated) {
+                          _navigator.pushAndRemoveUntil<void>(
+                            //  LoginPage.route(),
+                            MaterialPageRoute<void>(
+                                builder: (context) => WelcomeScreen()),
+                            (route) => false,
+                          );
+                        }
+                      },
+                      child: child,
+                    ),
+                  );
+                },
+                onGenerateRoute: _getRoute,
+              ),
+            ),
           ),
         ));
   }

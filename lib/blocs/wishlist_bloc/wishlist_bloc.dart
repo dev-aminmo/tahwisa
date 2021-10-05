@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:tahwisa/repositories/place_repository.dart';
 
 import 'bloc.dart';
 
 class WishListBloc extends Bloc<WishListEvent, WishListState> {
-  final placeRepository;
+  final PlaceRepository placeRepository;
   int page = 1;
   bool isFetching = false;
   WishListBloc({@required this.placeRepository})
@@ -29,9 +30,36 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
           page++;
           yield WishListSuccess(places: places);
         }
-        // authenticationBloc.add(LoggedIn(token: token));
       } catch (error) {
-        yield ExplorePlacesFailure(error: error.toString());
+        yield WishListFailure(error: error.toString());
+      }
+    }
+    if (event is AddToWishList) {
+      try {
+        var response =
+            await placeRepository.addToWishList(placeId: event.placeId);
+        if (response) {
+          yield (AddedToWishListSuccess());
+          add(PlaceFetched(refresh: true));
+        } else {
+          yield (WishListFailure(error: "An error occurred"));
+        }
+      } catch (error) {
+        yield (WishListFailure(error: error));
+      }
+    }
+    if (event is RemoveFromWishList) {
+      try {
+        var response =
+            await placeRepository.deleteFromWishList(placeId: event.placeId);
+        if (response) {
+          yield (RemovedFromWishListSuccess());
+          add(PlaceFetched(refresh: true));
+        } else {
+          yield (WishListFailure(error: "An error occurred"));
+        }
+      } catch (error) {
+        yield (WishListFailure(error: error));
       }
     }
   }
