@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tahwisa/blocs/wishlist_bloc/bloc.dart';
+import 'package:tahwisa/cubits/wish_place_cubit/wish_place_cubit.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 class TitleAndWishRow extends StatefulWidget {
@@ -8,12 +8,12 @@ class TitleAndWishRow extends StatefulWidget {
     @required this.title,
     @required this.placeId,
     @required this.wished,
-    @required this.wishListBloc,
+    @required this.wishPlaceCubit,
   }) : super(key: key);
 
   final String title;
   final bool wished;
-  final WishListBloc wishListBloc;
+  final WishPlaceCubit wishPlaceCubit;
   final placeId;
 
   @override
@@ -60,13 +60,12 @@ class _TitleAndWishRowState extends State<TitleAndWishRow> {
                 setState(() {
                   wished = true;
                 });
-                widget.wishListBloc.add(AddToWishList(placeId: widget.placeId));
+                widget.wishPlaceCubit.addToWishList(widget.placeId);
               } else {
                 setState(() {
                   wished = false;
                 });
-                widget.wishListBloc
-                    .add(RemoveFromWishList(placeId: widget.placeId));
+                widget.wishPlaceCubit.removeFromWishList(widget.placeId);
               }
             },
             child: Icon(

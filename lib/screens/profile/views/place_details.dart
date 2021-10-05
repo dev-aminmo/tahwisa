@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tahwisa/blocs/wishlist_bloc/bloc.dart';
 import 'package:tahwisa/cubits/place_details_cubit/place_details_cubit.dart';
 import 'package:tahwisa/cubits/reviews_cubit/reviews_cubit.dart';
 import 'package:tahwisa/cubits/user_review_cubit/user_review_cubit.dart';
+import 'package:tahwisa/cubits/wish_place_cubit/wish_place_cubit.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/review_repository.dart';
@@ -29,7 +29,6 @@ class PlaceDetailsScreen extends StatefulWidget {
   final Place place;
   final String heroAnimationTag;
   final placeId;
-
   const PlaceDetailsScreen({this.place, this.heroAnimationTag, this.placeId});
 
   @override
@@ -113,7 +112,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
             title: place.title,
             wished: place.wished,
             placeId: place.id,
-            wishListBloc: context.read<WishListBloc>(),
+            wishPlaceCubit: context.read<WishPlaceCubit>(),
           ),
           const SizedBox(height: 20),
           GestureDetector(

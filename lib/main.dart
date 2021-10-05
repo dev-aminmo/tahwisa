@@ -10,6 +10,7 @@ import 'package:tahwisa/screens/welcome.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 import 'blocs/wishlist_bloc/bloc.dart';
+import 'cubits/wish_place_cubit/wish_place_cubit.dart';
 import 'repositories/dropdowns_repository.dart';
 import 'repositories/maps_repository.dart';
 import 'repositories/models/place.dart';
@@ -91,8 +92,11 @@ class _AppState extends State<App> {
             builder: (ctx) => MultiBlocProvider(
               providers: [
                 BlocProvider(
+                    create: (_) => WishPlaceCubit(
+                        placeRepository: ctx.read<PlaceRepository>())),
+            /*    BlocProvider(
                     create: (_) => WishListBloc(
-                        placeRepository: ctx.read<PlaceRepository>()))
+                        placeRepository: ctx.read<PlaceRepository>()))*/
               ],
               child: MaterialApp(
                 navigatorKey: _navigatorKey,

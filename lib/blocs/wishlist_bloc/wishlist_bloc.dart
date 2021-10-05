@@ -34,33 +34,5 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
         yield WishListFailure(error: error.toString());
       }
     }
-    if (event is AddToWishList) {
-      try {
-        var response =
-            await placeRepository.addToWishList(placeId: event.placeId);
-        if (response) {
-          yield (AddedToWishListSuccess());
-          add(PlaceFetched(refresh: true));
-        } else {
-          yield (WishListFailure(error: "An error occurred"));
-        }
-      } catch (error) {
-        yield (WishListFailure(error: error));
-      }
-    }
-    if (event is RemoveFromWishList) {
-      try {
-        var response =
-            await placeRepository.deleteFromWishList(placeId: event.placeId);
-        if (response) {
-          yield (RemovedFromWishListSuccess());
-          add(PlaceFetched(refresh: true));
-        } else {
-          yield (WishListFailure(error: "An error occurred"));
-        }
-      } catch (error) {
-        yield (WishListFailure(error: error));
-      }
-    }
   }
 }

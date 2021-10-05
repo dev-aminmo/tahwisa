@@ -15,10 +15,6 @@ class WishListProgress extends WishListState {}
 
 class WishListEmpty extends WishListState {}
 
-class AddedToWishListSuccess extends WishListState {}
-
-class RemovedFromWishListSuccess extends WishListState {}
-
 class WishListSuccess extends WishListState {
   final List<Place> places;
   WishListSuccess({@required this.places});

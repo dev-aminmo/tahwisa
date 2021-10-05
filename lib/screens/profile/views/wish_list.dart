@@ -101,7 +101,8 @@ class _WishListState extends State<WishList> {
   void initState() {
     super.initState();
     placeRepository = RepositoryProvider.of<PlaceRepository>(context);
-    _wishListBloc = context.read<WishListBloc>()..add(PlaceFetched());
+    _wishListBloc = WishListBloc(placeRepository: placeRepository)
+      ..add(PlaceFetched());
   }
 
   @override
