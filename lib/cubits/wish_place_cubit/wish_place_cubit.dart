@@ -13,7 +13,7 @@ class WishPlaceCubit extends Cubit<WishPlaceState> {
     try {
       var response = await placeRepository.addToWishList(placeId: placeId);
       if (response) {
-        emit(AddedToWishListSuccess());
+        emit(AddedToWishListSuccess(placeId: placeId));
       } else {
         emit(WishPlaceFailure(error: "An error occurred"));
       }
@@ -26,7 +26,7 @@ class WishPlaceCubit extends Cubit<WishPlaceState> {
     try {
       var response = await placeRepository.deleteFromWishList(placeId: placeId);
       if (response) {
-        emit(RemovedFromWishListSuccess());
+        emit(RemovedFromWishListSuccess(placeId: placeId));
       } else {
         emit(WishPlaceFailure(error: "An error occurred"));
       }

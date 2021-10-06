@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tahwisa/blocs/search_bloc/search_bloc.dart';
 import 'package:tahwisa/blocs/search_filter_bloc_state_manager/filter_manager_bloc.dart';
 import 'package:tahwisa/cubits/top_tags_cubit/top_tags_cubit.dart';
+import 'package:tahwisa/cubits/wish_place_cubit/wish_place_cubit.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/models/tag.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
@@ -40,6 +41,7 @@ class _SearchScreenState extends State<SearchScreen> {
       filterManagerBloc: _filterManagerBloc,
       placeRepository: placeRepository,
       tagRepository: _tagRepository,
+      wishPlaceCubit: context.read<WishPlaceCubit>()
     );
   }
 

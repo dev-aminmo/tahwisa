@@ -11,9 +11,23 @@ class WishPlaceInitial extends WishPlaceState {}
 
 class WishPlaceProgress extends WishPlaceState {}
 
-class AddedToWishListSuccess extends WishPlaceState {}
+class AddedToWishListSuccess extends WishPlaceState {
+  final placeId;
 
-class RemovedFromWishListSuccess extends WishPlaceState {}
+  AddedToWishListSuccess({@required this.placeId});
+
+  @override
+  List<Object> get props => [placeId];
+}
+
+class RemovedFromWishListSuccess extends WishPlaceState {
+  final placeId;
+
+  RemovedFromWishListSuccess({@required this.placeId});
+
+  @override
+  List<Object> get props => [placeId];
+}
 
 class WishPlaceFailure extends WishPlaceState {
   final String error;

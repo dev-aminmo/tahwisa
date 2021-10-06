@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tahwisa/blocs/search_filter_bloc_state_manager/filter_manager_bloc.dart';
+import 'package:tahwisa/cubits/wish_place_cubit/wish_place_cubit.dart';
 import 'package:tahwisa/repositories/models/SearchFilter.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/models/query_response.dart';
@@ -19,22 +20,27 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final PlaceRepository placeRepository;
   final TagRepository tagRepository;
   final FilterManagerBloc filterManagerBloc;
-
+  final WishPlaceCubit wishPlaceCubit;
   final _places$ = BehaviorSubject<List<Place>>();
   Stream<List<Place>> get places => _places$;
   final _places = <Place>[];
   bool isFetching = false;
   int _page = 1;
   int get page => _page;
+  StreamSubscription _wishPlaceSubscription;
 
   SearchBloc({
     @required this.placeRepository,
     @required this.filterManagerBloc,
     @required this.tagRepository,
-  })  : assert(placeRepository != null),
-        super(SearchInitial());
+    @required this.wishPlaceCubit,
+  }) : super(SearchInitial()) {
+    _monitorWishPlaceCubit();
+  }
+
   @override
   Future<dynamic> close() {
+    _wishPlaceSubscription.cancel();
     _places$.close();
     filterManagerBloc.close();
     return super.close();
@@ -98,5 +104,28 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         }
       }
     }
+  }
+
+  void _monitorWishPlaceCubit() {
+    _wishPlaceSubscription = wishPlaceCubit.stream.listen((state) {
+      if (state is AddedToWishListSuccess) {
+        int index = this
+            ._places
+            .indexWhere((place) => (place.id == state.placeId) ? true : false);
+        if (index != -1) {
+          _places[index].wished = true;
+          _places$.add(_places);
+        }
+      }
+      if (state is RemovedFromWishListSuccess) {
+        int index = this
+            ._places
+            .indexWhere((place) => (place.id == state.placeId) ? true : false);
+        if (index != -1) {
+          _places[index].wished = false;
+          _places$.add(_places);
+        }
+      }
+    });
   }
 }
