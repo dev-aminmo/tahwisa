@@ -8,10 +8,8 @@ abstract class WishListEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class PlaceFetched extends WishListEvent {
-  final bool refresh;
-
-  PlaceFetched({this.refresh = false});
+class FetchFirstPageWishList extends WishListEvent {
+  FetchFirstPageWishList();
 }
 
 class AddToWishList extends WishListEvent {

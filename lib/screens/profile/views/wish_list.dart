@@ -12,14 +12,12 @@ class WishList extends StatefulWidget {
 }
 
 class _WishListState extends State<WishList> {
-  final List<Place> _places = [];
   final ScrollController _scrollController = ScrollController();
   WishListBloc _wishListBloc;
   PlaceRepository placeRepository;
 
   Future<void> getData(WishListBloc bloc) async {
-    _places.clear();
-    bloc.add(PlaceFetched(refresh: true));
+    bloc.add(FetchFirstPageWishList());
   }
 
   @override
@@ -38,9 +36,9 @@ class _WishListState extends State<WishList> {
         return RefreshIndicator(
             strokeWidth: 3,
             onRefresh: () async {
-              getData(context.read<WishListBloc>());
+              getData(_wishListBloc);
             },
-            child: child(state, height, width, context.read<WishListBloc>()));
+            child: child(state, height, width, _wishListBloc));
       },
     );
   }
@@ -59,41 +57,48 @@ class _WishListState extends State<WishList> {
       );
     }
     if (state is WishListSuccess) {
-      bloc..isFetching = false;
-      _places.addAll(state.places);
-      return ListView.builder(
-        physics: BouncingScrollPhysics(),
-        controller: _scrollController
-          ..addListener(() {
+      return StreamBuilder<List<Place>>(
+          stream: _wishListBloc.places,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                physics: BouncingScrollPhysics(),
+                controller: _scrollController
+                  ..addListener(() {
+                    /*
             if (_scrollController.offset ==
                     _scrollController.position.maxScrollExtent &&
                 !bloc.isFetching) {
               bloc
                 ..isFetching = true
                 ..add(PlaceFetched());
+            }*/
+                  }),
+                itemCount: snapshot.data.length + 1,
+                itemBuilder: (ctx, index) {
+                  if (index == snapshot.data.length) {
+                    return Container(
+                      margin: const EdgeInsets.only(top: 20, bottom: 60),
+                      height: 60,
+                      width: 300,
+                    );
+                  }
+                  return PlaceCard(
+                    width: width,
+                    callback: () {},
+                    place: snapshot.data[index],
+                    heroAnimationTag: 'wish',
+                  );
+                },
+              );
+            } else {
+              return SizedBox(
+                child: Text('nothing'),
+              );
             }
-          }),
-        itemCount: _places.length + 1,
-        itemBuilder: (ctx, index) {
-          if (index == _places.length) {
-            return Container(
-              margin: const EdgeInsets.only(top: 20, bottom: 60),
-              height: 60,
-              width: 300,
-            );
-          }
-          return PlaceCard(
-            width: width,
-            callback: () {},
-            place: _places[index],
-            heroAnimationTag: 'wish',
-          );
-        },
-      );
+          });
     } else {
-      return SizedBox(
-        child: Text('nothing'),
-      );
+      return SizedBox();
     }
   }
 
@@ -102,7 +107,7 @@ class _WishListState extends State<WishList> {
     super.initState();
     placeRepository = RepositoryProvider.of<PlaceRepository>(context);
     _wishListBloc = WishListBloc(placeRepository: placeRepository)
-      ..add(PlaceFetched());
+      ..add(FetchFirstPageWishList());
   }
 
   @override

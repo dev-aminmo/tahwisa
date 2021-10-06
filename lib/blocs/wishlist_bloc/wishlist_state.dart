@@ -17,7 +17,8 @@ class WishListEmpty extends WishListState {}
 
 class WishListSuccess extends WishListState {
   final List<Place> places;
-  WishListSuccess({@required this.places});
+  final int numPages;
+  WishListSuccess({@required this.places, @required this.numPages});
   @override
   List<Object> get props => [places];
 }

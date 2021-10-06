@@ -13,6 +13,6 @@ class QueryResponse {
     @required this.results,
     @required this.numPages,
     @required this.numResults,
-    @required this.filter,
+    this.filter,
   });
 }

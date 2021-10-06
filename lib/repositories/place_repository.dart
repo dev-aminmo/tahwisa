@@ -201,9 +201,7 @@ class PlaceRepository {
           options: Options(
             headers: {"Authorization": "Bearer " + token},
             validateStatus: (status) => true,
-          ) // options.headers["Authorization"] = "Bearer " + token;
-
-          );
+          ));
       var data = response.data;
       List<Place> places = [];
       for (var jsonPlace in data['data']) {
@@ -211,7 +209,11 @@ class PlaceRepository {
         places.add(place);
       }
 
-      return places;
+      return QueryResponse(
+        results: places,
+        numPages: data['data']['last_page'],
+        numResults: data['data']['total'],
+      );
     } catch (e) {
       throw (e.toString());
     }
