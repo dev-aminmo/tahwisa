@@ -5,6 +5,7 @@ import 'package:tahwisa/cubits/wish_place_cubit/wish_place_cubit.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/screens/profile/widgets/place_card.dart';
+import 'package:tahwisa/style/my_colors.dart';
 
 class Explore extends StatefulWidget {
   @override
@@ -17,8 +18,8 @@ class _ExploreState extends State<Explore>
   ExplorePlacesBloc _explorePlacesBloc;
   final ScrollController _scrollController = ScrollController();
   PlaceRepository placeRepository;
-  Future<void> refreshPlacesList(ExplorePlacesBloc bloc) async {
-    bloc.add(FetchFirstPageExplorePlaces());
+  Future<void> refreshPlacesList() async {
+    _explorePlacesBloc.add(FetchFirstPageExplorePlaces());
   }
 
   @override
@@ -57,7 +58,7 @@ class _ExploreState extends State<Explore>
         return RefreshIndicator(
             strokeWidth: 3,
             onRefresh: () async {
-              refreshPlacesList(context.read<ExplorePlacesBloc>());
+              refreshPlacesList();
             },
             child: child(state, height, width));
       },
@@ -112,9 +113,43 @@ class _ExploreState extends State<Explore>
             }
           });
     } else {
-      return SizedBox(
-        child: Text('nothing'),
-      );
+      if (state is ExplorePlacesFailure) {
+        return Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.refresh_outlined,
+                color: MyColors.greenBorder,
+                size: 72,
+              ),
+              MaterialButton(
+                color: MyColors.greenBorder,
+                onPressed: () {
+                  refreshPlacesList();
+                },
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  child: Text(
+                    "Re-Try",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Text(
+                "Something wrong happened",
+                style: TextStyle(color: MyColors.greenBorder, fontSize: 18),
+              ),
+            ],
+          ),
+        );
+      }
+      return SizedBox();
     }
   }
 }

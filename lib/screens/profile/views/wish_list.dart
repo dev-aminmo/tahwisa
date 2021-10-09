@@ -136,6 +136,42 @@ class _WishListState extends State<WishList>
             }
           });
     } else {
+      if (state is WishListFailure) {
+        return Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.refresh_outlined,
+                color: MyColors.greenBorder,
+                size: 72,
+              ),
+              MaterialButton(
+                color: MyColors.greenBorder,
+                onPressed: () {
+                  getData(_wishListBloc);
+                },
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  child: Text(
+                    "Re-Try",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Text(
+                "Something wrong happened",
+                style: TextStyle(color: MyColors.greenBorder, fontSize: 18),
+              ),
+            ],
+          ),
+        );
+      }
       return SizedBox();
     }
   }
