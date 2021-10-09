@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:queen_validators/queen_validators.dart';
 import 'package:tahwisa/repositories/user_repository.dart';
 import 'package:tahwisa/screens/profile/widgets/hide_keyboard_ontap.dart';
 import 'package:tahwisa/style/my_colors.dart';
@@ -50,12 +51,17 @@ class _SignUPScreenState extends State<SignUPScreen> {
   }
 
   _onSignupButtonPressed() {
-    if (_formKey.currentState.validate())
+    if (_formKey.currentState.validate()) {
+      FocusScopeNode currentFocus = FocusScope.of(context);
+      if (!currentFocus.hasPrimaryFocus) {
+        currentFocus.unfocus();
+      }
       _signupBloc.add(SignupButtonPressed(
         username: _usernameController.text,
         email: _emailController.text,
         password: _passwordController.text,
       ));
+    }
   }
 
   _onGoogleButtonPressed() {
@@ -64,6 +70,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
     return HideKeyboardOnTap(
         child: Scaffold(
             resizeToAvoidBottomInset: false,
@@ -84,71 +91,113 @@ class _SignUPScreenState extends State<SignUPScreen> {
                     );
                   });
                 }
-                return Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Spacer(flex: 3),
-                        AuthInput(
-                            controller: _usernameController,
-                            hint: "username",
-                            suffix: Icon(Icons.person_outline,
-                                color: MyColors.lightGreen)),
-                        Spacer(),
-                        AuthInput(
-                            controller: _emailController,
-                            hint: "email",
-                            suffix: Icon(Icons.mail_outlined,
-                                color: MyColors.lightGreen)),
-                        Spacer(),
-                        AuthInput(
-                          controller: _passwordController,
-                          hint: "password",
-                          suffix: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  obscured = !obscured;
-                                });
-                              },
-                              child: obscured
-                                  ? Icon(Icons.remove_red_eye_outlined,
-                                      color: MyColors.lightGreen)
-                                  : Icon(Icons.visibility_off_outlined,
-                                      color: MyColors.lightGreen)),
-                          obscured: obscured,
-                        ),
-                        Spacer(
-                          flex: 5,
-                        ),
-                        AuthButton(
-                          title: "Sign up",
-                          withBackgroundColor: true,
-                          onTap: state is! SignupLoading
-                              ? _onSignupButtonPressed
-                              : null,
-                          isLoading: state is SignupLoading ? true : false,
-                        ),
-                        Spacer(),
-                        Text("-or-",
-                            style: TextStyle(
-                                fontSize: 22,
-                                color: MyColors.darkBlue,
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.bold)),
-                        Spacer(),
-                        AuthButton(
-                          title: "Sign up with Google",
-                          onTap: state is! SignupLoading
-                              ? _onGoogleButtonPressed
-                              : null,
-                          isGoogle: true,
-                        ),
-                        Spacer(
-                          flex: 5,
-                        )
-                      ],
-                    ));
+                return SingleChildScrollView(
+                  child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(
+                                height: 72,
+                              ),
+                              AuthInput(
+                                controller: _usernameController,
+                                hint: "username",
+                                suffix: Icon(Icons.person_outline,
+                                    color: MyColors.lightGreen),
+                                validator: qValidator([
+                                  IsRequired(msg: 'username is required'),
+                                  MinLength(3),
+                                ]),
+                              ),
+                              const SizedBox(
+                                height: 36,
+                              ),
+                              AuthInput(
+                                controller: _emailController,
+                                hint: "email",
+                                suffix: Icon(Icons.mail_outlined,
+                                    color: MyColors.lightGreen),
+                                validator: qValidator([
+                                  IsRequired(msg: 'emil is required'),
+                                  IsEmail(),
+                                ]),
+                              ),
+                              const SizedBox(
+                                height: 36,
+                              ),
+                              AuthInput(
+                                controller: _passwordController,
+                                hint: "password",
+                                suffix: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      obscured = !obscured;
+                                    });
+                                  },
+                                  child: obscured
+                                      ? Icon(Icons.remove_red_eye_outlined,
+                                          color: MyColors.lightGreen)
+                                      : Icon(Icons.visibility_off_outlined,
+                                          color: MyColors.lightGreen),
+                                ),
+                                obscured: obscured,
+                                validator: qValidator([
+                                  IsRequired(msg: 'password is required'),
+                                  MinLength(6),
+                                ]),
+                                onEditingComplete: state is! SignupLoading
+                                    ? _onSignupButtonPressed
+                                    : null,
+                              ),
+                            ],
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(
+                                height: 72,
+                              ),
+                              AuthButton(
+                                title: "Sign up",
+                                withBackgroundColor: true,
+                                onTap: state is! SignupLoading
+                                    ? _onSignupButtonPressed
+                                    : null,
+                                isLoading:
+                                    state is SignupLoading ? true : false,
+                              ),
+                              const SizedBox(
+                                height: 36,
+                              ),
+                              Text("-or-",
+                                  style: TextStyle(
+                                      fontSize: 22,
+                                      color: MyColors.darkBlue,
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.bold)),
+                              const SizedBox(
+                                height: 36,
+                              ),
+                              AuthButton(
+                                title: "Sign up with Google",
+                                onTap: state is! SignupLoading
+                                    ? _onGoogleButtonPressed
+                                    : null,
+                                isGoogle: true,
+                              ),
+                              const SizedBox(
+                                height: 92,
+                              ),
+                            ],
+                          ),
+                        ],
+                      )),
+                );
               },
             )));
   }

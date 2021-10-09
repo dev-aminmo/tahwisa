@@ -35,6 +35,8 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+
     return BlocBuilder<LoginBloc, LoginState>(
       bloc: _loginBloc,
       builder: (
@@ -52,87 +54,97 @@ class _LoginFormState extends State<LoginForm> {
           });
         }
 
-        return Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              Spacer(
-                flex: 7,
-              ),
-              AuthInput(
-                  controller: _emailController,
-                  hint: "email",
-                  validator: qValidator([
-                    IsRequired(msg: 'email is required'),
-                    IsEmail(),
-                    //  MinLength(3),
-                  ]),
-                  suffix:
-                      Icon(Icons.person_outline, color: MyColors.lightGreen)),
-              Spacer(
-                flex: 2,
-              ),
-              AuthInput(
-                hint: "password",
-                controller: _passwordController,
-                suffix: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        obscured = !obscured;
-                      });
-                    },
-                    child: obscured
-                        ? Icon(Icons.remove_red_eye_outlined,
-                            color: MyColors.lightGreen)
-                        : Icon(Icons.visibility_off_outlined,
-                            color: MyColors.lightGreen)),
-                obscured: obscured,
-              ),
-              Row(children: [
-                Spacer(),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) {
-                      return RepositoryProvider.value(
-                        value: RepositoryProvider.of<UserRepository>(context),
-                        child: ResetPasswordPage(),
-                      );
-                    }));
-                  },
-                  child: Text('Forgot password?',
-                      style: TextStyle(
-                          color: MyColors.lightGreen,
-                          decoration: TextDecoration.underline)),
+        return SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                const SizedBox(
+                  height: 92,
                 ),
-                SizedBox(width: 20),
-              ]),
-              Spacer(
-                flex: 5,
-              ),
-              AuthButton(
-                title: "Login",
-                onTap: state is! LoginLoading ? _onLoginButtonPressed : null,
-                withBackgroundColor: true,
-                isLoading: state is LoginLoading ? true : false,
-              ),
-              Spacer(),
-              Text("-or-",
-                  style: TextStyle(
-                      fontSize: 22,
-                      color: MyColors.darkBlue,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold)),
-              Spacer(),
-              AuthButton(
-                title: "Login with Google",
-                onTap: state is! LoginLoading ? _onGoogleButtonPressed : null,
-                isGoogle: true,
-              ),
-              Spacer(
-                flex: 5,
-              ),
-            ],
+                AuthInput(
+                    controller: _emailController,
+                    hint: "email",
+                    validator: qValidator([
+                      IsRequired(msg: 'email is required'),
+                      IsEmail(),
+                      //  MinLength(3),
+                    ]),
+                    suffix:
+                        Icon(Icons.person_outline, color: MyColors.lightGreen)),
+                const SizedBox(
+                  height: 36,
+                ),
+                AuthInput(
+                  hint: "password",
+                  controller: _passwordController,
+                  suffix: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          obscured = !obscured;
+                        });
+                      },
+                      child: obscured
+                          ? Icon(Icons.remove_red_eye_outlined,
+                              color: MyColors.lightGreen)
+                          : Icon(Icons.visibility_off_outlined,
+                              color: MyColors.lightGreen)),
+                  onEditingComplete:
+                      state is! LoginLoading ? _onLoginButtonPressed : null,
+                  obscured: obscured,
+                ),
+                Row(children: [
+                  Spacer(),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return RepositoryProvider.value(
+                          value: RepositoryProvider.of<UserRepository>(context),
+                          child: ResetPasswordPage(),
+                        );
+                      }));
+                    },
+                    child: Text('Forgot password?',
+                        style: TextStyle(
+                            color: MyColors.lightGreen,
+                            decoration: TextDecoration.underline)),
+                  ),
+                  SizedBox(width: 20),
+                ]),
+                const SizedBox(
+                  height: 92,
+                ),
+                AuthButton(
+                  title: "Login",
+                  onTap: state is! LoginLoading ? _onLoginButtonPressed : null,
+                  withBackgroundColor: true,
+                  isLoading: state is LoginLoading ? true : false,
+                ),
+                const SizedBox(
+                  height: 36,
+                ),
+                Text("-or-",
+                    style: TextStyle(
+                        fontSize: 22,
+                        color: MyColors.darkBlue,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.bold)),
+                const SizedBox(
+                  height: 36,
+                ),
+                AuthButton(
+                  title: "Login with Google",
+                  onTap: state is! LoginLoading ? _onGoogleButtonPressed : null,
+                  isGoogle: true,
+                ),
+                const SizedBox(
+                  height: 92,
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -146,11 +158,17 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   _onLoginButtonPressed() {
-    if (_formKey.currentState.validate())
+    if (_formKey.currentState.validate()) {
+      FocusScopeNode currentFocus = FocusScope.of(context);
+      if (!currentFocus.hasPrimaryFocus) {
+        currentFocus.unfocus();
+      }
       _loginBloc.add(LoginButtonPressed(
         email: _emailController.text,
         password: _passwordController.text,
       ));
+    }
+
     // Navigator.pop(context);
   }
 

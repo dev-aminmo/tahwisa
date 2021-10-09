@@ -148,23 +148,14 @@ class PlaceCard extends StatelessWidget {
                 Positioned(
                   top: 8,
                   right: 8,
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(32.0),
-                      ),
-                      onTap: () {},
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          //Icons.favorite_outlined,
-                          (place.wished)
-                              ? Icons.favorite_outlined
-                              : Icons.favorite_border,
-                          color: MyColors.lightGreen,
-                        ),
-                      ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      //Icons.favorite_outlined,
+                      (place.wished)
+                          ? Icons.favorite_outlined
+                          : Icons.favorite_border,
+                      color: MyColors.lightGreen,
                     ),
                   ),
                 )
