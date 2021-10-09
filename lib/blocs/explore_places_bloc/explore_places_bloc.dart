@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:tahwisa/cubits/wish_place_cubit/wish_place_cubit.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/models/query_response.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
@@ -17,6 +18,8 @@ class ExplorePlacesBloc extends Bloc<ExplorePlacesEvent, ExplorePlacesState> {
   bool isFetching = false;
   int _page = 1;
   int get page => _page;
+  final WishPlaceCubit wishPlaceCubit;
+
   StreamSubscription _wishPlaceSubscription;
 
   @override
@@ -26,31 +29,15 @@ class ExplorePlacesBloc extends Bloc<ExplorePlacesEvent, ExplorePlacesState> {
     return super.close();
   }
 
-  ExplorePlacesBloc({@required this.placeRepository})
-      : super(ExplorePlacesInitial());
+  ExplorePlacesBloc(
+      {@required this.placeRepository, @required this.wishPlaceCubit})
+      : super(ExplorePlacesInitial()) {
+    _monitorWishPlaceCubit();
+  }
   @override
   Stream<ExplorePlacesState> mapEventToState(
     ExplorePlacesEvent event,
   ) async* {
-    /*if (event is FetchPlaces) {
-      if (event.refresh) page = 1;
-      if (page == 1) {
-        yield ExplorePlacesProgress();
-      }
-         try {
-      final places = await placeRepository.fetchPlaces(page);
-      if (places.length == 0) {
-        yield ExplorePlacesEmpty();
-      } else {
-        page++;
-        yield ExplorePlacesSuccess(places: places);
-      }
-       } catch (error) {
-        print("error");
-        yield ExplorePlacesFailure(error: error.toString());
-      }
-    }*/
-
     if (event is FetchFirstPageExplorePlaces) {
       try {
         _page = 1;
@@ -79,5 +66,28 @@ class ExplorePlacesBloc extends Bloc<ExplorePlacesEvent, ExplorePlacesState> {
         numPages: event.state.numPages,
       );
     }
+  }
+
+  void _monitorWishPlaceCubit() {
+    _wishPlaceSubscription = wishPlaceCubit.stream.listen((state) {
+      if (state is AddedToWishListSuccess) {
+        int index = this
+            ._places
+            .indexWhere((place) => (place.id == state.placeId) ? true : false);
+        if (index != -1) {
+          _places[index].wished = true;
+          _places$.add(_places);
+        }
+      }
+      if (state is RemovedFromWishListSuccess) {
+        int index = this
+            ._places
+            .indexWhere((place) => (place.id == state.placeId) ? true : false);
+        if (index != -1) {
+          _places[index].wished = false;
+          _places$.add(_places);
+        }
+      }
+    });
   }
 }

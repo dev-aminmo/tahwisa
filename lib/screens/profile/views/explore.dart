@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tahwisa/blocs/explore_places_bloc/bloc.dart';
+import 'package:tahwisa/cubits/wish_place_cubit/wish_place_cubit.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/screens/profile/widgets/place_card.dart';
@@ -27,7 +28,9 @@ class _ExploreState extends State<Explore>
   void initState() {
     super.initState();
     placeRepository = RepositoryProvider.of<PlaceRepository>(context);
-    _explorePlacesBloc = ExplorePlacesBloc(placeRepository: placeRepository)
+    _explorePlacesBloc = ExplorePlacesBloc(
+        placeRepository: placeRepository,
+        wishPlaceCubit: context.read<WishPlaceCubit>())
       ..add(FetchFirstPageExplorePlaces());
   }
 
@@ -39,6 +42,7 @@ class _ExploreState extends State<Explore>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return BlocConsumer<ExplorePlacesBloc, ExplorePlacesState>(
