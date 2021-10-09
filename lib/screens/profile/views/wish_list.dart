@@ -1,11 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tahwisa/blocs/wishlist_bloc/bloc.dart';
 import 'package:tahwisa/cubits/wish_place_cubit/wish_place_cubit.dart';
 //import 'package:tahwisa/blocs/explore_places_bloc/bloc.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/screens/profile/widgets/place_card.dart';
+import 'package:tahwisa/style/my_colors.dart';
 
 class WishList extends StatefulWidget {
   @override
@@ -69,6 +72,32 @@ class _WishListState extends State<WishList>
           stream: _wishListBloc.places,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              if (snapshot.data.length == 0) {
+                return Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FaIcon(FontAwesomeIcons.heartBroken,
+                          size: 136, color: MyColors.greenBorder),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: width * 0.03,
+                        ),
+                        child: FittedBox(
+                          alignment: Alignment.center,
+                          child: Text("Your wish list is empty",
+                              style: TextStyle(
+                                  color: MyColors.greenBorder, fontSize: 22)),
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              }
               return ListView.builder(
                 physics: BouncingScrollPhysics(),
                 controller: _scrollController
