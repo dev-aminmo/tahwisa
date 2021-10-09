@@ -76,7 +76,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                                 padding: EdgeInsets.all(
                                   16,
                                 ),
-                                shrinkWrap: true,
+                                //shrinkWrap: true,
                                 physics: BouncingScrollPhysics(),
                                 itemCount: snapshot.data.length + 1,
                                 itemBuilder: (context, index) {

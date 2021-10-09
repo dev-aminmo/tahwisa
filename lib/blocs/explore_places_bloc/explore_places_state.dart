@@ -1,13 +1,8 @@
-import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 
 @immutable
-abstract class ExplorePlacesState extends Equatable {
-  const ExplorePlacesState();
-  @override
-  List<Object> get props => [];
-}
+abstract class ExplorePlacesState {}
 
 class ExplorePlacesInitial extends ExplorePlacesState {}
 
@@ -17,19 +12,16 @@ class ExplorePlacesEmpty extends ExplorePlacesState {}
 
 class ExplorePlacesSuccess extends ExplorePlacesState {
   final List<Place> places;
-  ExplorePlacesSuccess({@required this.places});
-  @override
-  List<Object> get props => [places];
+  final int numPages;
+  ExplorePlacesSuccess({@required this.places, @required this.numPages});
+
+  bool canLoadMore(int page) => page + 1 <= numPages;
 }
 
 class ExplorePlacesFailure extends ExplorePlacesState {
   final String error;
 
-  const ExplorePlacesFailure({@required this.error});
-
-  @override
-  List<Object> get props => [error];
-
+  ExplorePlacesFailure({@required this.error});
   @override
   String toString() => 'ExplorePlacesFailure { error: $error }';
 }

@@ -22,6 +22,7 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
   @override
   Future<Function> close() {
     _wishPlaceSubscription.cancel();
+    _places$.close();
     return super.close();
   }
 
@@ -33,9 +34,6 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
     WishListEvent event,
   ) async* {
     if (event is FetchFirstPageWishList) {
-      if (_page == 1) {
-        yield WishListProgress();
-      }
       try {
         _page = 1;
         yield WishListProgress();

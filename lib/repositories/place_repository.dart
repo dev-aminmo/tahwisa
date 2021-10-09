@@ -23,11 +23,15 @@ class PlaceRepository {
           );
       var data = response.data;
       List<Place> places = [];
-      for (var jsonPlace in data['data']) {
+      for (var jsonPlace in data['data']['data']) {
         var place = Place.fromJson(jsonPlace);
         places.add(place);
       }
-      return places;
+      return QueryResponse(
+        results: places,
+        numPages: data['data']['last_page'],
+        numResults: data['data']['total'],
+      );
     } catch (e) {
       throw (e.toString());
     }

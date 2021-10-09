@@ -12,12 +12,12 @@ class Explore extends StatefulWidget {
 
 class _ExploreState extends State<Explore>
     with AutomaticKeepAliveClientMixin<Explore> {
-  final List<Place> _places = [];
+  bool _canLoadMore = true;
+  ExplorePlacesBloc _explorePlacesBloc;
   final ScrollController _scrollController = ScrollController();
   PlaceRepository placeRepository;
   Future<void> refreshPlacesList(ExplorePlacesBloc bloc) async {
-    _places.clear();
-    bloc.add(FetchPlaces(refresh: true));
+    bloc.add(FetchFirstPageExplorePlaces());
   }
 
   // Setting to true will force the tab to never be disposed.
@@ -26,8 +26,9 @@ class _ExploreState extends State<Explore>
   @override
   void initState() {
     super.initState();
-    //scrollController.position.maxScrollExtent == scrollController.offset
     placeRepository = RepositoryProvider.of<PlaceRepository>(context);
+    _explorePlacesBloc = ExplorePlacesBloc(placeRepository: placeRepository)
+      ..add(FetchFirstPageExplorePlaces());
   }
 
   @override
@@ -40,75 +41,73 @@ class _ExploreState extends State<Explore>
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return BlocProvider(
-      create: (_) => ExplorePlacesBloc(placeRepository: placeRepository)
-        ..add(FetchPlaces()),
-      child: BlocBuilder<ExplorePlacesBloc, ExplorePlacesState>(
-        buildWhen: (previousState, currentState) {
-          if (currentState is ExplorePlacesEmpty) {
-            return false;
-          } else
-            return true;
-        },
-        builder: (context, state) {
-          return RefreshIndicator(
-              strokeWidth: 3,
-              onRefresh: () async {
-                refreshPlacesList(context.read<ExplorePlacesBloc>());
-              },
-              child: child(
-                  state, height, width, context.read<ExplorePlacesBloc>()));
-        },
-      ),
+    return BlocConsumer<ExplorePlacesBloc, ExplorePlacesState>(
+      bloc: _explorePlacesBloc,
+      listener: (context, state) {
+        if (state is ExplorePlacesSuccess) {
+          setState(() {
+            _canLoadMore = state.canLoadMore(_explorePlacesBloc.page);
+          });
+        }
+      },
+      builder: (context, state) {
+        return RefreshIndicator(
+            strokeWidth: 3,
+            onRefresh: () async {
+              refreshPlacesList(context.read<ExplorePlacesBloc>());
+            },
+            child: child(state, height, width));
+      },
     );
   }
 
-  Widget child(state, height, width, bloc) {
+  Widget child(state, height, width) {
     if (state is ExplorePlacesProgress) {
       return Center(child: CircularProgressIndicator());
     }
-    if (state is ExplorePlacesEmpty) {
-      return Center(
-        child: Container(
-            height: 60,
-            width: 300,
-            color: Colors.black12,
-            child: Center(child: Text("No more places"))),
-      );
-    }
     if (state is ExplorePlacesSuccess) {
-      bloc..isFetching = false;
-      _places.addAll(state.places);
-      return ListView.builder(
-        physics: BouncingScrollPhysics(),
-        controller: _scrollController
-          ..addListener(() {
-            if (_scrollController.offset ==
-                    _scrollController.position.maxScrollExtent &&
-                !bloc.isFetching) {
-              bloc
-                ..isFetching = true
-                ..add(FetchPlaces());
-              print("fetch more places");
+      _explorePlacesBloc..isFetching = false;
+      return StreamBuilder<List<Place>>(
+          stream: _explorePlacesBloc.places,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                physics: BouncingScrollPhysics(),
+                controller: _scrollController
+                  ..addListener(() {
+                    if ((_scrollController.offset ==
+                                _scrollController.position.maxScrollExtent &&
+                            !_explorePlacesBloc.isFetching) &&
+                        _canLoadMore) {
+                      _explorePlacesBloc
+                        ..isFetching = true
+                        ..add(FetchExplorePlacesPageRequested(state));
+                    }
+                  }),
+                itemCount: snapshot.data.length + 1,
+                itemBuilder: (ctx, index) {
+                  if (index == snapshot.data.length) {
+                    return (_canLoadMore)
+                        ? Container(
+                            padding: const EdgeInsets.all(25),
+                            child: const Center(
+                                child: CircularProgressIndicator()))
+                        : const SizedBox();
+                  }
+                  return PlaceCard(
+                    width: width,
+                    callback: () {},
+                    place: snapshot.data[index],
+                    heroAnimationTag: 'explore',
+                  );
+                },
+              );
+            } else {
+              return SizedBox(
+                child: Text('nothing'),
+              );
             }
-          }),
-        itemCount: _places.length + 1,
-        itemBuilder: (ctx, index) {
-          if (index == _places.length) {
-            return Container(
-              margin: const EdgeInsets.only(top: 20, bottom: 60),
-              height: 60,
-              width: 300,
-            );
-          }
-          return PlaceCard(
-            width: width,
-            callback: () {},
-            place: _places[index],
-            heroAnimationTag: 'explore',
-          );
-        },
-      );
+          });
     } else {
       return SizedBox(
         child: Text('nothing'),

@@ -25,18 +25,3 @@ class FetchWishListPageRequested extends WishListEvent {
     return 'FetchWishListPageRequested { state : $state }';
   }
 }
-
-class AddToWishList extends WishListEvent {
-  final placeId;
-
-  AddToWishList({@required this.placeId});
-  @override
-  List<Object> get props => [placeId];
-}
-
-class RemoveFromWishList extends WishListEvent {
-  final placeId;
-  RemoveFromWishList({@required this.placeId});
-  @override
-  List<Object> get props => [placeId];
-}
