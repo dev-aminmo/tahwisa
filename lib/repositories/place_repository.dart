@@ -193,7 +193,7 @@ class PlaceRepository {
     return list;
   }
 
-  Future<dynamic> fetchWishListPlaces(int page) async {
+  Future<dynamic> fetchWishListPlaces(var page) async {
     try {
       var pref = await SharedPreferences.getInstance();
       String token = pref.getString("token");
@@ -204,11 +204,10 @@ class PlaceRepository {
           ));
       var data = response.data;
       List<Place> places = [];
-      for (var jsonPlace in data['data']) {
+      for (var jsonPlace in data['data']['data']) {
         var place = Place.fromJson(jsonPlace);
         places.add(place);
       }
-
       return QueryResponse(
         results: places,
         numPages: data['data']['last_page'],
