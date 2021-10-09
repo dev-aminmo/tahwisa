@@ -15,6 +15,7 @@ class _WishListState extends State<WishList> {
   final ScrollController _scrollController = ScrollController();
   WishListBloc _wishListBloc;
   PlaceRepository placeRepository;
+  bool _canLoadMore = true;
 
   Future<void> getData(WishListBloc bloc) async {
     bloc.add(FetchFirstPageWishList());
@@ -24,13 +25,14 @@ class _WishListState extends State<WishList> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return BlocBuilder<WishListBloc, WishListState>(
+    return BlocConsumer<WishListBloc, WishListState>(
       bloc: _wishListBloc,
-      buildWhen: (previousState, currentState) {
-        if (currentState is WishListEmpty) {
-          return false;
-        } else
-          return true;
+      listener: (context, state) {
+        if (state is WishListSuccess) {
+          setState(() {
+            _canLoadMore = state.canLoadMore(_wishListBloc.page);
+          });
+        }
       },
       builder: (context, state) {
         return RefreshIndicator(
@@ -57,6 +59,7 @@ class _WishListState extends State<WishList> {
       );
     }
     if (state is WishListSuccess) {
+      _wishListBloc..isFetching = false;
       return StreamBuilder<List<Place>>(
           stream: _wishListBloc.places,
           builder: (context, snapshot) {
@@ -65,23 +68,24 @@ class _WishListState extends State<WishList> {
                 physics: BouncingScrollPhysics(),
                 controller: _scrollController
                   ..addListener(() {
-                    /*
-            if (_scrollController.offset ==
-                    _scrollController.position.maxScrollExtent &&
-                !bloc.isFetching) {
-              bloc
-                ..isFetching = true
-                ..add(PlaceFetched());
-            }*/
+                    if ((_scrollController.offset ==
+                                _scrollController.position.maxScrollExtent &&
+                            !_wishListBloc.isFetching) &&
+                        _canLoadMore) {
+                      _wishListBloc
+                        ..isFetching = true
+                        ..add(FetchWishListPageRequested(state));
+                    }
                   }),
                 itemCount: snapshot.data.length + 1,
                 itemBuilder: (ctx, index) {
                   if (index == snapshot.data.length) {
-                    return Container(
-                      margin: const EdgeInsets.only(top: 20, bottom: 60),
-                      height: 60,
-                      width: 300,
-                    );
+                    return (_canLoadMore)
+                        ? Container(
+                            padding: const EdgeInsets.all(25),
+                            child: const Center(
+                                child: CircularProgressIndicator()))
+                        : const SizedBox();
                   }
                   return PlaceCard(
                     width: width,

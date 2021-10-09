@@ -52,5 +52,16 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
         yield WishListFailure(error: error.toString());
       }
     }
+    if (event is FetchWishListPageRequested) {
+      _page++;
+      final QueryResponse _queryResponse =
+          await placeRepository.fetchWishListPlaces(_page);
+      _places.addAll(_queryResponse.results);
+      _places$.add(_places);
+      yield WishListSuccess(
+        places: _queryResponse.results,
+        numPages: event.state.numPages,
+      );
+    }
   }
 }
