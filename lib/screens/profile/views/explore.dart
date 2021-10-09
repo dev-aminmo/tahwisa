@@ -21,7 +21,6 @@ class _ExploreState extends State<Explore>
     bloc.add(FetchFirstPageExplorePlaces());
   }
 
-  // Setting to true will force the tab to never be disposed.
   @override
   bool get wantKeepAlive => true;
   @override

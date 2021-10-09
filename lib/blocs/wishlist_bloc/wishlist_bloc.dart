@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:tahwisa/cubits/wish_place_cubit/wish_place_cubit.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/models/query_response.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
@@ -17,6 +18,7 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
   bool isFetching = false;
   int _page = 1;
   int get page => _page;
+  final WishPlaceCubit wishPlaceCubit;
   StreamSubscription _wishPlaceSubscription;
 
   @override
@@ -26,9 +28,10 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
     return super.close();
   }
 
-  WishListBloc({@required this.placeRepository})
-      : assert(placeRepository != null),
-        super(WishListInitial());
+  WishListBloc({@required this.placeRepository, @required this.wishPlaceCubit})
+      : super(WishListInitial()) {
+    _monitorWishPlaceCubit();
+  }
   @override
   Stream<WishListState> mapEventToState(
     WishListEvent event,
@@ -36,7 +39,8 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
     if (event is FetchFirstPageWishList) {
       try {
         _page = 1;
-        yield WishListProgress();
+
+        if (event.loading) yield WishListProgress();
         _places.clear();
         final QueryResponse _queryResponse =
             await placeRepository.fetchWishListPlaces(1);
@@ -61,5 +65,24 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
         numPages: event.state.numPages,
       );
     }
+  }
+
+  void _monitorWishPlaceCubit() {
+    _wishPlaceSubscription = wishPlaceCubit.stream.listen((state) {
+      if (state is AddedToWishListSuccess) {
+        if (_places.length < 10) {
+          add(FetchFirstPageWishList(loading: false));
+        }
+      }
+      if (state is RemovedFromWishListSuccess) {
+        int index = this
+            ._places
+            .indexWhere((place) => (place.id == state.placeId) ? true : false);
+        if (index != -1) {
+          _places.removeAt(index);
+          _places$.add(_places);
+        }
+      }
+    });
   }
 }

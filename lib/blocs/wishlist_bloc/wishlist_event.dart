@@ -10,7 +10,8 @@ abstract class WishListEvent extends Equatable {
 }
 
 class FetchFirstPageWishList extends WishListEvent {
-  FetchFirstPageWishList();
+  final bool loading;
+  FetchFirstPageWishList({this.loading = true});
 }
 
 class FetchWishListPageRequested extends WishListEvent {

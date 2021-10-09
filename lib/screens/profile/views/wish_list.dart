@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tahwisa/blocs/wishlist_bloc/bloc.dart';
+import 'package:tahwisa/cubits/wish_place_cubit/wish_place_cubit.dart';
 //import 'package:tahwisa/blocs/explore_places_bloc/bloc.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
@@ -11,7 +12,8 @@ class WishList extends StatefulWidget {
   _WishListState createState() => _WishListState();
 }
 
-class _WishListState extends State<WishList> {
+class _WishListState extends State<WishList>
+    with AutomaticKeepAliveClientMixin<WishList> {
   final ScrollController _scrollController = ScrollController();
   WishListBloc _wishListBloc;
   PlaceRepository placeRepository;
@@ -22,7 +24,10 @@ class _WishListState extends State<WishList> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return BlocConsumer<WishListBloc, WishListState>(
@@ -110,7 +115,9 @@ class _WishListState extends State<WishList> {
   void initState() {
     super.initState();
     placeRepository = RepositoryProvider.of<PlaceRepository>(context);
-    _wishListBloc = WishListBloc(placeRepository: placeRepository)
+    _wishListBloc = WishListBloc(
+        placeRepository: placeRepository,
+        wishPlaceCubit: context.read<WishPlaceCubit>())
       ..add(FetchFirstPageWishList());
   }
 
