@@ -54,6 +54,8 @@ dependencies:
   animations: ^2.0.1
   multi_image_picker2: ^5.0.02
   flutter_keyboard_visibility: ^5.0.3
+  firebase_core: ^1.8.0
+  firebase_messaging: ^10.0.9
 
 dev_dependencies:
   flutter_test:

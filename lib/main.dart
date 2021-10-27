@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,7 +11,6 @@ import 'package:tahwisa/screens/auth/login.dart';
 import 'package:tahwisa/screens/welcome.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
-import 'blocs/wishlist_bloc/bloc.dart';
 import 'cubits/wish_place_cubit/wish_place_cubit.dart';
 import 'repositories/dropdowns_repository.dart';
 import 'repositories/maps_repository.dart';
@@ -43,9 +44,26 @@ class SimpleBlocDelegate extends BlocObserver {
   }
 }
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = SimpleBlocDelegate();
+  await Firebase.initializeApp();
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  print('User granted permission: ${settings.authorizationStatus}');
+  String token = await messaging.getToken();
+  print("token: $token");
+
   runApp(App());
 }
 
@@ -94,7 +112,7 @@ class _AppState extends State<App> {
                 BlocProvider(
                     create: (_) => WishPlaceCubit(
                         placeRepository: ctx.read<PlaceRepository>())),
-            /*    BlocProvider(
+                /*    BlocProvider(
                     create: (_) => WishListBloc(
                         placeRepository: ctx.read<PlaceRepository>()))*/
               ],
