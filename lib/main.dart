@@ -13,6 +13,7 @@ import 'package:tahwisa/style/my_colors.dart';
 
 import 'cubits/wish_place_cubit/wish_place_cubit.dart';
 import 'repositories/dropdowns_repository.dart';
+import 'repositories/fcm_token_repository.dart';
 import 'repositories/maps_repository.dart';
 import 'repositories/models/place.dart';
 import 'repositories/review_repository.dart';
@@ -105,6 +106,7 @@ class _AppState extends State<App> {
             RepositoryProvider(create: (_) => ReviewRepository()),
             RepositoryProvider(create: (_) => MapsRepository()),
             RepositoryProvider(create: (_) => DropDownsRepository()),
+            RepositoryProvider(create: (_) => FcmTokenRepository()),
           ],
           child: Builder(
             builder: (ctx) => MultiBlocProvider(
