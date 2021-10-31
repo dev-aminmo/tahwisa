@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,5 +34,15 @@ class FcmTokenRepository {
     } catch (e) {
       throw (e.toString());
     }
+  }
+
+  Future<dynamic> deleteToken() async {
+    //var pref=await SharedPreferences.getInstance();
+    // String token = pref.getString("token");
+    //   String apiFcmToken = pref.getString("api_fcm_token");
+    var pref = await SharedPreferences.getInstance();
+    await pref.remove("api_fcm_token");
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    await messaging.deleteToken();
   }
 }

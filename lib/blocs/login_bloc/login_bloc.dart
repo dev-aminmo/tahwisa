@@ -28,10 +28,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (event is LoginButtonPressed) {
       yield LoginLoading();
       try {
+        print(".***************************** login button after pressed .");
         final token = await userRepository.authenticate(
           email: event.email,
           password: event.password,
         );
+        print("************************* token has been getted");
 
         authenticationBloc.add(LoggedIn(token: token));
 

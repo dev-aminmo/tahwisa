@@ -128,7 +128,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void dispose() {
-    authenticationBloc.close();
     _userCubit.close();
     _fcmCubit.close();
     super.dispose();

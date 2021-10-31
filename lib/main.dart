@@ -61,11 +61,11 @@ void main() async {
     provisional: false,
     sound: true,
   );
-
-  String token = await messaging.getToken();
-  print("token: $token");
-  await SharedPreferences.getInstance()
-    ..setString("fcm_token", token);
+  var onTokenRefresh = messaging.onTokenRefresh;
+  onTokenRefresh.listen((token) async {
+    await SharedPreferences.getInstance()
+      ..setString("fcm_token", token);
+  });
 
   runApp(App());
 }
