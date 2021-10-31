@@ -23,6 +23,10 @@ class FcmTokenRepository {
       var data = response.data;
       print(data);
       if (response.statusCode == 201) {
+/*        await SharedPreferences.getInstance()
+          ..setString("fcm_token_updated_at",  DateTime.now().toString());*/
+        await SharedPreferences.getInstance()
+          ..setString("api_fcm_token", fcmToken);
         return true;
       }
       return false;

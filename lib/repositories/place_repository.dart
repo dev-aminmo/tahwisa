@@ -167,8 +167,14 @@ class PlaceRepository {
         "municipal_id": municipalID,
         "tags": jsonTags ?? "[]"
       });
-      var response = await Dio().post(Api.add_place,
-          data: formData,
+      var response = await Dio().post(Api.add_place, data: formData,
+          onReceiveProgress: (int count, int total) {
+        print('count: $count');
+        print('total: $total');
+      }, onSendProgress: (int count, int total) {
+        print('send count: $count');
+        print('send total: $total');
+      },
           options: Options(
             headers: {
               "Authorization": "Bearer " + token,

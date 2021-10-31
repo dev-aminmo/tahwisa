@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tahwisa/blocs/authentication_bloc/bloc.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/user_repository.dart';
@@ -61,9 +62,10 @@ void main() async {
     sound: true,
   );
 
-  print('User granted permission: ${settings.authorizationStatus}');
   String token = await messaging.getToken();
   print("token: $token");
+  await SharedPreferences.getInstance()
+    ..setString("fcm_token", token);
 
   runApp(App());
 }
@@ -76,7 +78,8 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   AuthenticationBloc authenticationBloc;
   UserRepository userRepository;
-  PlaceRepository placeRepository;
+  FcmTokenRepository fcmTokenRepository;
+  //PlaceRepository placeRepository;
 
   final _navigatorKey = GlobalKey<NavigatorState>();
   NavigatorState get _navigator => _navigatorKey.currentState;
@@ -84,9 +87,11 @@ class _AppState extends State<App> {
   @override
   void initState() {
     userRepository = UserRepository();
-    authenticationBloc = AuthenticationBloc(userRepository: userRepository);
+    fcmTokenRepository = FcmTokenRepository();
+    authenticationBloc = AuthenticationBloc(
+        userRepository: userRepository, fcmTokenRepository: fcmTokenRepository);
     authenticationBloc.add(AppStarted());
-    placeRepository = PlaceRepository();
+    // placeRepository = PlaceRepository();
     super.initState();
   }
 
@@ -106,7 +111,7 @@ class _AppState extends State<App> {
             RepositoryProvider(create: (_) => ReviewRepository()),
             RepositoryProvider(create: (_) => MapsRepository()),
             RepositoryProvider(create: (_) => DropDownsRepository()),
-            RepositoryProvider(create: (_) => FcmTokenRepository()),
+            RepositoryProvider(create: (_) => fcmTokenRepository),
           ],
           child: Builder(
             builder: (ctx) => MultiBlocProvider(
@@ -146,9 +151,7 @@ class _AppState extends State<App> {
                           _navigator.pushAndRemoveUntil<void>(
                             //HomePage.route(),
                             MaterialPageRoute<void>(
-                                builder: (context) => RepositoryProvider(
-                                    create: (_) => placeRepository,
-                                    child: ProfileScreen())),
+                                builder: (context) => ProfileScreen()),
                             (route) => false,
                           );
                         } else if (state is AuthenticationUnauthenticated) {
@@ -185,9 +188,7 @@ class _AppState extends State<App> {
       case '/sign_up':
         return MaterialPageRoute(builder: (context) => SignUPScreen());
       case '/add_place_navigator':
-        return MaterialPageRoute(
-            builder: (context) => RepositoryProvider(
-                create: (_) => placeRepository, child: AddPlaceNavigator()));
+        return MaterialPageRoute(builder: (context) => AddPlaceNavigator());
       case PlaceDetailsScreen.routeName:
         Map<String, dynamic> arguments =
             new Map<String, dynamic>.from(settings.arguments);
