@@ -26,7 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   List<Widget> children;
   UserRepository userRepository;
   UserCubit _userCubit;
-  FcmCubit _fcmCubit;
+  FcmCubit fcmCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -122,14 +122,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     userRepository = RepositoryProvider.of<UserRepository>(context);
     authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     _userCubit = UserCubit(userRepository: userRepository);
-    _fcmCubit = FcmCubit(
-        repository: RepositoryProvider.of<FcmTokenRepository>(context));
+    var fcmTokenRepository = RepositoryProvider.of<FcmTokenRepository>(context);
+    fcmCubit = FcmCubit(repository: fcmTokenRepository);
   }
 
   @override
   void dispose() {
     _userCubit.close();
-    _fcmCubit.close();
+    fcmCubit.close();
+
     super.dispose();
   }
 

@@ -1,10 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tahwisa/blocs/authentication_bloc/bloc.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/user_repository.dart';
@@ -26,13 +24,6 @@ import 'screens/profile/views/rate_place.dart';
 import 'screens/profile/views/reviews_screen.dart';
 
 class SimpleBlocDelegate extends BlocObserver {
-  /* @override
-  void onChange(Cubit cubit, Change change) {
-    print(change.toString());
-
-    super.onChange(cubit, change);
-  }*/
-
   @override
   void onEvent(Bloc bloc, Object event) {
     print(event.toString());
@@ -50,23 +41,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = SimpleBlocDelegate();
   await Firebase.initializeApp();
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-  var onTokenRefresh = messaging.onTokenRefresh;
-  onTokenRefresh.listen((token) async {
-    await SharedPreferences.getInstance()
-      ..setString("fcm_token", token);
-  });
-
   runApp(App());
 }
 
@@ -79,20 +53,17 @@ class _AppState extends State<App> {
   AuthenticationBloc authenticationBloc;
   UserRepository userRepository;
   FcmTokenRepository fcmTokenRepository;
-  //PlaceRepository placeRepository;
-
   final _navigatorKey = GlobalKey<NavigatorState>();
   NavigatorState get _navigator => _navigatorKey.currentState;
 
   @override
   void initState() {
+    super.initState();
     userRepository = UserRepository();
     fcmTokenRepository = FcmTokenRepository();
     authenticationBloc = AuthenticationBloc(
         userRepository: userRepository, fcmTokenRepository: fcmTokenRepository);
     authenticationBloc.add(AppStarted());
-    // placeRepository = PlaceRepository();
-    super.initState();
   }
 
   @override
@@ -119,9 +90,6 @@ class _AppState extends State<App> {
                 BlocProvider(
                     create: (_) => WishPlaceCubit(
                         placeRepository: ctx.read<PlaceRepository>())),
-                /*    BlocProvider(
-                    create: (_) => WishListBloc(
-                        placeRepository: ctx.read<PlaceRepository>()))*/
               ],
               child: MaterialApp(
                 navigatorKey: _navigatorKey,

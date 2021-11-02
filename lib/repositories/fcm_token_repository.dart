@@ -24,8 +24,6 @@ class FcmTokenRepository {
       var data = response.data;
       print(data);
       if (response.statusCode == 201) {
-/*        await SharedPreferences.getInstance()
-          ..setString("fcm_token_updated_at",  DateTime.now().toString());*/
         await SharedPreferences.getInstance()
           ..setString("api_fcm_token", fcmToken);
         return true;
@@ -37,12 +35,13 @@ class FcmTokenRepository {
   }
 
   Future<dynamic> deleteToken() async {
-    //var pref=await SharedPreferences.getInstance();
-    // String token = pref.getString("token");
-    //   String apiFcmToken = pref.getString("api_fcm_token");
-    var pref = await SharedPreferences.getInstance();
-    await pref.remove("api_fcm_token");
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-    await messaging.deleteToken();
+    try {
+      FirebaseMessaging messaging = FirebaseMessaging.instance;
+      await messaging.deleteToken();
+    } catch (e) {} finally {
+      var pref = await SharedPreferences.getInstance();
+      await pref.remove("api_fcm_token");
+      await pref.remove("fcm_token");
+    }
   }
 }

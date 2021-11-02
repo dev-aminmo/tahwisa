@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tahwisa/repositories/fcm_token_repository.dart';
@@ -7,6 +8,7 @@ part 'fcm_token_state.dart';
 
 class FcmCubit extends Cubit<FcmTokenState> {
   final FcmTokenRepository repository;
+
   FcmCubit({@required this.repository}) : super(FcmTokenInitial()) {
     _updateFcmToken();
   }
@@ -23,12 +25,21 @@ class FcmCubit extends Cubit<FcmTokenState> {
     }
   }
 
-  void _updateFcmToken() {
-    SharedPreferences.getInstance().then((pref) {
+  void _updateFcmToken() async {
+    try {
+      var pref = await SharedPreferences.getInstance();
       String fcmToken = pref.getString("fcm_token");
+      if (fcmToken == null) {
+        FirebaseMessaging messaging = FirebaseMessaging.instance;
+        fcmToken = await messaging.getToken();
+        await pref.setString("fcm_token", fcmToken);
+      }
       String apiFcmToken = pref.getString("api_fcm_token");
-      print(fcmToken != apiFcmToken);
-      if (fcmToken != apiFcmToken) add(token: fcmToken);
-    });
+      if (fcmToken != apiFcmToken) {
+        add(token: fcmToken);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }
