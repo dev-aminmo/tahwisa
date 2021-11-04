@@ -30,8 +30,7 @@ class _ExploreState extends State<Explore>
     placeRepository = RepositoryProvider.of<PlaceRepository>(context);
     _explorePlacesBloc = ExplorePlacesBloc(
         placeRepository: placeRepository,
-        wishPlaceCubit: context.read<WishPlaceCubit>())
-      ..add(FetchFirstPageExplorePlaces());
+        wishPlaceCubit: context.read<WishPlaceCubit>());
   }
 
   @override

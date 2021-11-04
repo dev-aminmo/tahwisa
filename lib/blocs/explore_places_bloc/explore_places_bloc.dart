@@ -32,6 +32,7 @@ class ExplorePlacesBloc extends Bloc<ExplorePlacesEvent, ExplorePlacesState> {
   ExplorePlacesBloc(
       {@required this.placeRepository, @required this.wishPlaceCubit})
       : super(ExplorePlacesInitial()) {
+    add(FetchFirstPageExplorePlaces());
     _monitorWishPlaceCubit();
   }
   @override

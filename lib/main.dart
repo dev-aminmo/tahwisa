@@ -12,6 +12,7 @@ import 'package:tahwisa/screens/auth/login.dart';
 import 'package:tahwisa/screens/welcome.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
+import 'blocs/notification_bloc/notification_bloc.dart';
 import 'cubits/wish_place_cubit/wish_place_cubit.dart';
 import 'repositories/dropdowns_repository.dart';
 import 'repositories/fcm_token_repository.dart';
@@ -112,6 +113,10 @@ class _AppState extends State<App> {
                 BlocProvider(
                     create: (_) => WishPlaceCubit(
                         placeRepository: ctx.read<PlaceRepository>())),
+                BlocProvider(
+                    create: (_) => NotificationBloc(
+                        notificationRepository:
+                            ctx.read<NotificationRepository>())),
               ],
               child: MaterialApp(
                 navigatorKey: _navigatorKey,

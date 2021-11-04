@@ -6,7 +6,6 @@ import 'package:tahwisa/blocs/notification_bloc/notification_bloc.dart';
 import 'package:tahwisa/cubits/fcm_token_cubit/fcm_token_cubit.dart';
 import 'package:tahwisa/cubits/user_cubit/user_cubit.dart';
 import 'package:tahwisa/repositories/fcm_token_repository.dart';
-import 'package:tahwisa/repositories/notification_repository.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/user_repository.dart';
 import 'package:tahwisa/style/my_colors.dart';
@@ -153,10 +152,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _userCubit = UserCubit(userRepository: userRepository);
     var fcmTokenRepository = RepositoryProvider.of<FcmTokenRepository>(context);
     fcmCubit = FcmCubit(repository: fcmTokenRepository);
-    var notificationRepository =
-        RepositoryProvider.of<NotificationRepository>(context);
-    notificationBloc =
-        NotificationBloc(notificationRepository: notificationRepository);
+    notificationBloc = context.read<NotificationBloc>();
   }
 
   @override

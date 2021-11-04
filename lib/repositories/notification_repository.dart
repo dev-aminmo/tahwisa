@@ -13,7 +13,6 @@ class NotificationRepository {
           headers: {"Authorization": "Bearer " + token},
         ));
     var data = await response.data;
-    print(data);
     List<Notification> notifications = [];
     if (response.statusCode == 200) {
       for (var jsonReview in data['data']) {
