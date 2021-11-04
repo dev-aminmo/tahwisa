@@ -19,7 +19,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   void initState() {
     super.initState();
     userRepository = RepositoryProvider.of<UserRepository>(context);
-
     _controller = VideoPlayerController.network(
         'https://res.cloudinary.com/dtvc2pr8i/video/upload/eo_21,so_0/v1614644723/vid_aq0vw7.mp4')
       ..initialize().then((_) {

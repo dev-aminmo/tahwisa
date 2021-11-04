@@ -1,9 +1,12 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tahwisa/blocs/authentication_bloc/bloc.dart';
+import 'package:tahwisa/blocs/notification_bloc/notification_bloc.dart';
 import 'package:tahwisa/cubits/fcm_token_cubit/fcm_token_cubit.dart';
 import 'package:tahwisa/cubits/user_cubit/user_cubit.dart';
 import 'package:tahwisa/repositories/fcm_token_repository.dart';
+import 'package:tahwisa/repositories/notification_repository.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/user_repository.dart';
 import 'package:tahwisa/style/my_colors.dart';
@@ -27,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   UserRepository userRepository;
   UserCubit _userCubit;
   FcmCubit fcmCubit;
-
+  NotificationBloc notificationBloc;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,9 +109,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+// It is assumed that all messages contain a data field with the key 'type'
+  Future<void> setupInteractedMessage() async {
+    // Get any messages which caused the application to open from
+    // a terminated state.
+    RemoteMessage initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    // If the message also contains a data property with a "type" of "chat",
+    // navigate to a chat screen
+    if (initialMessage != null) {
+      print("initialMessage");
+      _handleMessage(initialMessage);
+    }
+
+    // Also handle any interaction when the app is in the background via a
+    // Stream listener
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+  }
+
+  void _handleMessage(RemoteMessage message) {
+    print("Remote message has come ************************");
+    Navigator.of(context).pushNamed('/add_place_navigator');
+  }
+
   @override
   void initState() {
     super.initState();
+    setupInteractedMessage();
+
     _currentIndex = 0;
     _pageController = PageController(initialPage: _currentIndex);
     children = [
@@ -124,13 +153,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _userCubit = UserCubit(userRepository: userRepository);
     var fcmTokenRepository = RepositoryProvider.of<FcmTokenRepository>(context);
     fcmCubit = FcmCubit(repository: fcmTokenRepository);
+    var notificationRepository =
+        RepositoryProvider.of<NotificationRepository>(context);
+    notificationBloc =
+        NotificationBloc(notificationRepository: notificationRepository);
   }
 
   @override
   void dispose() {
     _userCubit.close();
     fcmCubit.close();
-
+    notificationBloc.close();
     super.dispose();
   }
 

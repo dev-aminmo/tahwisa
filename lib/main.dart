@@ -1,9 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tahwisa/blocs/authentication_bloc/bloc.dart';
+import 'package:tahwisa/repositories/notification_repository.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/user_repository.dart';
 import 'package:tahwisa/screens/auth/login.dart';
@@ -37,10 +39,29 @@ class SimpleBlocDelegate extends BlocObserver {
   }
 }
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("************************************");
+  print("Handling a background message: ${message.messageId}");
+  print("Handling a background data: ${message.data}");
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   Bloc.observer = SimpleBlocDelegate();
   await Firebase.initializeApp();
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print("************************************");
+
+    print('Got a message whilst in the foreground!');
+    print('Message data: ${message.data}');
+
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.notification}');
+    }
+  });
   runApp(App());
 }
 
@@ -83,6 +104,7 @@ class _AppState extends State<App> {
             RepositoryProvider(create: (_) => MapsRepository()),
             RepositoryProvider(create: (_) => DropDownsRepository()),
             RepositoryProvider(create: (_) => fcmTokenRepository),
+            RepositoryProvider(create: (_) => NotificationRepository()),
           ],
           child: Builder(
             builder: (ctx) => MultiBlocProvider(
