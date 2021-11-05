@@ -6,6 +6,7 @@ import 'package:tahwisa/blocs/notification_bloc/notification_bloc.dart';
 import 'package:tahwisa/cubits/fcm_token_cubit/fcm_token_cubit.dart';
 import 'package:tahwisa/cubits/user_cubit/user_cubit.dart';
 import 'package:tahwisa/repositories/fcm_token_repository.dart';
+import 'package:tahwisa/repositories/notification_repository.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/user_repository.dart';
 import 'package:tahwisa/style/my_colors.dart';
@@ -20,7 +21,8 @@ class ProfileScreen extends StatefulWidget {
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen>
+    with WidgetsBindingObserver {
   AuthenticationBloc authenticationBloc;
   PlaceRepository placeRepository;
   PageController _pageController;
@@ -134,17 +136,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
     setupInteractedMessage();
 
     _currentIndex = 0;
     _pageController = PageController(initialPage: _currentIndex);
+
+    notificationBloc = NotificationBloc(
+        notificationRepository: context.read<NotificationRepository>());
     children = [
       Explore(),
       SearchScreen(),
       Container(),
       WishList(),
-      Notifications(),
+      BlocProvider<NotificationBloc>.value(
+        value: notificationBloc,
+        child: Notifications(),
+      )
     ];
     placeRepository = RepositoryProvider.of<PlaceRepository>(context);
     userRepository = RepositoryProvider.of<UserRepository>(context);
@@ -152,15 +161,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _userCubit = UserCubit(userRepository: userRepository);
     var fcmTokenRepository = RepositoryProvider.of<FcmTokenRepository>(context);
     fcmCubit = FcmCubit(repository: fcmTokenRepository);
-    notificationBloc = context.read<NotificationBloc>();
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _userCubit.close();
     fcmCubit.close();
     notificationBloc.close();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      notificationBloc.add(FetchNotifications(loading: false));
+    }
   }
 
   void _selectItem(int value) {
