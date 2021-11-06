@@ -74,6 +74,9 @@ class _NotificationsState extends State<Notifications> {
                         style: TextStyle(fontWeight: FontWeight.w700),
                       ),
                       subtitle: Text(snapshot.data[index].body),
+                      tileColor: snapshot.data[index].read
+                          ? Colors.grey.shade400.withOpacity(0.4)
+                          : Colors.transparent,
                     );
                   },
                 );

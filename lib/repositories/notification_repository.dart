@@ -17,7 +17,7 @@ class NotificationRepository {
     if (response.statusCode == 200) {
       for (var jsonReview in data['data']) {
         var notification = Notification.fromJson(jsonReview);
-        notifications.add(notification);
+        notifications.insert(0, notification);
       }
       return notifications;
     }

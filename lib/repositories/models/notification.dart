@@ -4,6 +4,7 @@ class Notification {
   var title;
   var body;
   var data;
+  bool read = false;
   var createdAt;
   var updatedAt;
 
@@ -14,6 +15,7 @@ class Notification {
     this.title = json['title'];
     this.body = json['body'];
     this.data = json['description'];
+    this.read = json['read'];
     this.createdAt = json['created_at'];
     this.updatedAt = json['updated_at'];
   }

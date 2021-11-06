@@ -175,6 +175,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
+      print(FirebaseMessaging.instance.getInitialMessage());
       notificationBloc.add(FetchNotifications(loading: false));
     }
   }
