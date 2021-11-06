@@ -40,6 +40,13 @@ class _ProfileScreenState extends State<ProfileScreen>
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: MyColors.white,
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(0.0),
+            child: AppBar(
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              brightness: Brightness.light,
+            )),
         body: PageView(
           controller: _pageController,
           physics: NeverScrollableScrollPhysics(),

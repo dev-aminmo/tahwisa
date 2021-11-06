@@ -38,8 +38,6 @@ class SimpleBlocDelegate extends BlocObserver {
   }
 }
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = SimpleBlocDelegate();
@@ -100,7 +98,6 @@ class _AppState extends State<App> {
                 title: 'Tahwisa',
                 debugShowCheckedModeBanner: false,
                 theme: ThemeData(
-                    //primarySwatch: Colors.blue,
                     textTheme: GoogleFonts.latoTextTheme(
                       Theme.of(context).textTheme,
                     ),
@@ -109,7 +106,6 @@ class _AppState extends State<App> {
                     accentColor: MyColors.lightGreen,
                     scaffoldBackgroundColor: MyColors.white,
                     backgroundColor: MyColors.white,
-                    // brightness: Brightness.light,
                     appBarTheme: AppBarTheme(
                       brightness: Brightness.dark,
                     )),

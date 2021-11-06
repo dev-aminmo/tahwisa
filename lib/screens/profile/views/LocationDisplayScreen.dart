@@ -37,7 +37,6 @@ class LocationDisplayScreenState extends State<LocationDisplayScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("latitude ${widget.latitude}");
     return new Scaffold(
       extendBodyBehindAppBar: true,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
