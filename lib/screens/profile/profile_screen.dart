@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,6 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   UserCubit _userCubit;
   FcmCubit fcmCubit;
   NotificationBloc notificationBloc;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,22 +113,13 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 
-// It is assumed that all messages contain a data field with the key 'type'
   Future<void> setupInteractedMessage() async {
-    // Get any messages which caused the application to open from
-    // a terminated state.
     RemoteMessage initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
-
-    // If the message also contains a data property with a "type" of "chat",
-    // navigate to a chat screen
     if (initialMessage != null) {
       print("initialMessage");
       _handleMessage(initialMessage);
     }
-
-    // Also handle any interaction when the app is in the background via a
-    // Stream listener
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
   }
 
@@ -139,7 +133,6 @@ class _ProfileScreenState extends State<ProfileScreen>
     WidgetsBinding.instance.addObserver(this);
     super.initState();
     setupInteractedMessage();
-
     _currentIndex = 0;
     _pageController = PageController(initialPage: _currentIndex);
 
@@ -175,7 +168,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      print(FirebaseMessaging.instance.getInitialMessage());
+      print("hey resumed **********");
       notificationBloc.add(FetchNotifications(loading: false));
     }
   }
@@ -232,7 +225,41 @@ class _ProfileScreenState extends State<ProfileScreen>
           label: "",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.notifications_none_outlined),
+          icon: StreamBuilder<int>(
+              stream: notificationBloc.unreadNotifications,
+              builder: (context, snapshot) {
+                return (snapshot.hasData && snapshot.data != 0)
+                    ? Stack(
+                        children: [
+                          Icon(Icons.notifications_none_outlined),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Container(
+                              decoration: new BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              constraints: BoxConstraints(
+                                minWidth: 16,
+                                minHeight: 16,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '${snapshot.data}',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    : Icon(Icons.notifications_none_outlined);
+              }),
           label: "",
         ),
       ];

@@ -58,28 +58,36 @@ class _NotificationsState extends State<Notifications> {
                                         fontSize: 22)))),
                       ])));
                 }
-                return ListView.separated(
-                  separatorBuilder: (ctx, index) {
-                    return Divider(
-                      endIndent: 16,
-                      indent: 16,
-                    );
-                  },
-                  physics: BouncingScrollPhysics(),
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (ctx, index) {
-                    return ListTile(
-                      title: Text(
-                        snapshot.data[index].title,
-                        style: TextStyle(fontWeight: FontWeight.w700),
+                return RefreshIndicator(
+                    strokeWidth: 3,
+                    onRefresh: () async {
+                      _notificationBloc.add(FetchNotifications());
+                    },
+                    child: ListView.separated(
+                      separatorBuilder: (ctx, index) {
+                        return Container(
+                          height: 0.75,
+                          color: Theme.of(context).dividerColor,
+                          width: double.infinity,
+                        );
+                      },
+                      physics: AlwaysScrollableScrollPhysics(
+                        parent: BouncingScrollPhysics(),
                       ),
-                      subtitle: Text(snapshot.data[index].body),
-                      tileColor: snapshot.data[index].read
-                          ? Colors.grey.shade400.withOpacity(0.4)
-                          : Colors.transparent,
-                    );
-                  },
-                );
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (ctx, index) {
+                        return ListTile(
+                          title: Text(
+                            snapshot.data[index].title,
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                          subtitle: Text(snapshot.data[index].body),
+                          tileColor: snapshot.data[index].read
+                              ? Colors.grey.shade400.withOpacity(0.4)
+                              : Colors.transparent,
+                        );
+                      },
+                    ));
               }
               return SizedBox();
             });

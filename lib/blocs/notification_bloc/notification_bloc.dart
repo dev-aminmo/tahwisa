@@ -15,6 +15,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   List<Notification> _notifications;
   final _notifications$ = BehaviorSubject<List<Notification>>();
   Stream<List<Notification>> get notifications => _notifications$;
+  final _unreadNotifications$ = BehaviorSubject<int>();
+  Stream<int> get unreadNotifications => _unreadNotifications$;
   NotificationRepository notificationRepository;
   NotificationBloc({
     @required this.notificationRepository,
@@ -35,6 +37,13 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     });
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       print('Message clicked! yaWz ********************************');
+    });
+    _notifications$.listen((notificationsList) {
+      var count = 0;
+      for (var notification in notificationsList) {
+        if (!notification.read) count++;
+      }
+      _unreadNotifications$.add(count);
     });
   }
 
@@ -66,6 +75,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   @override
   Future<Function> close() {
     _notifications$.close();
+    _unreadNotifications$.close();
     super.close();
   }
 }

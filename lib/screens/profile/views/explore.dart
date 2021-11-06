@@ -75,7 +75,9 @@ class _ExploreState extends State<Explore>
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
-                physics: BouncingScrollPhysics(),
+                physics: AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics(),
+                ),
                 controller: _scrollController
                   ..addListener(() {
                     if ((_scrollController.offset ==

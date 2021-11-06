@@ -99,7 +99,9 @@ class _WishListState extends State<WishList>
                 );
               }
               return ListView.builder(
-                physics: BouncingScrollPhysics(),
+                physics: AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics(),
+                ),
                 controller: _scrollController
                   ..addListener(() {
                     if ((_scrollController.offset ==
