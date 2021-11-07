@@ -84,7 +84,7 @@ class PlaceRepository {
       }
       var arr = [];
       for (var place in places) {
-        arr.add(place.id);
+        arr.add(place);
       }
       print("total number of results is:${data['data']['total']}");
       print("total number of pages is:${data['data']['last_page']}");

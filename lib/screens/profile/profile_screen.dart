@@ -44,7 +44,8 @@ class _ProfileScreenState extends State<ProfileScreen>
             preferredSize: Size.fromHeight(0.0),
             child: AppBar(
               elevation: 0,
-              backgroundColor: Colors.transparent,
+              backgroundColor:
+                  _currentIndex == 1 ? Colors.white : Colors.transparent,
               brightness: Brightness.light,
             )),
         body: PageView(
@@ -131,8 +132,12 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   void _handleMessage(RemoteMessage message) {
-    print("Remote message has come ************************");
-    Navigator.of(context).pushNamed('/add_place_navigator');
+    Navigator.of(context).pushNamed(
+      '/notification_details',
+      arguments: {
+        'notificationBloc': notificationBloc,
+      },
+    );
   }
 
   @override

@@ -38,11 +38,10 @@ class _SearchScreenState extends State<SearchScreen> {
     _topTagsCubit = TopTagsCubit(repository: _tagRepository);
     _filterManagerBloc = FilterManagerBloc();
     _searchBloc = SearchBloc(
-      filterManagerBloc: _filterManagerBloc,
-      placeRepository: placeRepository,
-      tagRepository: _tagRepository,
-      wishPlaceCubit: context.read<WishPlaceCubit>()
-    );
+        filterManagerBloc: _filterManagerBloc,
+        placeRepository: placeRepository,
+        tagRepository: _tagRepository,
+        wishPlaceCubit: context.read<WishPlaceCubit>());
   }
 
   @override

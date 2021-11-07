@@ -66,8 +66,9 @@ class _NotificationsState extends State<Notifications> {
                     child: ListView.separated(
                       separatorBuilder: (ctx, index) {
                         return Container(
-                          height: 0.75,
-                          color: Theme.of(context).dividerColor,
+                          height: 0.6,
+                          color:
+                              Theme.of(context).dividerColor.withOpacity(0.08),
                           width: double.infinity,
                         );
                       },
@@ -85,6 +86,14 @@ class _NotificationsState extends State<Notifications> {
                           tileColor: snapshot.data[index].read
                               ? Colors.grey.shade400.withOpacity(0.4)
                               : Colors.transparent,
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                              '/notification_details',
+                              arguments: {
+                                'notificationBloc': _notificationBloc,
+                              },
+                            );
+                          },
                         );
                       },
                     ));
