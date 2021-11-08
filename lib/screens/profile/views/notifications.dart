@@ -88,9 +88,10 @@ class _NotificationsState extends State<Notifications> {
                               : Colors.transparent,
                           onTap: () {
                             Navigator.of(context).pushNamed(
-                              '/notification_details',
+                              '/notification/place_added',
                               arguments: {
                                 'notificationBloc': _notificationBloc,
+                                'notification': snapshot.data[index]
                               },
                             );
                           },

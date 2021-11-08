@@ -8,6 +8,7 @@ import 'package:tahwisa/blocs/notification_bloc/notification_bloc.dart';
 import 'package:tahwisa/cubits/fcm_token_cubit/fcm_token_cubit.dart';
 import 'package:tahwisa/cubits/user_cubit/user_cubit.dart';
 import 'package:tahwisa/repositories/fcm_token_repository.dart';
+import 'package:tahwisa/repositories/models/notification.dart' as My;
 import 'package:tahwisa/repositories/notification_repository.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/user_repository.dart';
@@ -40,14 +41,15 @@ class _ProfileScreenState extends State<ProfileScreen>
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: MyColors.white,
-        appBar: PreferredSize(
+        /* appBar: PreferredSize(
             preferredSize: Size.fromHeight(0.0),
             child: AppBar(
               elevation: 0,
               backgroundColor:
                   _currentIndex == 1 ? Colors.white : Colors.transparent,
-              brightness: Brightness.light,
-            )),
+              brightness: Brightness.dark,
+              foregroundColor: Colors.lightGreen,
+            )),*/
         body: PageView(
           controller: _pageController,
           physics: NeverScrollableScrollPhysics(),
@@ -132,12 +134,21 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   void _handleMessage(RemoteMessage message) {
-    Navigator.of(context).pushNamed(
-      '/notification_details',
+    print(message.data);
+    var notificationBloc = My.Notification(
+      id: message.data['id'],
+      title: message.notification?.title,
+      body: message.notification?.body,
+      description: message.data['description'],
+      placeId: message.data['place_id'],
+      type: message.data['type'],
+    );
+    /*   Navigator.of(context).pushNamed(
+      '/notification/place_added',
       arguments: {
         'notificationBloc': notificationBloc,
       },
-    );
+    );*/
   }
 
   @override

@@ -1,24 +1,39 @@
+import 'package:flutter/foundation.dart';
+
 class Notification {
   var id;
-  var notificationId;
   var title;
   var body;
-  var data;
+  var description;
   bool read = false;
+  var type;
+  var placeId;
   var createdAt;
   var updatedAt;
 
-  Notification({this.title, this.body, this.data});
+  Notification(
+      {@required this.id,
+      this.title,
+      this.body,
+      this.description,
+      this.read = false,
+      @required this.type,
+      this.placeId,
+      this.createdAt,
+      this.updatedAt});
+
   Notification.fromJson(Map<String, dynamic> json) {
     this.id = json['id'];
-    this.notificationId = json['notification_id'];
     this.title = json['title'];
     this.body = json['body'];
-    this.data = json['description'];
+    this.description = json['description'];
     this.read = json['read'];
+    this.type = json['type'];
+    this.placeId = json['place_id'];
     this.createdAt = json['created_at'];
     this.updatedAt = json['updated_at'];
   }
   @override
-  String toString() => " title: $title,body: $body , data: $data";
+  String toString() =>
+      "id: $id ,title: $title,body: $body , description: $description";
 }

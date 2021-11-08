@@ -23,17 +23,25 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     @required this.notificationRepository,
   }) : super(NotificationInitial()) {
     add(FetchNotifications());
-    // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("************************************");
 
       print('Got a message whilst in the foreground!');
       print('Message data: ${message.data}');
       if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
+        print('Message also contained a title: ${message.notification.title}');
+        print('Message also contained a body: ${message.notification.body}');
+        print('Message also contained a data: ${message.data}');
+
         add(PushNotification(
             notification: Notification(
-                title: message.notification?.title, body: "ha tabradi hah")));
+          id: message.data['id'],
+          title: message.notification?.title,
+          body: message.notification?.body,
+          description: message.data['description'],
+          placeId: message.data['place_id'],
+          type: message.data['type'],
+        )));
       }
     });
     _notifications$.listen((notificationsList) {
