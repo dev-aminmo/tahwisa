@@ -40,6 +40,7 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
   @override
   void initState() {
     notification = widget.notification;
+    widget.notificationBloc.add(ReadNotification(id: notification.id));
     _placeDetailsCubit = PlaceDetailsCubit(
         placeID: notification.placeId,
         placeRepository: context.read<PlaceRepository>());
@@ -65,16 +66,16 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
                 bloc: _placeDetailsCubit,
                 builder: (context, state) {
                   if (state is PlaceDetailsSuccess) {
-                    return ListView(
+                    return SingleChildScrollView(
                         padding: EdgeInsets.zero,
                         physics: ClampingScrollPhysics(),
-                        children: [
+                        child: Column(children: [
                           Carousel(
                               place: state.place,
                               heroAnimationTag: "notification"),
                           buildPlaceDetails(state.place),
                         ] //]),
-                        );
+                            ));
                   } else {
                     return Center(
                       child: CircularProgressIndicator(),
@@ -89,6 +90,7 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Container(width: 50, height: 200),
                 Text("Accept    "),
                 Text("  Refuse"),
               ],

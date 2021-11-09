@@ -25,14 +25,9 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     add(FetchNotifications());
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("************************************");
-
       print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
       if (message.notification != null) {
-        print('Message also contained a title: ${message.notification.title}');
-        print('Message also contained a body: ${message.notification.body}');
         print('Message also contained a data: ${message.data}');
-
         add(PushNotification(
             notification: Notification(
           id: message.data['id'],
@@ -76,6 +71,17 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         yield NotificationFailure(error: error.toString());
       }
     }
+    if (event is ReadNotification) {
+      try {
+        int index = this._notifications.indexWhere(
+            (notification) => (notification.id == event.id) ? true : false);
+        if (index != -1) {
+          _notifications.elementAt(index).read = true;
+          _notifications$.add(_notifications);
+        }
+        notificationRepository.readNotification(id: event.id);
+      } catch (e) {}
+    }
   }
 
   @override
@@ -85,12 +91,3 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     super.close();
   }
 }
-
-/*
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  print("************************************");
-  print("Handling a background message: ${message.messageId}");
-  print("Handling a background data: ${message.data}");
-}
-*/

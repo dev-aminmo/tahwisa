@@ -20,3 +20,10 @@ class PushNotification extends NotificationEvent {
   @override
   List<Object> get props => [notification];
 }
+
+class ReadNotification extends NotificationEvent {
+  final id;
+  ReadNotification({@required this.id});
+  @override
+  List<Object> get props => [id];
+}

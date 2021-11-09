@@ -23,4 +23,17 @@ class NotificationRepository {
     }
     return false;
   }
+
+  Future<dynamic> readNotification({var id}) async {
+    var pref = await SharedPreferences.getInstance();
+    String token = pref.getString("token");
+    var response = await Dio().put(Api.read_notification + "/$id",
+        options: Options(
+          headers: {"Authorization": "Bearer " + token},
+        ));
+    if (response.statusCode == 201) {
+      return true;
+    }
+    return false;
+  }
 }
