@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tahwisa/blocs/notification_bloc/notification_bloc.dart';
+import 'package:tahwisa/cubits/place_availability_cubit/place_availability_cubit.dart';
 import 'package:tahwisa/cubits/place_details_cubit/place_details_cubit.dart';
+import 'package:tahwisa/repositories/admin_repository.dart';
 import 'package:tahwisa/repositories/models/notification.dart' as My;
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/screens/profile/views/LocationDisplayScreen.dart';
 import 'package:tahwisa/screens/profile/widgets/place_details/widgets.dart';
 import 'package:tahwisa/screens/profile/widgets/static_map_view.dart';
+import 'package:tahwisa/style/my_colors.dart';
 
 class NotificationPlaceAdded extends StatefulWidget {
   static const String routeName = '/notification/place_added';
@@ -36,11 +39,15 @@ class NotificationPlaceAdded extends StatefulWidget {
 class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
   PlaceDetailsCubit _placeDetailsCubit;
   My.Notification notification;
+  PlaceAvailabilityCubit _placeAvailabilityCubit;
 
   @override
   void initState() {
     notification = widget.notification;
     widget.notificationBloc.add(ReadNotification(id: notification.id));
+    _placeAvailabilityCubit =
+        PlaceAvailabilityCubit(context.read<AdminRepository>())
+          ..checkIfPlaceIsAvailable(notification.placeId);
     _placeDetailsCubit = PlaceDetailsCubit(
         placeID: notification.placeId,
         placeRepository: context.read<PlaceRepository>());
@@ -50,52 +57,101 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
   @override
   void dispose() {
     _placeDetailsCubit.close();
+    _placeAvailabilityCubit.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: buildAppBar(),
+      extendBodyBehindAppBar: true,
+      backgroundColor: MyColors.white,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 20),
-            Expanded(
-              child: BlocBuilder<PlaceDetailsCubit, PlaceDetailsState>(
-                bloc: _placeDetailsCubit,
-                builder: (context, state) {
-                  if (state is PlaceDetailsSuccess) {
-                    return SingleChildScrollView(
-                        padding: EdgeInsets.zero,
-                        physics: ClampingScrollPhysics(),
-                        child: Column(children: [
-                          Carousel(
-                              place: state.place,
-                              heroAnimationTag: "notification"),
-                          buildPlaceDetails(state.place),
-                        ] //]),
-                            ));
-                  } else {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                },
-              ),
-            ),
-            const Divider(
-              height: 1,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(width: 50, height: 200),
-                Text("Accept    "),
-                Text("  Refuse"),
-              ],
-            ),
-          ],
+        child: BlocBuilder<PlaceAvailabilityCubit, PlaceAvailabilityState>(
+          bloc: _placeAvailabilityCubit,
+          builder: (context, state) {
+            if (state is PlaceAvailabilityInitial) {
+              return CircularProgressIndicator();
+            }
+            if (state is PlaceAvailable) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: BlocBuilder<PlaceDetailsCubit, PlaceDetailsState>(
+                      bloc: _placeDetailsCubit,
+                      builder: (context, state) {
+                        if (state is PlaceDetailsSuccess) {
+                          return SingleChildScrollView(
+                              padding: EdgeInsets.zero,
+                              physics: ClampingScrollPhysics(),
+                              child: Column(children: [
+                                Carousel(
+                                    place: state.place,
+                                    heroAnimationTag: "notification"),
+                                buildPlaceDetails(state.place),
+                              ] //]),
+                                  ));
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: 16,
+                          ),
+                          MaterialButton(
+                            onPressed: () {},
+                            child: Text(
+                              "Refuse",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            color: Colors.redAccent,
+                          ),
+                          Spacer(),
+                          MaterialButton(
+                            onPressed: () {},
+                            child: Text(
+                              "Accept",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            color: Colors.green,
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            }
+            if (state is PlaceUnAvailable) {
+              return Text("This Notification is No Longer available");
+            }
+            return CircularProgressIndicator();
+          },
         ),
       ),
     );
@@ -105,7 +161,6 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
     return Padding(
       padding: EdgeInsets.all(18),
       child: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

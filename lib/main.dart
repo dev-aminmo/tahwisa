@@ -12,6 +12,7 @@ import 'package:tahwisa/screens/welcome.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 import 'cubits/wish_place_cubit/wish_place_cubit.dart';
+import 'repositories/admin_repository.dart';
 import 'repositories/dropdowns_repository.dart';
 import 'repositories/fcm_token_repository.dart';
 import 'repositories/maps_repository.dart';
@@ -86,6 +87,7 @@ class _AppState extends State<App> {
             RepositoryProvider(create: (_) => DropDownsRepository()),
             RepositoryProvider(create: (_) => fcmTokenRepository),
             RepositoryProvider(create: (_) => NotificationRepository()),
+            RepositoryProvider(create: (_) => AdminRepository()),
           ],
           child: Builder(
             builder: (ctx) => MultiBlocProvider(
@@ -108,7 +110,7 @@ class _AppState extends State<App> {
                     scaffoldBackgroundColor: MyColors.white,
                     backgroundColor: MyColors.white,
                     appBarTheme: AppBarTheme(
-                      brightness: Brightness.dark,
+                      brightness: Brightness.light,
                     )),
                 builder: (context, child) {
                   return RepositoryProvider(
