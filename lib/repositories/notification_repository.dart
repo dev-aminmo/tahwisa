@@ -15,8 +15,8 @@ class NotificationRepository {
     var data = await response.data;
     List<Notification> notifications = [];
     if (response.statusCode == 200) {
-      for (var jsonReview in data['data']) {
-        var notification = Notification.fromJson(jsonReview);
+      for (var jsonNotification in data['data']) {
+        var notification = Notification.fromJson(jsonNotification);
         notifications.add(notification);
       }
       return notifications;

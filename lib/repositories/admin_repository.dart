@@ -22,23 +22,6 @@ class AdminRepository {
     return false;
   }
 
-  Future<dynamic> getErrorMessages({
-    @required var placeId,
-  }) async {
-    var pref = await SharedPreferences.getInstance();
-    String token = pref.getString("token");
-    var response =
-        await Dio().get(Api.check_if_place_is_available + "/$placeId",
-            options: Options(
-              headers: {"Authorization": "Bearer " + token},
-            ));
-    print("get error if is available ${response.statusCode}");
-    if (response.statusCode == 200) {
-      return true;
-    }
-    return false;
-  }
-
   Future<dynamic> approvePlace({
     @required var placeId,
   }) async {
