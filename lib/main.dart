@@ -17,6 +17,7 @@ import 'repositories/dropdowns_repository.dart';
 import 'repositories/fcm_token_repository.dart';
 import 'repositories/maps_repository.dart';
 import 'repositories/models/place.dart';
+import 'repositories/refuse_place_message_repository.dart';
 import 'repositories/review_repository.dart';
 import 'screens/auth/signup.dart';
 import 'screens/profile/profile_screen.dart';
@@ -88,6 +89,7 @@ class _AppState extends State<App> {
             RepositoryProvider(create: (_) => fcmTokenRepository),
             RepositoryProvider(create: (_) => NotificationRepository()),
             RepositoryProvider(create: (_) => AdminRepository()),
+            RepositoryProvider(create: (_) => RefusePlaceMessageRepository()),
           ],
           child: Builder(
             builder: (ctx) => MultiBlocProvider(

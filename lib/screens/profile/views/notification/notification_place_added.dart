@@ -5,10 +5,12 @@ import 'package:tahwisa/blocs/notification_bloc/notification_bloc.dart';
 import 'package:tahwisa/cubits/admin_cubit/admin_cubit.dart';
 import 'package:tahwisa/cubits/place_availability_cubit/place_availability_cubit.dart';
 import 'package:tahwisa/cubits/place_details_cubit/place_details_cubit.dart';
+import 'package:tahwisa/cubits/refuse_place_messages/refuse_place_messages_cubit.dart';
 import 'package:tahwisa/repositories/admin_repository.dart';
 import 'package:tahwisa/repositories/models/notification.dart' as My;
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
+import 'package:tahwisa/repositories/refuse_place_message_repository.dart';
 import 'package:tahwisa/screens/profile/views/LocationDisplayScreen.dart';
 import 'package:tahwisa/screens/profile/widgets/place_details/widgets.dart';
 import 'package:tahwisa/screens/profile/widgets/static_map_view.dart';
@@ -42,7 +44,7 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
   My.Notification notification;
   PlaceAvailabilityCubit _placeAvailabilityCubit;
   AdminCubit _adminCubit;
-
+  RefusePlaceMessagesCubit _refusePlaceMessagesCubit;
   @override
   void initState() {
     notification = widget.notification;
@@ -50,10 +52,13 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
     var _adminRepository = context.read<AdminRepository>();
     _placeAvailabilityCubit = PlaceAvailabilityCubit(_adminRepository)
       ..checkIfPlaceIsAvailable(notification.placeId);
-    _adminCubit = AdminCubit(_adminRepository);
+
     _placeDetailsCubit = PlaceDetailsCubit(
         placeID: notification.placeId,
         placeRepository: context.read<PlaceRepository>());
+    _adminCubit = AdminCubit(_adminRepository);
+    _refusePlaceMessagesCubit =
+        RefusePlaceMessagesCubit(context.read<RefusePlaceMessageRepository>());
     super.initState();
   }
 
@@ -78,93 +83,149 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
               return CircularProgressIndicator();
             }
             if (state is PlaceAvailable) {
-              return BlocListener<AdminCubit, AdminState>(
-                  bloc: _adminCubit,
-                  listener: (context, state) {
-                    if (state is AdminLoading) {
-                      showDialog<void>(
-                          context: context,
-                          useRootNavigator: false,
-                          barrierDismissible: false, // user must tap button!
-                          builder: (BuildContext context) => WillPopScope(
-                              onWillPop: () async => false,
-                              child: AlertDialog(
-                                  backgroundColor: Colors.white,
-                                  content: Column(
+              return MultiBlocListener(
+                  listeners: [
+                    BlocListener<RefusePlaceMessagesCubit,
+                            RefusePlaceMessagesState>(
+                        bloc: _refusePlaceMessagesCubit,
+                        listener: (context, state) {
+                          if (state is RefusePlaceMessagesLoading) {
+                            showDialog<void>(
+                                context: context,
+                                useRootNavigator: false,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) => WillPopScope(
+                                    onWillPop: () async => false,
+                                    child: AlertDialog(
+                                        backgroundColor: Colors.white,
+                                        content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              CircularProgressIndicator()
+                                            ]))));
+                          }
+                          if (state is RefusePlaceMessagesSuccess) {
+                            Navigator.of(context).pop();
+                            showDialog<void>(
+                                context: context,
+                                useRootNavigator: false,
+                                barrierDismissible:
+                                    true, // user must tap button!
+                                builder: (BuildContext context) => AlertDialog(
+                                    backgroundColor: Colors.white,
+                                    content: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        CircularProgressIndicator()
-                                      ]))));
-                    }
-                    if (state is AdminSuccess) {
-                      Navigator.of(context).pop();
-                      showDialog<void>(
-                          context: context,
-                          useRootNavigator: false,
-                          barrierDismissible: true, // user must tap button!
-                          builder: (BuildContext context) => AlertDialog(
-                              backgroundColor: Colors.white,
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    Icons.check_circle_outlined,
-                                    color: Colors.green,
-                                    size: 72,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  const Text(
-                                    "Your request has been successfully submitted",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w900,
-                                        fontSize: 22,
-                                        color: MyColors.darkBlue),
-                                  ),
-                                  const SizedBox(height: 16),
-                                ],
-                              ))).then((value) {
-                        Navigator.of(context, rootNavigator: true).pop();
-                      });
-                    }
-                    if (state is AdminError) {
-                      Navigator.of(context).pop();
-                      showDialog<void>(
-                          context: context,
-                          useRootNavigator: false,
-                          barrierDismissible: true, // user must tap button!
-                          builder: (BuildContext context) => AlertDialog(
-                              backgroundColor: Colors.white,
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    Icons.error_outline_rounded,
-                                    color: Colors.red,
-                                    size: 72,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  const Text(
-                                    "This post has been handled by another Admin",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: 1.2,
-                                      fontSize: 18,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                ],
-                              ))).then((value) {
-                        Navigator.of(context, rootNavigator: true).pop();
-                      });
-                    }
-                  },
+                                        const SizedBox(height: 16),
+                                        const Text(
+                                          "Form To Fill",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: 22,
+                                              color: MyColors.darkBlue),
+                                        ),
+                                      ],
+                                    )));
+                          }
+                        }),
+                    BlocListener<AdminCubit, AdminState>(
+                        bloc: _adminCubit,
+                        listener: (context, state) {
+                          if (state is AdminLoading) {
+                            showDialog<void>(
+                                context: context,
+                                useRootNavigator: false,
+                                barrierDismissible:
+                                    false, // user must tap button!
+                                builder: (BuildContext context) => WillPopScope(
+                                    onWillPop: () async => false,
+                                    child: AlertDialog(
+                                        backgroundColor: Colors.white,
+                                        content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              CircularProgressIndicator()
+                                            ]))));
+                          }
+                          if (state is AdminSuccess) {
+                            Navigator.of(context).pop();
+                            showDialog<void>(
+                                context: context,
+                                useRootNavigator: false,
+                                barrierDismissible:
+                                    true, // user must tap button!
+                                builder: (BuildContext context) => AlertDialog(
+                                    backgroundColor: Colors.white,
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.check_circle_outlined,
+                                          color: Colors.green,
+                                          size: 72,
+                                        ),
+                                        const SizedBox(height: 16),
+                                        const Text(
+                                          "Your request has been successfully submitted",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: 22,
+                                              color: MyColors.darkBlue),
+                                        ),
+                                        const SizedBox(height: 16),
+                                      ],
+                                    ))).then((value) {
+                              Navigator.of(context, rootNavigator: true).pop();
+                            });
+                          }
+                          if (state is AdminError) {
+                            Navigator.of(context).pop();
+                            showDialog<void>(
+                                context: context,
+                                useRootNavigator: false,
+                                barrierDismissible:
+                                    true, // user must tap button!
+                                builder: (BuildContext context) => AlertDialog(
+                                    backgroundColor: Colors.white,
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.error_outline_rounded,
+                                          color: Colors.red,
+                                          size: 72,
+                                        ),
+                                        const SizedBox(height: 16),
+                                        const Text(
+                                          "This post has been handled by another Admin",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            letterSpacing: 1.2,
+                                            fontSize: 18,
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 16),
+                                      ],
+                                    ))).then((value) {
+                              Navigator.of(context, rootNavigator: true).pop();
+                            });
+                          }
+                        }),
+                  ],
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
@@ -205,7 +266,10 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
                                 width: 16,
                               ),
                               MaterialButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  _refusePlaceMessagesCubit
+                                      .getAdminRefusePlaceMessages();
+                                },
                                 child: Text(
                                   "Refuse",
                                   style: TextStyle(

@@ -28,10 +28,10 @@ class RefusePlaceMessagesCubit extends Cubit<RefusePlaceMessagesState> {
       emit(RefusePlaceMessagesLoading());
       var messages =
           await refusePlaceMessageRepository.getAdminRefusePlaceMessages();
-      (messages)
-          ? emit(RefusePlaceMessagesSuccess(refusePlaceMessages: messages))
-          : emit(RefusePlaceMessagesError());
+      emit(RefusePlaceMessagesSuccess(refusePlaceMessages: messages));
     } catch (e) {
+      print(e);
+
       emit(RefusePlaceMessagesError());
     }
   }
