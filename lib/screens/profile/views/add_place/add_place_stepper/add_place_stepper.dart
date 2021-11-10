@@ -159,6 +159,7 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
                             const SizedBox(height: 16),
                             const Text(
                               "Place added successfully",
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontWeight: FontWeight.w900,
                                   fontSize: 22,
@@ -198,6 +199,7 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
                             const SizedBox(height: 16),
                             const Text(
                               "An error has occurred",
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 1.2,
@@ -208,6 +210,7 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
                             const SizedBox(height: 16),
                             const Text(
                               "You can retry",
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   letterSpacing: 1.2,
