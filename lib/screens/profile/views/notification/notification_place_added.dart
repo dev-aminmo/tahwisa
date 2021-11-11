@@ -8,14 +8,16 @@ import 'package:tahwisa/cubits/place_details_cubit/place_details_cubit.dart';
 import 'package:tahwisa/cubits/refuse_place_messages/refuse_place_messages_cubit.dart';
 import 'package:tahwisa/repositories/admin_repository.dart';
 import 'package:tahwisa/repositories/models/notification.dart' as My;
-import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/models/refuse_place_message.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/refuse_place_message_repository.dart';
-import 'package:tahwisa/screens/profile/views/LocationDisplayScreen.dart';
-import 'package:tahwisa/screens/profile/widgets/place_details/widgets.dart';
-import 'package:tahwisa/screens/profile/widgets/static_map_view.dart';
+import 'package:tahwisa/screens/profile/widgets/notification/added/approve_refuse_buttons.dart';
+import 'package:tahwisa/screens/profile/widgets/notification/added/notification_place_details.dart';
 import 'package:tahwisa/style/my_colors.dart';
+
+import 'file:///C:/Users/pc/AndroidStudioProjects/tahwisa/lib/screens/profile/widgets/notification/added/error_alert.dart';
+import 'file:///C:/Users/pc/AndroidStudioProjects/tahwisa/lib/screens/profile/widgets/notification/added/loading_alert.dart';
+import 'file:///C:/Users/pc/AndroidStudioProjects/tahwisa/lib/screens/profile/widgets/notification/added/success_alert.dart';
 
 class NotificationPlaceAdded extends StatefulWidget {
   static const String routeName = '/notification/place_added';
@@ -62,13 +64,14 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
     _adminCubit = AdminCubit(_adminRepository);
     _refusePlaceMessagesCubit =
         RefusePlaceMessagesCubit(context.read<RefusePlaceMessageRepository>());
-    super.initState();
   }
 
   @override
   void dispose() {
     _placeDetailsCubit.close();
     _placeAvailabilityCubit.close();
+    _adminCubit.close();
+    _refusePlaceMessagesCubit.close();
     super.dispose();
   }
 
@@ -97,17 +100,11 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
                                 context: context,
                                 useRootNavigator: false,
                                 barrierDismissible: false,
-                                builder: (BuildContext context) => WillPopScope(
-                                    onWillPop: () async => false,
-                                    child: AlertDialog(
-                                        backgroundColor: Colors.white,
-                                        content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              CircularProgressIndicator()
-                                            ]))));
+                                builder: (BuildContext context) =>
+                                    StatefulBuilder(
+                                        builder: (BuildContext context,
+                                                StateSetter setState) =>
+                                            LoadingAlert()));
                           }
 
                           if (state is RefusePlaceMessagesError) {
@@ -116,33 +113,12 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
                                 context: context,
                                 useRootNavigator: false,
                                 barrierDismissible:
-                                true, // user must tap button!
-                                builder: (BuildContext context) => AlertDialog(
-                                    backgroundColor: Colors.white,
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                      children: [
-                                        const Icon(
-                                          Icons.error_outline_rounded,
-                                          color: Colors.red,
-                                          size: 72,
-                                        ),
-                                        const SizedBox(height: 16),
-                                        const Text(
-                                          "Cannot make an action now please retry later",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            letterSpacing: 1.2,
-                                            fontSize: 18,
-                                            color: Colors.red,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 16),
-                                      ],
-                                    ))).then((value) {
+                                    true, // user must tap button!
+                                builder: (BuildContext context) => StatefulBuilder(
+                                    builder: (context, setState) => ErrorAlert(
+                                        message:
+                                            "Cannot make an action now please retry later"))).then(
+                                (value) {
                               Navigator.of(context, rootNavigator: true).pop();
                             });
                           }
@@ -231,10 +207,7 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
                                                   setState(() {});
                                                   if (_userChecked.length > 0) {
                                                     _errorMessage = '';
-                                                    print(notification.placeId);
-                                                    print(notification.id);
                                                     Navigator.pop(context);
-
                                                     _adminCubit.refusePlace(
                                                         placeId: notification
                                                             .placeId,
@@ -260,19 +233,12 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
                             showDialog<void>(
                                 context: context,
                                 useRootNavigator: false,
-                                barrierDismissible:
-                                    false, // user must tap button!
-                                builder: (BuildContext context) => WillPopScope(
-                                    onWillPop: () async => false,
-                                    child: AlertDialog(
-                                        backgroundColor: Colors.white,
-                                        content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              CircularProgressIndicator()
-                                            ]))));
+                                barrierDismissible: false,
+                                builder: (BuildContext context) =>
+                                    StatefulBuilder(
+                                        builder: (BuildContext context,
+                                                StateSetter setState) =>
+                                            LoadingAlert()));
                           }
                           if (state is AdminSuccess) {
                             Navigator.of(context).pop();
@@ -281,30 +247,11 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
                                 useRootNavigator: false,
                                 barrierDismissible:
                                     true, // user must tap button!
-                                builder: (BuildContext context) => AlertDialog(
-                                    backgroundColor: Colors.white,
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        const Icon(
-                                          Icons.check_circle_outlined,
-                                          color: Colors.green,
-                                          size: 72,
-                                        ),
-                                        const SizedBox(height: 16),
-                                        const Text(
-                                          "Your request has been successfully submitted",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w900,
-                                              fontSize: 22,
-                                              color: MyColors.darkBlue),
-                                        ),
-                                        const SizedBox(height: 16),
-                                      ],
-                                    ))).then((value) {
+                                builder: (BuildContext context) =>
+                                    StatefulBuilder(
+                                      builder: (context, setState) =>
+                                          SuccessAlert(),
+                                    )).then((value) {
                               Navigator.of(context, rootNavigator: true).pop();
                             });
                           }
@@ -315,32 +262,10 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
                                 useRootNavigator: false,
                                 barrierDismissible:
                                     true, // user must tap button!
-                                builder: (BuildContext context) => AlertDialog(
-                                    backgroundColor: Colors.white,
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        const Icon(
-                                          Icons.error_outline_rounded,
-                                          color: Colors.red,
-                                          size: 72,
-                                        ),
-                                        const SizedBox(height: 16),
-                                        const Text(
-                                          "This post has been handled by another Admin",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            letterSpacing: 1.2,
-                                            fontSize: 18,
-                                            color: Colors.red,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 16),
-                                      ],
-                                    ))).then((value) {
+                                builder: (BuildContext context) =>
+                                    StatefulBuilder(
+                                        builder: (context, setState) =>
+                                            ErrorAlert())).then((value) {
                               Navigator.of(context, rootNavigator: true).pop();
                             });
                           }
@@ -350,80 +275,9 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Expanded(
-                        child:
-                            BlocBuilder<PlaceDetailsCubit, PlaceDetailsState>(
-                          bloc: _placeDetailsCubit,
-                          builder: (context, state) {
-                            if (state is PlaceDetailsSuccess) {
-                              return SingleChildScrollView(
-                                  padding: EdgeInsets.zero,
-                                  physics: ClampingScrollPhysics(),
-                                  child: Column(children: [
-                                    Carousel(
-                                        place: state.place,
-                                        heroAnimationTag: "notification"),
-                                    buildPlaceDetails(state.place),
-                                  ] //]),
-                                      ));
-                            } else {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          SizedBox(
-                            height: 8,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: 16,
-                              ),
-                              MaterialButton(
-                                onPressed: () {
-                                  _refusePlaceMessagesCubit
-                                      .getAdminRefusePlaceMessages();
-                                },
-                                child: Text(
-                                  "Refuse",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                color: Colors.redAccent,
-                              ),
-                              Spacer(),
-                              MaterialButton(
-                                onPressed: () {
-                                  if (_adminCubit.state is! AdminLoading) {
-                                    _adminCubit
-                                        .approvePlace(notification.placeId);
-                                  }
-                                },
-                                child: Text(
-                                  "Approve",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                color: Colors.green,
-                              ),
-                              SizedBox(
-                                width: 16,
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                        ],
-                      ),
+                      NotificationPlaceDetails(_placeDetailsCubit),
+                      ApproveRefuseButtons(
+                          _refusePlaceMessagesCubit, _adminCubit, notification)
                     ],
                   ));
             }
@@ -433,63 +287,6 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
             return CircularProgressIndicator();
           },
         ),
-      ),
-    );
-  }
-
-  Padding buildPlaceDetails(Place place) {
-    return Padding(
-      padding: EdgeInsets.all(18),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 20),
-          GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => LocationDisplayScreen(
-                              latitude: place.latitude,
-                              longitude: place.longitude,
-                              title: place.title,
-                            )));
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  LocationRow(place: place),
-                  const SizedBox(height: 16),
-                  StaticMapView(
-                      latitude: place.latitude, longitude: place.longitude),
-                ],
-              )),
-          const SizedBox(height: 16),
-          const SizedBox(height: 16),
-          Divider(
-            indent: 32,
-            endIndent: 32,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            '@Uploaded by',
-            style: TextStyle(fontSize: 14, color: Colors.grey.withOpacity(0.8)),
-          ),
-          const SizedBox(height: 8),
-
-          UserRow(place: place),
-          const SizedBox(height: 8),
-
-          const SizedBox(height: 8),
-
-          DescriptionShowMoreText(text: place.description),
-          const SizedBox(height: 8),
-          TagsList(place: place),
-
-          //    ReviewBlocBuilder(reviewCubit: _userReviewCubit),
-        ],
       ),
     );
   }
