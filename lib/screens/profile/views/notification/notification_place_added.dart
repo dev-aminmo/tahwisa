@@ -9,6 +9,7 @@ import 'package:tahwisa/cubits/refuse_place_messages/refuse_place_messages_cubit
 import 'package:tahwisa/repositories/admin_repository.dart';
 import 'package:tahwisa/repositories/models/notification.dart' as My;
 import 'package:tahwisa/repositories/models/place.dart';
+import 'package:tahwisa/repositories/models/refuse_place_message.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/refuse_place_message_repository.dart';
 import 'package:tahwisa/screens/profile/views/LocationDisplayScreen.dart';
@@ -45,6 +46,8 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
   PlaceAvailabilityCubit _placeAvailabilityCubit;
   AdminCubit _adminCubit;
   RefusePlaceMessagesCubit _refusePlaceMessagesCubit;
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     notification = widget.notification;
@@ -106,31 +109,114 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
                                               CircularProgressIndicator()
                                             ]))));
                           }
+                          if (state is RefusePlaceMessagesError) {
+                            Navigator.of(context).pop();
+//Todo handle error
+                          }
                           if (state is RefusePlaceMessagesSuccess) {
+                            List<RefusePlaceMessage> _userChecked = [];
+                            var _errorMessage = '';
+                            String _description;
+                            void _onSelected(
+                                bool selected, RefusePlaceMessage message) {
+                              if (selected == true) {
+                                setState(() {
+                                  _userChecked.add(message);
+                                });
+                              } else {
+                                setState(() {
+                                  _userChecked.remove(message);
+                                });
+                              }
+                            }
+
                             Navigator.of(context).pop();
                             showDialog<void>(
                                 context: context,
                                 useRootNavigator: false,
-                                barrierDismissible:
-                                    true, // user must tap button!
-                                builder: (BuildContext context) => AlertDialog(
-                                    backgroundColor: Colors.white,
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        const SizedBox(height: 16),
-                                        const Text(
-                                          "Form To Fill",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w900,
-                                              fontSize: 22,
-                                              color: MyColors.darkBlue),
-                                        ),
-                                      ],
-                                    )));
+                                barrierDismissible: true,
+                                builder: (context) {
+                                  return StatefulBuilder(
+                                      builder: (context, setState) =>
+                                          AlertDialog(
+                                            backgroundColor: Colors.white,
+                                            content: Form(
+                                                key: _formKey,
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    ...state.refusePlaceMessages
+                                                        .map((message) =>
+                                                            ListTile(
+                                                              title: Text(
+                                                                  message.name),
+                                                              trailing:
+                                                                  Checkbox(
+                                                                value: _userChecked
+                                                                    .contains(
+                                                                        message),
+                                                                onChanged:
+                                                                    (val) {
+                                                                  setState(() {
+                                                                    _onSelected(
+                                                                        val,
+                                                                        message);
+                                                                  });
+                                                                },
+                                                              ),
+                                                            ))
+                                                        .toList(),
+                                                    Text(_errorMessage,
+                                                        style: TextStyle(
+                                                            color: Colors.red)),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.all(8.0),
+                                                      child: TextFormField(
+                                                        decoration: InputDecoration(
+                                                            hintText:
+                                                                "Description (Optional)"),
+                                                        onChanged: (value) =>
+                                                            _description =
+                                                                value,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: Text('Cancel'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  setState(() {});
+                                                  if (_userChecked.length > 0) {
+                                                    _errorMessage = '';
+                                                    print(notification.placeId);
+                                                    print(notification.id);
+                                                    Navigator.pop(context);
+
+                                                    _adminCubit.refusePlace(
+                                                        placeId: notification
+                                                            .placeId,
+                                                        messages: _userChecked,
+                                                        description:
+                                                            _description);
+                                                  } else {
+                                                    _errorMessage =
+                                                        "check at least one message";
+                                                  }
+                                                },
+                                                child: Text('Send'),
+                                              ),
+                                            ],
+                                          ));
+                                });
                           }
                         }),
                     BlocListener<AdminCubit, AdminState>(

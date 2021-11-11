@@ -43,6 +43,6 @@ class RefusePlaceMessageRepository {
       }
       return messages;
     }
-    return false;
+    throw ("An error occurred");
   }
 }
