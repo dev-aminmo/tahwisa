@@ -109,10 +109,44 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
                                               CircularProgressIndicator()
                                             ]))));
                           }
+
                           if (state is RefusePlaceMessagesError) {
                             Navigator.of(context).pop();
-//Todo handle error
+                            showDialog<void>(
+                                context: context,
+                                useRootNavigator: false,
+                                barrierDismissible:
+                                true, // user must tap button!
+                                builder: (BuildContext context) => AlertDialog(
+                                    backgroundColor: Colors.white,
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.error_outline_rounded,
+                                          color: Colors.red,
+                                          size: 72,
+                                        ),
+                                        const SizedBox(height: 16),
+                                        const Text(
+                                          "Cannot make an action now please retry later",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            letterSpacing: 1.2,
+                                            fontSize: 18,
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 16),
+                                      ],
+                                    ))).then((value) {
+                              Navigator.of(context, rootNavigator: true).pop();
+                            });
                           }
+
                           if (state is RefusePlaceMessagesSuccess) {
                             List<RefusePlaceMessage> _userChecked = [];
                             var _errorMessage = '';
