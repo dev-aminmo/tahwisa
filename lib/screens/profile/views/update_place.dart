@@ -140,7 +140,8 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
                               )
                             ],
                           ))).then((value) {
-                    Navigator.of(context, rootNavigator: true).pop();
+                    //Todo clean
+                    Navigator.of(context).popUntil((route) => route.isFirst);
                   });
                 }
                 if (state is PlaceUploadFailure) {
