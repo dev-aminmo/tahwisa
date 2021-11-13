@@ -9,11 +9,15 @@ class PlaceAvailabilityCubit extends Cubit<PlaceAvailabilityState> {
 
   PlaceAvailabilityCubit(this.adminRepository)
       : super(PlaceAvailabilityInitial());
-  checkIfPlaceIsAvailable(placeId) async {
+  checkIfPlaceIsAvailable(placeId, {var update = false}) async {
     try {
       var response =
           await adminRepository.checkIfPlaceIsAvailable(placeId: placeId);
-      (response) ? emit(PlaceAvailable()) : emit(PlaceUnAvailable());
+      if (!update) {
+        (response) ? emit(PlaceAvailable()) : emit(PlaceUnAvailable());
+      } else {
+        (response) ? emit(PlaceUnAvailable()) : emit(PlaceAvailable());
+      }
     } catch (e) {
       emit(PlaceUnAvailable());
     }

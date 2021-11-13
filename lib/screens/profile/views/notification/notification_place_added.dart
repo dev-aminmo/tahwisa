@@ -11,6 +11,7 @@ import 'package:tahwisa/repositories/models/notification.dart' as My;
 import 'package:tahwisa/repositories/models/refuse_place_message.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/repositories/refuse_place_message_repository.dart';
+import 'package:tahwisa/screens/profile/widgets/404.dart';
 import 'package:tahwisa/screens/profile/widgets/notification/added/approve_refuse_buttons.dart';
 import 'package:tahwisa/screens/profile/widgets/notification/added/notification_place_details.dart';
 import 'package:tahwisa/style/my_colors.dart';
@@ -281,7 +282,7 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
                   ));
             }
             if (state is PlaceUnAvailable) {
-              return Text("This Notification is No Longer available");
+              return Page404();
             }
             return CircularProgressIndicator();
           },

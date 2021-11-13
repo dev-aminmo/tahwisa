@@ -108,7 +108,6 @@ class _NotificationsState extends State<Notifications> {
                               Navigator.of(context).pushNamed(
                                 '/notification/place_refused',
                                 arguments: {
-                                  'notificationBloc': _notificationBloc,
                                   'notification': snapshot.data[index]
                                 },
                               );

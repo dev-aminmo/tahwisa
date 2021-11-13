@@ -41,15 +41,6 @@ class _ProfileScreenState extends State<ProfileScreen>
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: MyColors.white,
-        /* appBar: PreferredSize(
-            preferredSize: Size.fromHeight(0.0),
-            child: AppBar(
-              elevation: 0,
-              backgroundColor:
-                  _currentIndex == 1 ? Colors.white : Colors.transparent,
-              brightness: Brightness.dark,
-              foregroundColor: Colors.lightGreen,
-            )),*/
         body: PageView(
           controller: _pageController,
           physics: NeverScrollableScrollPhysics(),
@@ -127,15 +118,13 @@ class _ProfileScreenState extends State<ProfileScreen>
     RemoteMessage initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
-      print("initialMessage");
       _handleMessage(initialMessage);
     }
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
   }
 
   void _handleMessage(RemoteMessage message) {
-    print(message.data);
-    var notificationBloc = My.Notification(
+    var notification = My.Notification(
       id: message.data['id'],
       title: message.notification?.title,
       body: message.notification?.body,
@@ -143,12 +132,36 @@ class _ProfileScreenState extends State<ProfileScreen>
       placeId: message.data['place_id'],
       type: message.data['type'],
     );
-    /*   Navigator.of(context).pushNamed(
-      '/notification/place_added',
-      arguments: {
-        'notificationBloc': notificationBloc,
-      },
-    );*/
+    if (notification.type == 'place_added') {
+      notificationBloc.add(ReadNotification(id: notification.id));
+
+      Navigator.of(context).pushNamed(
+        '/notification/place_added',
+        arguments: {
+          'notificationBloc': notificationBloc,
+          'notification': notification
+        },
+      );
+    }
+    if (notification.type == 'place_refused') {
+      notificationBloc.add(ReadNotification(id: notification.id));
+
+      Navigator.of(context).pushNamed(
+        '/notification/place_refused',
+        arguments: {'notification': notification},
+      );
+    }
+    if (notification.type == 'place_approved') {
+      notificationBloc.add(ReadNotification(id: notification.id));
+
+      Navigator.of(context).pushNamed(
+        '/place_details',
+        arguments: {
+          'heroAnimationTag': "notification",
+          'placeId': notification.placeId,
+        },
+      );
+    }
   }
 
   @override

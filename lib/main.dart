@@ -27,6 +27,7 @@ import 'screens/profile/views/notification/notification_place_refused.dart';
 import 'screens/profile/views/place_details.dart';
 import 'screens/profile/views/rate_place.dart';
 import 'screens/profile/views/reviews_screen.dart';
+import 'screens/profile/views/update_place.dart';
 
 class SimpleBlocDelegate extends BlocObserver {
   @override
@@ -171,6 +172,12 @@ class _AppState extends State<App> {
           heroAnimationTag: arguments['heroAnimationTag'],
           placeId: arguments['placeId'],
         );
+      case UpdatePlaceScreen.routeName:
+        Map<String, dynamic> arguments =
+            new Map<String, dynamic>.from(settings.arguments);
+        return UpdatePlaceScreen.route(
+          placeId: arguments['placeId'],
+        );
       case RatePlaceScreen.routeName:
         Map<String, dynamic> arguments =
             new Map<String, dynamic>.from(settings.arguments);
@@ -195,7 +202,6 @@ class _AppState extends State<App> {
         Map<String, dynamic> arguments =
             new Map<String, dynamic>.from(settings.arguments);
         return NotificationPlaceRefused.route(
-            notificationBloc: arguments['notificationBloc'],
             notification: arguments['notification']);
     }
   }
