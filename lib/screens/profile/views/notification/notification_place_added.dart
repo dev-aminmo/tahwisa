@@ -52,12 +52,11 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
 
   @override
   void initState() {
+    super.initState();
     notification = widget.notification;
-    widget.notificationBloc.add(ReadNotification(id: notification.id));
     var _adminRepository = context.read<AdminRepository>();
     _placeAvailabilityCubit = PlaceAvailabilityCubit(_adminRepository)
       ..checkIfPlaceIsAvailable(notification.placeId);
-
     _placeDetailsCubit = PlaceDetailsCubit(
         placeID: notification.placeId,
         placeRepository: context.read<PlaceRepository>());

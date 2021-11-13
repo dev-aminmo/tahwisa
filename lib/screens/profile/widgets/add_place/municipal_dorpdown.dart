@@ -5,13 +5,15 @@ import 'package:tahwisa/repositories/models/municipal.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 class MunicipalDropDown extends StatelessWidget {
-  const MunicipalDropDown({
-    Key key,
-    @required DropDownsMunicipalBloc dropDownsMunicipalBloc,
-  })  : _dropDownsMunicipalBloc = dropDownsMunicipalBloc,
+  const MunicipalDropDown(
+      {Key key,
+      @required DropDownsMunicipalBloc dropDownsMunicipalBloc,
+      this.hint = "Municipal"})
+      : _dropDownsMunicipalBloc = dropDownsMunicipalBloc,
         super(key: key);
 
   final DropDownsMunicipalBloc _dropDownsMunicipalBloc;
+  final String hint;
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +28,7 @@ class MunicipalDropDown extends StatelessWidget {
                     itemHeight: 72,
                     isExpanded: true,
                     hint: Text(
-                      "Municipal",
-                      //  style: SharedUI.textStyle(SharedUI.gray).copyWith(fontSize: 22),
+                      hint,
                     ),
                     value: item.data,
                     icon: Icon(
@@ -36,7 +37,6 @@ class MunicipalDropDown extends StatelessWidget {
                     ),
                     iconSize: 24,
                     elevation: 16,
-                    //style: SharedUI.textStyle(Colors.black).copyWith(fontSize: 20),
                     underline: Container(
                       height: 2,
                       color: MyColors.greenBorder,

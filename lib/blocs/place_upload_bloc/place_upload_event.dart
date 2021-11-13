@@ -26,9 +26,7 @@ class UploadPlaceButtonPressed extends PlaceUploadEvent {
     @required this.latitude,
     @required this.longitude,
     @required this.tags,
-  }) {
-    print(this.toString());
-  }
+  });
 
   @override
   List<Object> get props =>
@@ -37,4 +35,28 @@ class UploadPlaceButtonPressed extends PlaceUploadEvent {
   @override
   String toString() =>
       'UploadPlaceButtonPressed { $title, $description,$picture,$municipalID, $latitude, $longitude ,$tags}';
+}
+
+class UpdatePlaceButtonPressed extends PlaceUploadEvent {
+  final String title;
+  final String description;
+  final List<File> pictures;
+  final int municipalID;
+  final placeId;
+
+  UpdatePlaceButtonPressed({
+    @required this.title,
+    @required this.description,
+    this.pictures,
+    @required this.municipalID,
+    @required this.placeId,
+  });
+
+  @override
+  List<Object> get props =>
+      [title, description, pictures, municipalID, placeId];
+
+  @override
+  String toString() =>
+      'UpdatePlaceButtonPressed { $title, $description,$pictures,$municipalID,$placeId}';
 }

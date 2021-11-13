@@ -38,5 +38,23 @@ class PlaceUploadBloc extends Bloc<PlaceUploadEvent, PlaceUploadState> {
         yield PlaceUploadFailure(error: error.toString());
       }
     }
+    if (event is UpdatePlaceButtonPressed) {
+      yield PlaceUploadLoading();
+      try {
+        var response = await placeRepository.update(
+            title: event.title,
+            description: event.description,
+            pictures: event.pictures,
+            municipalID: event.municipalID,
+            placeId: event.placeId);
+        if (response) {
+          yield (PlaceUploadSuccess());
+        } else {
+          yield PlaceUploadFailure(error: "An error occurred");
+        }
+      } catch (error) {
+        yield PlaceUploadFailure(error: error.toString());
+      }
+    }
   }
 }

@@ -10,11 +10,11 @@ class RefusePlaceMessagesCubit extends Cubit<RefusePlaceMessagesState> {
 
   RefusePlaceMessagesCubit(this.refusePlaceMessageRepository)
       : super(RefusePlaceMessagesInitial());
-  getRefusePlaceMessages(var placeId) async {
+  getRefusePlaceMessages(var notificationId) async {
     try {
       emit(RefusePlaceMessagesLoading());
       var messages = await refusePlaceMessageRepository.getRefusePlaceMessages(
-          placeId: placeId);
+          notificationId: notificationId);
       emit(RefusePlaceMessagesSuccess(refusePlaceMessages: messages));
     } catch (e) {
       emit(RefusePlaceMessagesError());

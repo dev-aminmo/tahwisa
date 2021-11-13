@@ -194,6 +194,46 @@ class PlaceRepository {
     }
   }
 
+  Future<dynamic> update({
+    String title,
+    String description,
+    List<File> pictures,
+    int municipalID,
+    var placeId,
+  }) async {
+    try {
+      var pref = await SharedPreferences.getInstance();
+      String token = pref.getString("token");
+      var formData = FormData.fromMap({
+        'data': {
+          "title": title,
+          "description": description,
+          "municipal_id": municipalID,
+        },
+        'file[]':
+            pictures != null ? await _picturesToMultipartFile(pictures) : null
+      });
+
+      var response = await Dio().post(Api.update_place + "/$placeId",
+          data: formData,
+          options: Options(
+            headers: {
+              "Authorization": "Bearer " + token,
+              "Accept": "multipart/mixed",
+              "Content-Type": "multipart/form-data",
+            },
+            validateStatus: (status) => true,
+          ));
+      print(response);
+      if (response.statusCode == 201) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      throw (e.toString());
+    }
+  }
+
   Future<List> _picturesToMultipartFile(pictures) async {
     var list = [];
     for (var item in pictures) {

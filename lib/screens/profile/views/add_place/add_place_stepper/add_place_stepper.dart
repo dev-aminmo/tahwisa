@@ -31,7 +31,6 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
   PlaceUploadBloc _placeUploadBloc;
   PlaceRepository _placeRepository;
   TagRepository _tagRepository;
-  DropDownsRepository _dropDownsRepository;
   DropDownStateBloc _dropDownStateBloc;
   DropDownsMunicipalBloc _dropDownsMunicipalBloc;
   ImagePickerBloc _imagePickerBloc;
@@ -46,7 +45,8 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
     _selectedTags = [];
     _titleEditingController = TextEditingController();
     _descriptionEditingController = TextEditingController();
-    _dropDownsRepository = DropDownsRepository();
+    DropDownsRepository _dropDownsRepository =
+        context.read<DropDownsRepository>();
     _tagRepository = TagRepository();
     _dropDownsMunicipalBloc =
         DropDownsMunicipalBloc(dropDownsRepository: _dropDownsRepository);

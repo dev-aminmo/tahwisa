@@ -23,6 +23,7 @@ import 'screens/auth/signup.dart';
 import 'screens/profile/profile_screen.dart';
 import 'screens/profile/views/add_place/add_place_navigator.dart';
 import 'screens/profile/views/notification/notification_place_added.dart';
+import 'screens/profile/views/notification/notification_place_refused.dart';
 import 'screens/profile/views/place_details.dart';
 import 'screens/profile/views/rate_place.dart';
 import 'screens/profile/views/reviews_screen.dart';
@@ -188,6 +189,12 @@ class _AppState extends State<App> {
         Map<String, dynamic> arguments =
             new Map<String, dynamic>.from(settings.arguments);
         return NotificationPlaceAdded.route(
+            notificationBloc: arguments['notificationBloc'],
+            notification: arguments['notification']);
+      case NotificationPlaceRefused.routeName:
+        Map<String, dynamic> arguments =
+            new Map<String, dynamic>.from(settings.arguments);
+        return NotificationPlaceRefused.route(
             notificationBloc: arguments['notificationBloc'],
             notification: arguments['notification']);
     }

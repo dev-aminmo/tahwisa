@@ -15,8 +15,10 @@ class DropDownsRepository {
       for (var jsonState in data['data']) {
         states.add(MyState.fromJson(jsonState));
       }
+      print(states);
       return states;
     } catch (e) {
+      print(e);
       throw (e);
     }
   }

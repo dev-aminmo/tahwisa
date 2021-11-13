@@ -87,13 +87,45 @@ class _NotificationsState extends State<Notifications> {
                               ? Colors.grey.shade400.withOpacity(0.4)
                               : Colors.transparent,
                           onTap: () {
-                            Navigator.of(context).pushNamed(
-                              '/notification/place_added',
-                              arguments: {
-                                'notificationBloc': _notificationBloc,
-                                'notification': snapshot.data[index]
-                              },
-                            );
+                            if (snapshot.data[index].type == 'place_added') {
+                              if (!snapshot.data[index].read)
+                                _notificationBloc.add(ReadNotification(
+                                    id: snapshot.data[index].id));
+
+                              Navigator.of(context).pushNamed(
+                                '/notification/place_added',
+                                arguments: {
+                                  'notificationBloc': _notificationBloc,
+                                  'notification': snapshot.data[index]
+                                },
+                              );
+                            }
+                            if (snapshot.data[index].type == 'place_refused') {
+                              if (!snapshot.data[index].read)
+                                _notificationBloc.add(ReadNotification(
+                                    id: snapshot.data[index].id));
+
+                              Navigator.of(context).pushNamed(
+                                '/notification/place_refused',
+                                arguments: {
+                                  'notificationBloc': _notificationBloc,
+                                  'notification': snapshot.data[index]
+                                },
+                              );
+                            }
+                            if (snapshot.data[index].type == 'place_approved') {
+                              if (!snapshot.data[index].read)
+                                _notificationBloc.add(ReadNotification(
+                                    id: snapshot.data[index].id));
+
+                              Navigator.of(context).pushNamed(
+                                '/place_details',
+                                arguments: {
+                                  'heroAnimationTag': "notification",
+                                  'placeId': snapshot.data[index].placeId,
+                                },
+                              );
+                            }
                           },
                         );
                       },
@@ -102,6 +134,43 @@ class _NotificationsState extends State<Notifications> {
               return SizedBox();
             });
       }
+      if (state is NotificationFailure) {
+        return Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.refresh_outlined,
+                color: MyColors.greenBorder,
+                size: 72,
+              ),
+              MaterialButton(
+                color: MyColors.greenBorder,
+                onPressed: () {
+                  _notificationBloc.add(FetchNotifications());
+                },
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  child: Text(
+                    "Re-Try",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Text(
+                "Something wrong happened",
+                style: TextStyle(color: MyColors.greenBorder, fontSize: 18),
+              ),
+            ],
+          ),
+        );
+      }
+
       return SizedBox();
     });
   }

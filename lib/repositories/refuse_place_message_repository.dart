@@ -7,20 +7,21 @@ import 'models/refuse_place_message.dart';
 
 class RefusePlaceMessageRepository {
   Future<dynamic> getRefusePlaceMessages({
-    @required var placeId,
+    @required var notificationId,
   }) async {
     var pref = await SharedPreferences.getInstance();
     String token = pref.getString("token");
-    var response = await Dio().get(Api.get_refuse_messages + "/$placeId",
+    var response = await Dio().get(Api.get_refuse_messages + "/$notificationId",
         options: Options(
           headers: {"Authorization": "Bearer " + token},
         ));
     var data = await response.data;
+    print(data);
     List<RefusePlaceMessage> messages = [];
     if (response.statusCode == 200) {
-      for (var jsonReview in data['data']) {
-        var notification = RefusePlaceMessage.fromJson(jsonReview);
-        messages.add(notification);
+      for (var jsonMessage in data['data']) {
+        var message = RefusePlaceMessage.fromJson(jsonMessage);
+        messages.add(message);
       }
       return messages;
     }
@@ -37,9 +38,9 @@ class RefusePlaceMessageRepository {
     var data = await response.data;
     List<RefusePlaceMessage> messages = [];
     if (response.statusCode == 200) {
-      for (var jsonReview in data['data']) {
-        var notification = RefusePlaceMessage.fromJson(jsonReview);
-        messages.add(notification);
+      for (var jsonMessage in data['data']) {
+        var message = RefusePlaceMessage.fromJson(jsonMessage);
+        messages.add(message);
       }
       return messages;
     }

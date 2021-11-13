@@ -26,6 +26,7 @@ class AuthInput extends StatelessWidget {
           controller: controller,
           keyboardType: (hint == "email") ? TextInputType.emailAddress : null,
           obscureText: obscured,
+          // autofillHints: [AutofillHints.email],
           onEditingComplete: onEditingComplete,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.only(

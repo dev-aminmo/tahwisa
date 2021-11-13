@@ -8,10 +8,12 @@ class StateDropdown extends StatelessWidget {
   const StateDropdown({
     Key key,
     @required DropDownStateBloc dropDownStateBloc,
+    this.hint="State"
   })  : _dropDownStateBloc = dropDownStateBloc,
         super(key: key);
 
   final DropDownStateBloc _dropDownStateBloc;
+  final String hint;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class StateDropdown extends StatelessWidget {
                       itemHeight: 72,
                       isExpanded: true,
                       hint: Text(
-                        "State",
+                        hint,
                       ),
                       value: item.data,
                       icon: Icon(

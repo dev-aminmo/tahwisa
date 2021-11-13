@@ -35,8 +35,6 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-
     return BlocBuilder<LoginBloc, LoginState>(
       bloc: _loginBloc,
       builder: (

@@ -41,7 +41,6 @@ class DropDownStateBloc extends Bloc<DropDownStateEvent, DropDownState> {
     }
     if (event is StateChosen) {
       _selectedState$.add(event.state);
-      print(_selectedState$.value);
       municipalBloc.add(FetchMuniciaples(state: event.state));
     }
     if (event is LoadState) {
