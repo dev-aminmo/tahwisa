@@ -94,6 +94,24 @@ class _SearchScreenState extends State<SearchScreen> {
                     stream: _searchBloc.places,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
+                        if (snapshot.data.length == 0) {
+                          return Center(
+                            child:
+                                Stack(alignment: Alignment.center, children: [
+                              Image.asset('assets/images/empty-search.gif'),
+                              Positioned(
+                                  bottom: 32,
+                                  child: Center(
+                                    child: Text('No places was found',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: MyColors.darkBlue,
+                                          fontSize: 16,
+                                        )),
+                                  ))
+                            ]),
+                          );
+                        }
                         return ListView.builder(
                             controller: innerScrollController
                               ..addListener(() {
