@@ -23,7 +23,7 @@ class ReviewItem extends StatelessWidget {
                 minRadius: 22,
                 backgroundColor: MyColors.gray,
                 backgroundImage: NetworkImage(
-                  review.user.profilePicture.replaceFirstMapped(
+                  review.user!.profilePicture!.replaceFirstMapped(
                       "image/upload/", (match) => "image/upload/w_150,f_auto/"),
                 ),
               ),
@@ -34,7 +34,7 @@ class ReviewItem extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      review.user.name,
+                      review.user!.name!,
                       textAlign: TextAlign.left,
                       softWrap: true,
                       style: TextStyle(

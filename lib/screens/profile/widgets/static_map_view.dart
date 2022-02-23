@@ -6,21 +6,21 @@ class StaticMapView extends StatefulWidget {
   final latitude;
   final longitude;
 
-  StaticMapView({@required this.latitude, @required this.longitude});
+  StaticMapView({required this.latitude, required this.longitude});
 
   @override
   _StaticMapViewState createState() => _StaticMapViewState();
 }
 
 class _StaticMapViewState extends State<StaticMapView> {
-  String _staticMapUrl;
+  String? _staticMapUrl;
   @override
   Widget build(BuildContext context) {
     return _staticMapUrl == null
         ? SizedBox()
         : SizedBox(
             width: double.infinity,
-            child: Image.network(_staticMapUrl,
+            child: Image.network(_staticMapUrl!,
                 // height: 200,
                 fit: BoxFit.cover,
                 width: double.infinity),

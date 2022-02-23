@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 
 class MyState extends Equatable {
-  String name;
-  int id;
+  String? name;
+  int? id;
 
   MyState({this.name, this.id});
 
@@ -12,5 +12,5 @@ class MyState extends Equatable {
   }
 
   @override
-  List<Object> get props => [name, id];
+  List<Object> get props => [name!, id!];
 }

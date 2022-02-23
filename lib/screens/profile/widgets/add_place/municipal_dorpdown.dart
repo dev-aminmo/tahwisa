@@ -6,23 +6,23 @@ import 'package:tahwisa/style/my_colors.dart';
 
 class MunicipalDropDown extends StatelessWidget {
   const MunicipalDropDown(
-      {Key key,
-      @required DropDownsMunicipalBloc dropDownsMunicipalBloc,
+      {Key? key,
+      required DropDownsMunicipalBloc? dropDownsMunicipalBloc,
       this.hint = "Municipal"})
       : _dropDownsMunicipalBloc = dropDownsMunicipalBloc,
         super(key: key);
 
-  final DropDownsMunicipalBloc _dropDownsMunicipalBloc;
+  final DropDownsMunicipalBloc? _dropDownsMunicipalBloc;
   final String hint;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
         bloc: _dropDownsMunicipalBloc,
-        builder: (context, state) {
+        builder: (context, dynamic state) {
           if (state is DropDownsMunicipalSuccess) {
-            return StreamBuilder<Municipal>(
-                stream: _dropDownsMunicipalBloc.selectedMunicipal,
+            return StreamBuilder<Municipal?>(
+                stream: _dropDownsMunicipalBloc!.selectedMunicipal,
                 builder: (context, item) {
                   return DropdownButton(
                     itemHeight: 72,
@@ -41,14 +41,14 @@ class MunicipalDropDown extends StatelessWidget {
                       height: 2,
                       color: MyColors.greenBorder,
                     ),
-                    onChanged: _dropDownsMunicipalBloc.selectedStateEvent,
+                    onChanged: _dropDownsMunicipalBloc!.selectedStateEvent,
                     items: state.municipales
                         ?.map<DropdownMenuItem<Municipal>>((e) {
                       return DropdownMenuItem<Municipal>(
                         value: e,
-                        child: Text(e.name),
+                        child: Text(e.name!),
                       );
-                    })?.toList(),
+                    }).toList(),
                   );
                 });
           } else if (state is DropDownMunicipalInitial) {

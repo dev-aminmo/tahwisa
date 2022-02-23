@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:tahwisa/blocs/drop_down_municipal_bloc/bloc.dart';
 import 'package:tahwisa/blocs/drop_down_state_bloc/bloc.dart';
 import 'package:tahwisa/repositories/models/SearchFilter.dart';
@@ -21,19 +20,22 @@ class FilterManagerBloc extends Bloc<FilterManagerEvent, FilterManagerState> {
     FilterManagerEvent event,
   ) async* {
     if (event is SaveFilterState) {
-      if (event.dropDownStateBloc.state is DropDownsStatesSuccess) {
-        if (event.dropDownsMunicipalBloc.state is DropDownsMunicipalSuccess) {
+      if (event.dropDownStateBloc!.state is DropDownsStatesSuccess) {
+        if (event.dropDownsMunicipalBloc!.state is DropDownsMunicipalSuccess) {
           yield (FilterManagerLoadedState(
-            dropDownsStatesSuccess: event.dropDownStateBloc.state,
-            selectedState: event.dropDownStateBloc.currentState,
-            dropDownsMunicipalSuccess: event.dropDownsMunicipalBloc.state,
-            selectedMunicipal: event.dropDownsMunicipalBloc.currentMunicipal,
+            dropDownsStatesSuccess:
+                event.dropDownStateBloc!.state as DropDownsStatesSuccess?,
+            selectedState: event.dropDownStateBloc!.currentState,
+            dropDownsMunicipalSuccess: event.dropDownsMunicipalBloc!.state
+                as DropDownsMunicipalSuccess?,
+            selectedMunicipal: event.dropDownsMunicipalBloc!.currentMunicipal,
             ratingRangeValues: event.ratingRangeValues,
           ));
         } else {
           yield (FilterManagerLoadedState(
-            dropDownsStatesSuccess: event.dropDownStateBloc.state,
-            selectedState: event.dropDownStateBloc.currentState,
+            dropDownsStatesSuccess:
+                event.dropDownStateBloc!.state as DropDownsStatesSuccess?,
+            selectedState: event.dropDownStateBloc!.currentState,
             ratingRangeValues: event.ratingRangeValues,
           ));
         }
@@ -58,13 +60,15 @@ class FilterManagerBloc extends Bloc<FilterManagerEvent, FilterManagerState> {
         stateId:
             (state as FilterManagerLoadedState).selectedState?.id?.toString(),
         ratingMin: double.parse((state as FilterManagerLoadedState)
-            .ratingRangeValues
-            ?.start
-            ?.toStringAsFixed(1)),
+                .ratingRangeValues
+                ?.start
+                .toStringAsFixed(1) ??
+            "0"),
         ratingMax: double.parse((state as FilterManagerLoadedState)
-            .ratingRangeValues
-            ?.end
-            ?.toStringAsFixed(1)),
+                .ratingRangeValues
+                ?.end
+                .toStringAsFixed(1) ??
+            "5"),
       );
     } else {
       return SearchFilter();

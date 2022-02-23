@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tahwisa/blocs/wishlist_bloc/bloc.dart';
 import 'package:tahwisa/cubits/wish_place_cubit/wish_place_cubit.dart';
-//import 'package:tahwisa/blocs/explore_places_bloc/bloc.dart';
 import 'package:tahwisa/repositories/models/place.dart';
 import 'package:tahwisa/repositories/place_repository.dart';
 import 'package:tahwisa/screens/profile/widgets/place_card.dart';
@@ -18,8 +16,8 @@ class WishList extends StatefulWidget {
 class _WishListState extends State<WishList>
     with AutomaticKeepAliveClientMixin<WishList> {
   final ScrollController _scrollController = ScrollController();
-  WishListBloc _wishListBloc;
-  PlaceRepository placeRepository;
+  late WishListBloc _wishListBloc;
+  PlaceRepository? placeRepository;
   bool _canLoadMore = true;
 
   Future<void> getData(WishListBloc bloc) async {
@@ -72,7 +70,7 @@ class _WishListState extends State<WishList>
           stream: _wishListBloc.places,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              if (snapshot.data.length == 0) {
+              if (snapshot.data!.length == 0) {
                 return Center(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -113,9 +111,9 @@ class _WishListState extends State<WishList>
                         ..add(FetchWishListPageRequested(state));
                     }
                   }),
-                itemCount: snapshot.data.length + 1,
+                itemCount: snapshot.data!.length + 1,
                 itemBuilder: (ctx, index) {
-                  if (index == snapshot.data.length) {
+                  if (index == snapshot.data!.length) {
                     return (_canLoadMore)
                         ? Container(
                             padding: const EdgeInsets.all(25),
@@ -126,7 +124,7 @@ class _WishListState extends State<WishList>
                   return PlaceCard(
                     width: width,
                     callback: () {},
-                    place: snapshot.data[index],
+                    place: snapshot.data![index],
                     heroAnimationTag: 'wish',
                   );
                 },

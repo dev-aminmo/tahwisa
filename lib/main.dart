@@ -1,6 +1,6 @@
-import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tahwisa/blocs/authentication_bloc/bloc.dart';
@@ -10,6 +10,7 @@ import 'package:tahwisa/repositories/user_repository.dart';
 import 'package:tahwisa/screens/auth/login.dart';
 import 'package:tahwisa/screens/welcome.dart';
 import 'package:tahwisa/style/my_colors.dart';
+import 'package:tahwisa/utilities/dio_http_client.dart';
 
 import 'cubits/wish_place_cubit/wish_place_cubit.dart';
 import 'repositories/admin_repository.dart';
@@ -31,8 +32,8 @@ import 'screens/profile/views/update_place.dart';
 
 class SimpleBlocDelegate extends BlocObserver {
   @override
-  void onEvent(Bloc bloc, Object event) {
-    print(event.toString());
+  void onEvent(Bloc bloc, Object? event) {
+    print(event?.toString());
     super.onEvent(bloc, event);
   }
 
@@ -56,11 +57,11 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  AuthenticationBloc authenticationBloc;
-  UserRepository userRepository;
-  FcmTokenRepository fcmTokenRepository;
+  late AuthenticationBloc authenticationBloc;
+  late UserRepository userRepository;
+  late FcmTokenRepository fcmTokenRepository;
   final _navigatorKey = GlobalKey<NavigatorState>();
-  NavigatorState get _navigator => _navigatorKey.currentState;
+  NavigatorState? get _navigator => _navigatorKey.currentState;
 
   @override
   void initState() {
@@ -69,6 +70,8 @@ class _AppState extends State<App> {
     fcmTokenRepository = FcmTokenRepository();
     authenticationBloc = AuthenticationBloc(
         userRepository: userRepository, fcmTokenRepository: fcmTokenRepository);
+
+    DioHttpClient.initialDio(authenticationBloc);
     authenticationBloc.add(AppStarted());
   }
 
@@ -110,11 +113,10 @@ class _AppState extends State<App> {
                     ),
                     primaryColor: MyColors.darkBlue,
                     indicatorColor: MyColors.lightGreen,
-                    accentColor: MyColors.lightGreen,
                     scaffoldBackgroundColor: MyColors.white,
                     backgroundColor: MyColors.white,
                     appBarTheme: AppBarTheme(
-                      brightness: Brightness.light,
+                      systemOverlayStyle: SystemUiOverlayStyle.light,
                     )),
                 builder: (context, child) {
                   return RepositoryProvider(
@@ -123,14 +125,14 @@ class _AppState extends State<App> {
                         BlocListener<AuthenticationBloc, AuthenticationState>(
                       listener: (context, state) {
                         if (state is AuthenticationAuthenticated) {
-                          _navigator.pushAndRemoveUntil<void>(
+                          _navigator?.pushAndRemoveUntil<void>(
                             //HomePage.route(),
                             MaterialPageRoute<void>(
                                 builder: (context) => ProfileScreen()),
                             (route) => false,
                           );
                         } else if (state is AuthenticationUnauthenticated) {
-                          _navigator.pushAndRemoveUntil<void>(
+                          _navigator?.pushAndRemoveUntil<void>(
                             //  LoginPage.route(),
                             MaterialPageRoute<void>(
                                 builder: (context) => WelcomeScreen()),
@@ -153,56 +155,55 @@ class _AppState extends State<App> {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(builder: (context) => SplashPage());
-        break;
       case '/home':
         return MaterialPageRoute(builder: (context) => WelcomeScreen());
-        break;
       case '/login':
         return MaterialPageRoute(builder: (context) => LoginPage());
-        break;
       case '/sign_up':
         return MaterialPageRoute(builder: (context) => SignUPScreen());
       case '/add_place_navigator':
         return MaterialPageRoute(builder: (context) => AddPlaceNavigator());
       case PlaceDetailsScreen.routeName:
-        Map<String, dynamic> arguments =
-            new Map<String, dynamic>.from(settings.arguments);
+        Map<String, dynamic> arguments = new Map<String, dynamic>.from(
+            settings.arguments as Map<dynamic, dynamic>);
         return PlaceDetailsScreen.route(
           place: arguments['place'] as Place,
           heroAnimationTag: arguments['heroAnimationTag'],
           placeId: arguments['placeId'],
         );
       case UpdatePlaceScreen.routeName:
-        Map<String, dynamic> arguments =
-            new Map<String, dynamic>.from(settings.arguments);
+        Map<String, dynamic> arguments = new Map<String, dynamic>.from(
+            settings.arguments as Map<dynamic, dynamic>);
         return UpdatePlaceScreen.route(
           placeId: arguments['placeId'],
         );
       case RatePlaceScreen.routeName:
-        Map<String, dynamic> arguments =
-            new Map<String, dynamic>.from(settings.arguments);
+        Map<String, dynamic> arguments = new Map<String, dynamic>.from(
+            settings.arguments as Map<dynamic, dynamic>);
         return RatePlaceScreen.route(
           initialRate: arguments['initialRate'],
           userReviewCubit: arguments['userReviewCubit'],
           initialComment: arguments['initialComment'],
         );
       case ReviewsScreen.routeName:
-        Map<String, dynamic> arguments =
-            new Map<String, dynamic>.from(settings.arguments);
+        Map<String, dynamic> arguments = new Map<String, dynamic>.from(
+            settings.arguments as Map<dynamic, dynamic>);
         return ReviewsScreen.route(
           reviewsCubit: arguments['reviewsCubit'],
         );
       case NotificationPlaceAdded.routeName:
-        Map<String, dynamic> arguments =
-            new Map<String, dynamic>.from(settings.arguments);
+        Map<String, dynamic> arguments = new Map<String, dynamic>.from(
+            settings.arguments as Map<dynamic, dynamic>);
         return NotificationPlaceAdded.route(
             notificationBloc: arguments['notificationBloc'],
             notification: arguments['notification']);
       case NotificationPlaceRefused.routeName:
-        Map<String, dynamic> arguments =
-            new Map<String, dynamic>.from(settings.arguments);
+        Map<String, dynamic> arguments = new Map<String, dynamic>.from(
+            settings.arguments as Map<dynamic, dynamic>);
         return NotificationPlaceRefused.route(
             notification: arguments['notification']);
+      default:
+        return MaterialPageRoute(builder: (context) => LoginPage());
     }
   }
 }

@@ -7,14 +7,14 @@ import 'package:tahwisa/screens/profile/widgets/add_place/tag_picker.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 class TagsImagesPage extends StatefulWidget {
-  final TagRepository tagRepository;
-  final ImagePickerBloc imagePickerBloc;
-  final List<Tag> selectedTags;
+  final TagRepository? tagRepository;
+  final ImagePickerBloc? imagePickerBloc;
+  final List<Tag>? selectedTags;
 
   const TagsImagesPage(
-      {@required this.tagRepository,
-      @required this.imagePickerBloc,
-      @required this.selectedTags});
+      {required this.tagRepository,
+      required this.imagePickerBloc,
+      required this.selectedTags});
 
   @override
   _TagsImagesPageState createState() => _TagsImagesPageState();
@@ -47,7 +47,7 @@ class _TagsImagesPageState extends State<TagsImagesPage>
                     GridView.builder(
                         physics: BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: state.images?.length,
+                        itemCount: state.images.length,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
@@ -69,7 +69,7 @@ class _TagsImagesPageState extends State<TagsImagesPage>
                     MaterialButton(
                       color: MyColors.lightGreen,
                       onPressed: () {
-                        widget.imagePickerBloc.add(PickImages());
+                        widget.imagePickerBloc!.add(PickImages());
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -84,7 +84,7 @@ class _TagsImagesPageState extends State<TagsImagesPage>
                 );
               }
               return GestureDetector(
-                onTap: () => widget.imagePickerBloc.add(PickImages()),
+                onTap: () => widget.imagePickerBloc!.add(PickImages()),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -94,7 +94,7 @@ class _TagsImagesPageState extends State<TagsImagesPage>
                     MaterialButton(
                       color: MyColors.darkBlue,
                       onPressed: () {
-                        widget.imagePickerBloc.add(PickImages());
+                        widget.imagePickerBloc!.add(PickImages());
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(12),

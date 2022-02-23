@@ -9,26 +9,26 @@ abstract class FilterManagerState extends Equatable {
 class FilterManagerInitial extends FilterManagerState {}
 
 class FilterManagerLoadedState extends FilterManagerState {
-  final DropDownsStatesSuccess dropDownsStatesSuccess;
-  final MyState selectedState;
-  final DropDownsMunicipalSuccess dropDownsMunicipalSuccess;
-  final Municipal selectedMunicipal;
-  final RangeValues ratingRangeValues;
+  final DropDownsStatesSuccess? dropDownsStatesSuccess;
+  final MyState? selectedState;
+  final DropDownsMunicipalSuccess? dropDownsMunicipalSuccess;
+  final Municipal? selectedMunicipal;
+  final RangeValues? ratingRangeValues;
 
   FilterManagerLoadedState({
     this.dropDownsStatesSuccess,
     this.selectedState,
     this.dropDownsMunicipalSuccess,
     this.selectedMunicipal,
-    @required this.ratingRangeValues,
+    required this.ratingRangeValues,
   });
 
   @override
   List<Object> get props => [
-        dropDownsStatesSuccess,
-        selectedState,
-        dropDownsMunicipalSuccess,
-        selectedMunicipal,
-        ratingRangeValues
+        dropDownsStatesSuccess!,
+        selectedState!,
+        dropDownsMunicipalSuccess!,
+        selectedMunicipal!,
+        ratingRangeValues!
       ];
 }

@@ -17,9 +17,9 @@ part 'search_event.dart';
 part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  final PlaceRepository placeRepository;
+  late final PlaceRepository placeRepository;
   final TagRepository tagRepository;
-  final FilterManagerBloc filterManagerBloc;
+  late final FilterManagerBloc filterManagerBloc;
   final WishPlaceCubit wishPlaceCubit;
   final _places$ = BehaviorSubject<List<Place>>();
   Stream<List<Place>> get places => _places$;
@@ -27,13 +27,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   bool isFetching = false;
   int _page = 1;
   int get page => _page;
-  StreamSubscription _wishPlaceSubscription;
+  late StreamSubscription _wishPlaceSubscription;
 
   SearchBloc({
-    @required this.placeRepository,
-    @required this.filterManagerBloc,
-    @required this.tagRepository,
-    @required this.wishPlaceCubit,
+    required this.placeRepository,
+    required this.filterManagerBloc,
+    required this.tagRepository,
+    required this.wishPlaceCubit,
   }) : super(SearchInitial()) {
     _monitorWishPlaceCubit();
   }
@@ -54,10 +54,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       _page = 1;
       yield SearchProgress();
       _places.clear();
-      final QueryResponse _queryResponse = await placeRepository.search(
-          query: event.query,
+      final QueryResponse _queryResponse = await (placeRepository.search(
+          query: event.query ?? '',
           filter: filterManagerBloc.stateToFilter(),
-          tagId: event.tag?.id);
+          tagId: event.tag?.id) as FutureOr<QueryResponse>);
       _places.addAll(_queryResponse.results);
       _places$.add(_places);
       //if (places.length == 0) {
@@ -73,12 +73,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
     if (event is SearchPageRequested) {
       _page++;
-      final QueryResponse _queryResponse = await placeRepository.search(
-        query: event.state.query,
+      final QueryResponse _queryResponse = await (placeRepository.search(
+        query: event.state.query ?? '',
         page: _page,
         filter: (state as SearchSuccess).filter,
         tagId: (state as SearchSuccess).tag?.id,
-      );
+      ) as FutureOr<QueryResponse>);
 
       _places.addAll(_queryResponse.results);
 

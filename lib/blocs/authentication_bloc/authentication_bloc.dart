@@ -11,11 +11,11 @@ import 'bloc.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final UserRepository userRepository;
-  final FcmTokenRepository fcmTokenRepository;
+  final FcmTokenRepository? fcmTokenRepository;
 
   AuthenticationBloc({
-    @required this.userRepository,
-    @required this.fcmTokenRepository,
+    required this.userRepository,
+    required this.fcmTokenRepository,
   })  : assert(userRepository != null),
         super(AuthenticationUninitialized());
 
@@ -36,14 +36,14 @@ class AuthenticationBloc
 
     if (event is LoggedIn) {
       yield AuthenticationLoading();
-      await userRepository.persistToken(event.token);
+      await userRepository.persistToken(event.token!);
       yield AuthenticationAuthenticated();
     }
 
     if (event is LoggedOut) {
       yield AuthenticationLoading();
       try {
-        await fcmTokenRepository.deleteToken();
+        await fcmTokenRepository!.deleteToken();
         var _googleSignIn = GoogleSignIn();
         await _googleSignIn.signOut();
       } catch (e) {

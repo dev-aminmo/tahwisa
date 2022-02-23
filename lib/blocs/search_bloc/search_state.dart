@@ -9,25 +9,26 @@ class SearchProgress extends SearchState {}
 class SearchEmpty extends SearchState {}
 
 class SearchSuccess extends SearchState {
-  final String query;
+  final String? query;
   //int page;
-  final int numPages;
-  final int numResults;
-  final SearchFilter filter;
-  final Tag tag;
+  final int? numPages;
+  final int? numResults;
+  final SearchFilter? filter;
+  final Tag? tag;
 
   SearchSuccess({
-    @required this.query,
+    required this.query,
     //  @required this.page,
-    @required this.numPages,
-    @required this.numResults,
-    @required this.filter,
+    required this.numPages,
+    required this.numResults,
+    //required this.filter,
+    this.filter,
     this.tag,
   });
 
   /// Whether or not there are more pages to load based off
   /// the current `page` and server-provided `numPages`.
-  bool canLoadMore(int page) => page + 1 <= numPages;
+  bool canLoadMore(int page) => page + 1 <= numPages!;
   @override
   String toString() =>
       'SearchSuccess query:$query ,numPages: $numPages,numResults: $numResults ,filter:$filter, tag:$tag ';
@@ -36,7 +37,7 @@ class SearchSuccess extends SearchState {
 class SearchFailure extends SearchState {
   final String error;
 
-  SearchFailure({@required this.error});
+  SearchFailure({required this.error});
 
   @override
   String toString() => 'SearchFailure { error: $error }';

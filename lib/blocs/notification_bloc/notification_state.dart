@@ -12,18 +12,18 @@ class NotificationInitial extends NotificationState {}
 class NotificationLoading extends NotificationState {}
 
 class NotificationSuccess extends NotificationState {
-  final List<Notification> notifications;
+  final List<Notification>? notifications;
   NotificationSuccess({this.notifications});
 
   @override
-  List<Object> get props => [notifications];
+  List<Object> get props => [notifications!];
 }
 
 class NotificationFailure extends NotificationState {
   final String error;
 
   const NotificationFailure({
-    @required this.error,
+    required this.error,
   });
 
   @override

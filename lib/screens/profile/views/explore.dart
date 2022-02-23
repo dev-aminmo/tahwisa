@@ -15,9 +15,9 @@ class Explore extends StatefulWidget {
 class _ExploreState extends State<Explore>
     with AutomaticKeepAliveClientMixin<Explore> {
   bool _canLoadMore = true;
-  ExplorePlacesBloc _explorePlacesBloc;
+  late ExplorePlacesBloc _explorePlacesBloc;
   final ScrollController _scrollController = ScrollController();
-  PlaceRepository placeRepository;
+  PlaceRepository? placeRepository;
   Future<void> refreshPlacesList() async {
     _explorePlacesBloc.add(FetchFirstPageExplorePlaces());
   }
@@ -89,9 +89,9 @@ class _ExploreState extends State<Explore>
                         ..add(FetchExplorePlacesPageRequested(state));
                     }
                   }),
-                itemCount: snapshot.data.length + 1,
+                itemCount: snapshot.data!.length + 1,
                 itemBuilder: (ctx, index) {
-                  if (index == snapshot.data.length) {
+                  if (index == snapshot.data!.length) {
                     return (_canLoadMore)
                         ? Container(
                             padding: const EdgeInsets.all(25),
@@ -102,7 +102,7 @@ class _ExploreState extends State<Explore>
                   return PlaceCard(
                     width: width,
                     callback: () {},
-                    place: snapshot.data[index],
+                    place: snapshot.data![index],
                     heroAnimationTag: 'explore',
                   );
                 },

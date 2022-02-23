@@ -5,8 +5,8 @@ import '../rating_bar_stars_read_only.dart';
 
 class RatingBarReadOnlyRow extends StatelessWidget {
   const RatingBarReadOnlyRow({
-    Key key,
-    @required this.place,
+    Key? key,
+    required this.place,
   }) : super(key: key);
 
   final Place place;

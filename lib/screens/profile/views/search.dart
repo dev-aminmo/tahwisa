@@ -19,14 +19,14 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  PlaceRepository placeRepository;
-  SearchBloc _searchBloc;
-  double width;
-  double height;
-  TextEditingController _searchEditingController;
-  TopTagsCubit _topTagsCubit;
-  ScrollController innerScrollController;
-  FilterManagerBloc _filterManagerBloc;
+  late PlaceRepository placeRepository;
+  late SearchBloc _searchBloc;
+  double? width;
+  double? height;
+  TextEditingController? _searchEditingController;
+  TopTagsCubit? _topTagsCubit;
+  ScrollController? innerScrollController;
+  late FilterManagerBloc _filterManagerBloc;
 
   bool _canLoadMore = true;
   @override
@@ -46,7 +46,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void dispose() {
-    _searchEditingController.dispose();
+    _searchEditingController!.dispose();
     _searchBloc.close();
     _filterManagerBloc.close();
     innerScrollController = null;
@@ -94,7 +94,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     stream: _searchBloc.places,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        if (snapshot.data.length == 0) {
+                        if (snapshot.data!.length == 0) {
                           return Center(
                             child:
                                 Stack(alignment: Alignment.center, children: [
@@ -113,12 +113,12 @@ class _SearchScreenState extends State<SearchScreen> {
                           );
                         }
                         return ListView.builder(
-                            controller: innerScrollController
+                            controller: innerScrollController!
                               ..addListener(() {
                                 if ((innerScrollController.offset ==
                                             innerScrollController
                                                 .position.maxScrollExtent &&
-                                        !_searchBloc.isFetching) &&
+                                        _searchBloc.isFetching) &&
                                     _canLoadMore) {
                                   _searchBloc
                                     ..isFetching = true
@@ -126,11 +126,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                 }
                               }),
                             physics: BouncingScrollPhysics(),
-                            itemCount: snapshot.data.length + 1,
+                            itemCount: snapshot.data!.length + 1,
                             padding: const EdgeInsets.only(top: 8),
                             scrollDirection: Axis.vertical,
                             itemBuilder: (ctx, index) {
-                              if (index == snapshot.data.length) {
+                              if (index == snapshot.data!.length) {
                                 return (_canLoadMore)
                                     ? Container(
                                         padding: const EdgeInsets.all(25),
@@ -144,10 +144,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                   children: [
                                     Padding(
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: width * 0.025,
+                                          horizontal: width! * 0.025,
                                           vertical: 8),
                                       child: FittedBox(
-                                        child: Text("#${state.tag.name}",
+                                        child: Text("#${state.tag!.name}",
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w900,
@@ -156,7 +156,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                       ),
                                     ),
                                     PlaceCard(
-                                      place: snapshot.data[index],
+                                      place: snapshot.data![index],
                                       heroAnimationTag: 'search',
                                       callback: () {},
                                       width: width,
@@ -165,7 +165,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 );
                               }
                               return PlaceCard(
-                                place: snapshot.data[index],
+                                place: snapshot.data![index],
                                 heroAnimationTag: 'search',
                                 callback: () {},
                                 width: width,
@@ -191,7 +191,7 @@ class _SearchScreenState extends State<SearchScreen> {
   SliverToBoxAdapter buildSliverAppBar(BuildContext context) {
     return SliverToBoxAdapter(
       child: Container(
-        padding: EdgeInsets.only(top: height * 0.02, left: width * 0.02),
+        padding: EdgeInsets.only(top: height! * 0.02, left: width! * 0.02),
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: <BoxShadow>[
@@ -221,7 +221,7 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             Container(
               margin: EdgeInsets.symmetric(
-                  horizontal: width * 0.05, vertical: height * 0.025),
+                  horizontal: width! * 0.05, vertical: height! * 0.025),
               child: Row(
                 children: [
                   BlocBuilder<SearchBloc, SearchState>(
@@ -333,18 +333,19 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void _addSearchFirstPageEvent() {
-    _searchBloc.add(SearchFirstPageEvent(query: _searchEditingController.text));
+    _searchBloc
+        .add(SearchFirstPageEvent(query: _searchEditingController!.text));
   }
 }
 
 class TopTagsView extends StatelessWidget {
   const TopTagsView({
-    Key key,
-    @required TopTagsCubit topTagsCubit,
+    Key? key,
+    required TopTagsCubit? topTagsCubit,
   })  : _topTagsCubit = topTagsCubit,
         super(key: key);
 
-  final TopTagsCubit _topTagsCubit;
+  final TopTagsCubit? _topTagsCubit;
 
   @override
   Widget build(BuildContext context) {

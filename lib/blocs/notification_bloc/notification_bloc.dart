@@ -12,15 +12,15 @@ part 'notification_event.dart';
 part 'notification_state.dart';
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
-  List<Notification> _notifications;
-  final _notifications$ = BehaviorSubject<List<Notification>>();
-  Stream<List<Notification>> get notifications => _notifications$;
+  List<Notification>? _notifications;
+  final _notifications$ = BehaviorSubject<List<Notification>?>();
+  Stream<List<Notification>?> get notifications => _notifications$;
   final _unreadNotifications$ = BehaviorSubject<int>();
   Stream<int> get unreadNotifications => _unreadNotifications$;
   NotificationRepository notificationRepository;
   var test = "hello";
   NotificationBloc({
-    @required this.notificationRepository,
+    required this.notificationRepository,
   }) : super(NotificationInitial()) {
     add(FetchNotifications());
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -41,8 +41,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     });
     _notifications$.listen((notificationsList) {
       var count = 0;
-      for (var notification in notificationsList) {
-        if (!notification.read) count++;
+      for (var notification in notificationsList!) {
+        if (!notification.read!) count++;
       }
       _unreadNotifications$.add(count);
     });
@@ -56,7 +56,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       if (event.loading) yield NotificationLoading();
       try {
         _notifications = [];
-        _notifications = await notificationRepository.fetchNotifications();
+        _notifications = await (notificationRepository.fetchNotifications() as FutureOr<List<Notification>?>);
         _notifications$.add(_notifications);
         yield NotificationSuccess(notifications: _notifications);
       } catch (error) {
@@ -65,7 +65,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     }
     if (event is PushNotification) {
       try {
-        _notifications.insert(0, event.notification);
+        _notifications!.insert(0, event.notification);
         _notifications$.add(_notifications);
       } catch (error) {
         yield NotificationFailure(error: error.toString());
@@ -73,10 +73,10 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     }
     if (event is ReadNotification) {
       try {
-        int index = this._notifications.indexWhere(
+        int index = this._notifications!.indexWhere(
             (notification) => (notification.id == event.id) ? true : false);
         if (index != -1) {
-          _notifications.elementAt(index).read = true;
+          _notifications!.elementAt(index).read = true;
           _notifications$.add(_notifications);
         }
         notificationRepository.readNotification(id: event.id);
@@ -85,9 +85,9 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   }
 
   @override
-  Future<Function> close() {
+  Future<void> close() {
     _notifications$.close();
     _unreadNotifications$.close();
-    super.close();
+    return super.close();
   }
 }

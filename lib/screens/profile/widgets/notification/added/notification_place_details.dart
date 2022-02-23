@@ -24,7 +24,7 @@ class NotificationPlaceDetails extends StatelessWidget {
                 child: Column(children: [
                   Carousel(
                       place: state.place, heroAnimationTag: "notification"),
-                  buildPlaceDetails(state.place, context),
+                  buildPlaceDetails(state.place!, context),
                 ] //]),
                     ));
           } else {

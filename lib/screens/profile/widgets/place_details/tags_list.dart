@@ -5,8 +5,8 @@ import 'tag_chip.dart';
 
 class TagsList extends StatelessWidget {
   const TagsList({
-    Key key,
-    @required this.place,
+    Key? key,
+    required this.place,
   }) : super(key: key);
 
   final Place place;
@@ -16,7 +16,7 @@ class TagsList extends StatelessWidget {
     return Wrap(
       spacing: 6.0,
       runSpacing: 6.0,
-      children: place.tags.map((tag) => TagChip(tag.name)).toList(),
+      children: place.tags!.map((tag) => TagChip(tag.name)).toList(),
     );
   }
 }

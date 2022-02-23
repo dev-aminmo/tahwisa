@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 class FullScreenImage extends StatefulWidget {
   FullScreenImage({
-    @required this.child,
+    required this.child,
   });
 
   final Widget child;
@@ -15,13 +15,16 @@ class FullScreenImage extends StatefulWidget {
 class _FullScreenImageState extends State<FullScreenImage> {
   @override
   void initState() {
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     super.initState();
   }
 
   @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
+      SystemUiOverlay.top,
+      SystemUiOverlay.bottom,
+    ]);
     super.dispose();
   }
 
@@ -31,7 +34,6 @@ class _FullScreenImageState extends State<FullScreenImage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        backwardsCompatibility: false,
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.light,

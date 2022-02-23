@@ -7,7 +7,7 @@ import 'api/api_endpoints.dart';
 class NotificationRepository {
   Future<dynamic> fetchNotifications() async {
     var pref = await SharedPreferences.getInstance();
-    String token = pref.getString("token");
+    String token = pref.getString("token")!;
     var response = await Dio().get(Api.get_notifications,
         options: Options(
           headers: {"Authorization": "Bearer " + token},
@@ -26,7 +26,7 @@ class NotificationRepository {
 
   Future<dynamic> readNotification({var id}) async {
     var pref = await SharedPreferences.getInstance();
-    String token = pref.getString("token");
+    String token = pref.getString("token")!;
     var response = await Dio().put(Api.read_notification + "/$id",
         options: Options(
           headers: {"Authorization": "Bearer " + token},

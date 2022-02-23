@@ -11,7 +11,7 @@ import 'package:tahwisa/repositories/place_repository.dart';
 import 'bloc.dart';
 
 class ExplorePlacesBloc extends Bloc<ExplorePlacesEvent, ExplorePlacesState> {
-  final PlaceRepository placeRepository;
+  final PlaceRepository? placeRepository;
   final _places$ = BehaviorSubject<List<Place>>();
   Stream<List<Place>> get places => _places$;
   final _places = <Place>[];
@@ -20,17 +20,17 @@ class ExplorePlacesBloc extends Bloc<ExplorePlacesEvent, ExplorePlacesState> {
   int get page => _page;
   final WishPlaceCubit wishPlaceCubit;
 
-  StreamSubscription _wishPlaceSubscription;
+  late StreamSubscription _wishPlaceSubscription;
 
   @override
-  Future<Function> close() {
+  Future<Function?> close() {
     _wishPlaceSubscription.cancel();
     _places$.close();
-    return super.close();
+    return super.close().then((value) => value as Function?);
   }
 
   ExplorePlacesBloc(
-      {@required this.placeRepository, @required this.wishPlaceCubit})
+      {required this.placeRepository, required this.wishPlaceCubit})
       : super(ExplorePlacesInitial()) {
     add(FetchFirstPageExplorePlaces());
     _monitorWishPlaceCubit();
@@ -45,7 +45,7 @@ class ExplorePlacesBloc extends Bloc<ExplorePlacesEvent, ExplorePlacesState> {
         yield ExplorePlacesProgress();
         _places.clear();
         final QueryResponse _queryResponse =
-            await placeRepository.fetchPlaces(1);
+            await (placeRepository!.fetchPlaces(1) as FutureOr<QueryResponse>);
         _places.addAll(_queryResponse.results);
         _places$.add(_places);
         yield ExplorePlacesSuccess(
@@ -59,7 +59,7 @@ class ExplorePlacesBloc extends Bloc<ExplorePlacesEvent, ExplorePlacesState> {
     if (event is FetchExplorePlacesPageRequested) {
       _page++;
       final QueryResponse _queryResponse =
-          await placeRepository.fetchPlaces(_page);
+          await (placeRepository!.fetchPlaces(_page) as FutureOr<QueryResponse>);
       _places.addAll(_queryResponse.results);
       _places$.add(_places);
       yield ExplorePlacesSuccess(

@@ -7,10 +7,10 @@ import 'models/refuse_place_message.dart';
 
 class RefusePlaceMessageRepository {
   Future<dynamic> getRefusePlaceMessages({
-    @required var notificationId,
+    required var notificationId,
   }) async {
     var pref = await SharedPreferences.getInstance();
-    String token = pref.getString("token");
+    String token = pref.getString("token")!;
     var response = await Dio().get(Api.get_refuse_messages + "/$notificationId",
         options: Options(
           headers: {"Authorization": "Bearer " + token},
@@ -30,7 +30,7 @@ class RefusePlaceMessageRepository {
 
   Future<dynamic> getAdminRefusePlaceMessages() async {
     var pref = await SharedPreferences.getInstance();
-    String token = pref.getString("token");
+    String token = pref.getString("token")!;
     var response = await Dio().get(Api.get_admin_refuse_messages,
         options: Options(
           headers: {"Authorization": "Bearer " + token},

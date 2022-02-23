@@ -9,7 +9,7 @@ part 'top_tags_state.dart';
 class TopTagsCubit extends Cubit<TopTagsState> {
   final TagRepository repository;
 
-  TopTagsCubit({@required this.repository}) : super(TopTagsInitial()) {
+  TopTagsCubit({required this.repository}) : super(TopTagsInitial()) {
     getTopTags();
   }
 

@@ -4,8 +4,8 @@ import 'package:tahwisa/style/my_colors.dart';
 
 class LocationRow extends StatelessWidget {
   const LocationRow({
-    Key key,
-    @required this.place,
+    Key? key,
+    required this.place,
   }) : super(key: key);
 
   final Place place;

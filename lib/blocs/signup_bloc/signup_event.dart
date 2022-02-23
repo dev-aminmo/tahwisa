@@ -14,9 +14,9 @@ class SignupButtonPressed extends SignupEvent {
   final String password;
 
   const SignupButtonPressed({
-    @required this.username,
-    @required this.email,
-    @required this.password,
+    required this.username,
+    required this.email,
+    required this.password,
   });
 
   @override

@@ -10,6 +10,5 @@ class Page404 extends StatelessWidget {
         "assets/images/404page.svg",
       ),
     );
-    ;
   }
 }

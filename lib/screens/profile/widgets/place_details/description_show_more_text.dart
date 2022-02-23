@@ -4,8 +4,8 @@ import 'package:tahwisa/style/my_colors.dart';
 
 class DescriptionShowMoreText extends StatefulWidget {
   const DescriptionShowMoreText({
-    Key key,
-    @required this.text,
+    Key? key,
+    required this.text,
   }) : super(key: key);
 
   final text;

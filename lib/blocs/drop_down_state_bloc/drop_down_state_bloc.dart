@@ -10,21 +10,21 @@ import 'bloc.dart';
 
 class DropDownStateBloc extends Bloc<DropDownStateEvent, DropDownState> {
   final dropDownsRepository;
-  final DropDownsMunicipalBloc municipalBloc;
+  final DropDownsMunicipalBloc? municipalBloc;
 
-  final _selectedState$ = BehaviorSubject<MyState>();
-  Stream<MyState> get selectedState => _selectedState$;
-  MyState get currentState => _selectedState$.value;
+  final _selectedState$ = BehaviorSubject<MyState?>();
+  Stream<MyState?> get selectedState => _selectedState$;
+  MyState? get currentState => _selectedState$.value;
 
   @override
   Future<void> close() {
-    municipalBloc.close();
+    municipalBloc!.close();
     _selectedState$.close();
     return super.close();
   }
 
   DropDownStateBloc(
-      {@required this.dropDownsRepository, @required this.municipalBloc})
+      {required this.dropDownsRepository, required this.municipalBloc})
       : super(DropDownStateInitial());
   @override
   Stream<DropDownState> mapEventToState(
@@ -41,17 +41,17 @@ class DropDownStateBloc extends Bloc<DropDownStateEvent, DropDownState> {
     }
     if (event is StateChosen) {
       _selectedState$.add(event.state);
-      municipalBloc.add(FetchMuniciaples(state: event.state));
+      municipalBloc!.add(FetchMuniciaples(state: event.state));
     }
     if (event is LoadState) {
       _selectedState$.add(event.selectedState);
 
-      yield (event.dropDownsStatesSuccess);
+      yield event.dropDownsStatesSuccess!;
       /*   municipalBloc.add(FetchMuniciaples(state: event.state));*/
     }
     if (event is ClearState) {
       _selectedState$.add(null);
-      municipalBloc.add(ClearMunicipal());
+      municipalBloc!.add(ClearMunicipal());
     }
   }
 }

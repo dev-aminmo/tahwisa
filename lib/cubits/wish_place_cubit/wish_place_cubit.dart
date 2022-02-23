@@ -8,7 +8,7 @@ part 'wish_place_state.dart';
 class WishPlaceCubit extends Cubit<WishPlaceState> {
   final PlaceRepository placeRepository;
 
-  WishPlaceCubit({@required this.placeRepository}) : super(WishPlaceInitial());
+  WishPlaceCubit({required this.placeRepository}) : super(WishPlaceInitial());
   void addToWishList(var placeId) async {
     try {
       var response = await placeRepository.addToWishList(placeId: placeId);
@@ -18,7 +18,7 @@ class WishPlaceCubit extends Cubit<WishPlaceState> {
         emit(WishPlaceFailure(error: "An error occurred"));
       }
     } catch (error) {
-      emit(WishPlaceFailure(error: error));
+      emit(WishPlaceFailure(error: error.toString()));
     }
   }
 
@@ -31,7 +31,7 @@ class WishPlaceCubit extends Cubit<WishPlaceState> {
         emit(WishPlaceFailure(error: "An error occurred"));
       }
     } catch (error) {
-      emit(WishPlaceFailure(error: error));
+      emit(WishPlaceFailure(error: error.toString()));
     }
   }
 }

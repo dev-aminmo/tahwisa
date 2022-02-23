@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 
 class Municipal extends Equatable {
-  String name;
-  int id;
+  String? name;
+  int? id;
   //int state_id;
   Municipal({this.name, this.id //, this.state_id
       });
@@ -20,6 +20,6 @@ class Municipal extends Equatable {
 
   @override
   List<Object> get props => [
-        id //, state_id
+        id! //, state_id
       ];
 }

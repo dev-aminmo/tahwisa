@@ -12,14 +12,11 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
   final authenticationBloc;
 
   SignupBloc({
-    @required this.userRepository,
-    @required this.authenticationBloc,
+    required this.userRepository,
+    required this.authenticationBloc,
   })  : assert(userRepository != null),
         assert(authenticationBloc != null),
         super(SignupInitial());
-
-  @override
-  SignupState get initialState => SignupInitial();
 
   @override
   Stream<SignupState> mapEventToState(
@@ -43,7 +40,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       yield SignupLoading();
       try {
         var _googleSignIn = GoogleSignIn();
-        var user = await _googleSignIn.signIn();
+        var user = await (_googleSignIn.signIn() as FutureOr<GoogleSignInAccount>);
         var authenticated_user = await user.authentication;
         if (authenticated_user == null) {
           throw ("cannot log in with this account");

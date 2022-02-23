@@ -14,18 +14,18 @@ class DropDownMunicipalInitial extends DropDownMunicipalState {}
 class DropDownsMunicipalLoading extends DropDownMunicipalState {}
 
 class DropDownsMunicipalSuccess extends DropDownMunicipalState {
-  final List<Municipal> municipales;
+  final List<Municipal>? municipales;
   DropDownsMunicipalSuccess({this.municipales});
 
   @override
-  List<Object> get props => [municipales];
+  List<Object> get props => [municipales!];
 }
 
 class DropDownMunicipalFailure extends DropDownMunicipalState {
   final String error;
 
   const DropDownMunicipalFailure({
-    @required this.error,
+    required this.error,
   });
 
   @override

@@ -1,12 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-//import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 class AuthButton extends StatefulWidget {
-  final String title;
-  final Function onTap;
+  final String? title;
+  final Function? onTap;
   final bool withBackgroundColor;
   final bool isGoogle;
   final bool isLoading;
@@ -40,7 +38,7 @@ class _AuthButtonState extends State<AuthButton> {
                 MediaQuery.of(context).size.width * 0.1,
               ),
             ),
-            onPressed: widget.onTap,
+            onPressed: widget.onTap as void Function()?,
             child: widget.isGoogle
                 ? Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -53,7 +51,7 @@ class _AuthButtonState extends State<AuthButton> {
                       Flexible(
                         child: FittedBox(
                           child: Text(
-                            widget.title,
+                            widget.title!,
                             maxLines: 1,
                             style: TextStyle(
                                 color: (widget.withBackgroundColor)
@@ -71,7 +69,7 @@ class _AuthButtonState extends State<AuthButton> {
                   )
                 : (!widget.isLoading)
                     ? Text(
-                        widget.title,
+                        widget.title!,
                         style: TextStyle(
                             color: (widget.withBackgroundColor)
                                 ? MyColors.white

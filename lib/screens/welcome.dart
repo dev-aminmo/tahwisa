@@ -11,8 +11,8 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  VideoPlayerController _controller;
-  UserRepository userRepository;
+  late VideoPlayerController _controller;
+  UserRepository? userRepository;
 
   var repo;
   @override
@@ -43,8 +43,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ? FittedBox(
                     fit: BoxFit.cover,
                     child: SizedBox(
-                        width: _controller.value.size?.width ?? 0,
-                        height: _controller.value.size?.height ?? 0,
+                        width: _controller.value.size.width,
+                        height: _controller.value.size.height,
                         child: VideoPlayer(_controller)))
                 : Image.asset('assets/images/video_place_holder.jpg',
                     fit: BoxFit.cover, width: width, height: height),

@@ -7,10 +7,10 @@ class AuthInput extends StatelessWidget {
   final bool obscured;
   final controller;
   final validator;
-  final Function onEditingComplete;
+  final Function? onEditingComplete;
 
   AuthInput(
-      {@required this.hint,
+      {required this.hint,
       this.suffix,
       this.obscured = false,
       this.controller,
@@ -27,7 +27,7 @@ class AuthInput extends StatelessWidget {
           keyboardType: (hint == "email") ? TextInputType.emailAddress : null,
           obscureText: obscured,
           // autofillHints: [AutofillHints.email],
-          onEditingComplete: onEditingComplete,
+          onEditingComplete: onEditingComplete as void Function()?,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.only(
                 left: 16,

@@ -18,7 +18,7 @@ class SignupLoading extends SignupState {}
 class SignupFailure extends SignupState {
   final String error;
 
-  const SignupFailure({@required this.error});
+  const SignupFailure({required this.error});
 
   @override
   List<Object> get props => [error];

@@ -21,7 +21,7 @@ class _AddPlaceNavigatorState extends State<AddPlaceNavigator> {
             builder: ((context, state) {
           return WillPopScope(
             //this will override the back button behavior so when the button is clicked onPopPage will be called
-            onWillPop: () async => !await _navigatorKey.currentState.maybePop(),
+            onWillPop: () async => !await _navigatorKey.currentState!.maybePop(),
 
             child: Navigator(
               key: _navigatorKey,

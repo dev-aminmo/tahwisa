@@ -7,8 +7,8 @@ import 'tag_card.dart';
 
 class TopTagsGridView extends StatelessWidget {
   const TopTagsGridView({
-    Key key,
-    @required this.tags,
+    Key? key,
+    required this.tags,
   }) : super(key: key);
 
   final List<Tag> tags;

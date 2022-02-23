@@ -1,16 +1,18 @@
-import 'package:flutter_native_config/flutter_native_config.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_maps_webservice/staticmap.dart';
 import 'package:uuid/uuid.dart';
 
+
 class MapsRepository {
-  GoogleMapsPlaces _places;
+  GoogleMapsPlaces? _places;
   var uuid = Uuid();
   var key;
   var _sessionToken;
   _init() async {
-    this.key = await FlutterNativeConfig.getConfig<String>(
-        android: 'com.google.android.geo.API_KEY', ios: '');
+    //TODO get key from config file
+ /*  this.key = await FlutterNativeConfig.getConfig<String>(
+        android: 'com.google.android.geo.API_KEY', ios: '');*/
+    this.key = "-1";
     this._sessionToken = uuid.v4();
     return _places = GoogleMapsPlaces(apiKey: key);
   }
@@ -20,7 +22,7 @@ class MapsRepository {
       if (_places == null) {
         this._places = await _init();
       }
-      PlacesAutocompleteResponse response = await _places.autocomplete(pattern,
+      PlacesAutocompleteResponse response = await _places!.autocomplete(pattern,
           sessionToken: _sessionToken,
           language: 'fr',
           region: 'DZ',
@@ -38,11 +40,11 @@ class MapsRepository {
       if (_places == null) {
         this._places = await _init();
       }
-      var details = await _places.getDetailsByPlaceId(
+      var details = await _places!.getDetailsByPlaceId(
         placeId,
         sessionToken: _sessionToken,
       );
-      return details?.result?.geometry?.location;
+      return details.result.geometry?.location;
     } catch (e) {
       return null;
     }

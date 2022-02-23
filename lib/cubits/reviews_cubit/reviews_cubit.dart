@@ -8,7 +8,7 @@ import 'package:tahwisa/repositories/review_repository.dart';
 part 'reviews_state.dart';
 
 class ReviewsCubit extends Cubit<ReviewsState> {
-  final ReviewRepository repository;
+  final ReviewRepository? repository;
   final placeID;
 
   final _reviews$ = BehaviorSubject<List<Review>>();
@@ -22,14 +22,14 @@ class ReviewsCubit extends Cubit<ReviewsState> {
   int _page = 1;
 
   @override
-  Future<Function> close() {
+  Future<void> close() {
     _canLoadMore$.close();
     _isFetching$.close();
     _reviews$.close();
-    super.close();
+    return super.close();
   }
 
-  ReviewsCubit({@required this.repository, @required this.placeID})
+  ReviewsCubit({required this.repository, required this.placeID})
       : super(ReviewsLoading()) {
     _canLoadMore$.add(true);
     _isFetching$.add(false);
@@ -40,11 +40,12 @@ class ReviewsCubit extends Cubit<ReviewsState> {
     try {
       _isFetching$.add(true);
       ReviewsResponse response =
-          await repository.fetchReviews(placeId: placeID, page: _page);
+          await (repository!.fetchReviews(placeId: placeID, page: _page)
+              as Future<ReviewsResponse>);
 
       _reviews.addAll(response.reviews);
       _reviews$.add(_reviews);
-      if (response.numPages <= _page) {
+      if (response.numPages! <= _page) {
         _canLoadMore$.add(false);
       } else {
         _canLoadMore$.add(true);

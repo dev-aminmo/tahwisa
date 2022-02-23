@@ -5,19 +5,19 @@ class Notification {
   var title;
   var body;
   var description;
-  bool read = false;
+  bool? read = false;
   var type;
   var placeId;
   var createdAt;
   var updatedAt;
 
   Notification(
-      {@required this.id,
+      {required this.id,
       this.title,
       this.body,
       this.description,
       this.read = false,
-      @required this.type,
+      required this.type,
       this.placeId,
       this.createdAt,
       this.updatedAt});

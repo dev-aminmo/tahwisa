@@ -5,14 +5,14 @@ import 'package:tahwisa/screens/profile/widgets/hide_keyboard_ontap.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 class TitleDescriptionPage extends StatefulWidget {
-  final TextEditingController titleEditingController;
-  final TextEditingController descriptionEditingController;
+  final TextEditingController? titleEditingController;
+  final TextEditingController? descriptionEditingController;
   final formKey;
 
   TitleDescriptionPage({
-    @required this.titleEditingController,
-    @required this.descriptionEditingController,
-    @required this.formKey,
+    required this.titleEditingController,
+    required this.descriptionEditingController,
+    required this.formKey,
   });
 
   @override
@@ -44,7 +44,7 @@ class _TitleDescriptionPageState extends State<TitleDescriptionPage>
                     }
                   },
                   validator: qValidator([
-                    IsRequired(msg: 'title is required'),
+                    IsRequired('title is required'),
                     MaxLength(191),
                     MinLength(5),
                   ]),

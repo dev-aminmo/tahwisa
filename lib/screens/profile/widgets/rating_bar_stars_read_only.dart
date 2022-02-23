@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:rating_bar/rating_bar.dart';
-import 'package:tahwisa/style/my_colors.dart';
 
 class RatingBarStarsReadOnly extends StatelessWidget {
   const RatingBarStarsReadOnly(
-      {Key key, @required this.reviewsAverage, this.iconSize = 24.0})
+      {Key? key, required this.reviewsAverage, this.iconSize = 24.0})
       : super(key: key);
 
   final reviewsAverage;
@@ -12,7 +10,7 @@ class RatingBarStarsReadOnly extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RatingBar.readOnly(
+    /*   return RatingBar.readOnly(
       size: iconSize,
       filledIcon: Icons.star,
       emptyIcon: Icons.star_border,
@@ -23,6 +21,7 @@ class RatingBarStarsReadOnly extends StatelessWidget {
       initialRating: reviewsAverage + 0.0,
       maxRating: 5,
       isHalfAllowed: true,
-    );
+    );*/
+    return Container();
   }
 }

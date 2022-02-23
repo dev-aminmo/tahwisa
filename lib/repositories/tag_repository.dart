@@ -13,7 +13,7 @@ class TagRepository {
       return this.tags;
     }
     var pref = await SharedPreferences.getInstance();
-    String token = pref.getString("token");
+    String token = pref.getString("token")!;
     var response = await Dio().get(Api.tags + "?query=$query",
         options: Options(
           headers: {"Authorization": "Bearer " + token},
@@ -35,7 +35,7 @@ class TagRepository {
 
   Future<List<Tag>> getTopTags() async {
     var pref = await SharedPreferences.getInstance();
-    String token = pref.getString("token");
+    String token = pref.getString("token")!;
     var response = await Dio().get(Api.tags + "/top",
         options: Options(
           headers: {"Authorization": "Bearer " + token},

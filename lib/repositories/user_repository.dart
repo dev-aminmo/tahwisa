@@ -6,9 +6,9 @@ import 'package:tahwisa/repositories/models/user.dart';
 import 'api/api_endpoints.dart';
 
 class UserRepository {
-  Future<String> authenticate({
-    @required String email,
-    @required String password,
+  Future<String?> authenticate({
+    required String email,
+    required String password,
   }) async {
     try {
       var response = await Dio().post(
@@ -22,10 +22,10 @@ class UserRepository {
     }
   }
 
-  Future<String> register({
-    @required String email,
-    @required String username,
-    @required String password,
+  Future<String?> register({
+    required String email,
+    required String username,
+    required String password,
   }) async {
     try {
       var response = await Dio().post(
@@ -42,8 +42,8 @@ class UserRepository {
     }
   }
 
-  Future<String> social({
-    @required String accessToken,
+  Future<String?> social({
+    required String accessToken,
   }) async {
     try {
       var response = await Dio().post(
@@ -61,7 +61,7 @@ class UserRepository {
   }
 
   Future<bool> resetPassword({
-    @required String email,
+    required String email,
   }) async {
     try {
       var response = await Dio().post(
@@ -95,7 +95,7 @@ class UserRepository {
   Future<dynamic> user() async {
     try {
       var pref = await SharedPreferences.getInstance();
-      String token = pref.getString("token");
+      String token = pref.getString("token")!;
       var response = await Dio().get(Api.user,
           options: Options(
             headers: {"Authorization": "Bearer " + token},
@@ -109,6 +109,5 @@ class UserRepository {
     } catch (e) {
       throw (e);
     }
-    return null;
   }
 }

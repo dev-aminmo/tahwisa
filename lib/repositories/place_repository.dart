@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tahwisa/repositories/models/query_response.dart';
+import 'package:tahwisa/utilities/dio_http_client.dart';
 
 import 'api/api_endpoints.dart';
 import 'models/SearchFilter.dart';
@@ -13,15 +13,15 @@ import 'models/tag.dart';
 class PlaceRepository {
   Future<dynamic> fetchPlaces(int page) async {
     try {
-      var pref = await SharedPreferences.getInstance();
-      String token = pref.getString("token");
-      var response = await Dio().get(Api.all_places + "?page=$page",
-          options: Options(
-            headers: {"Authorization": "Bearer " + token},
-            validateStatus: (status) => true,
-          ) // options.headers["Authorization"] = "Bearer " + token;
-          );
-      var data = response.data;
+      var response =
+          await DioHttpClient.dio?.get(Api.all_places + "?page=$page",
+              options: Options(
+                //  headers: {"Authorization": "Bearer " + token},
+                headers: {"Accept": "application/json"},
+                validateStatus: (status) => true,
+              ) // options.headers["Authorization"] = "Bearer " + token;
+              );
+      var data = response?.data;
       List<Place> places = [];
       for (var jsonPlace in data['data']['data']) {
         var place = Place.fromJson(jsonPlace);
@@ -40,7 +40,7 @@ class PlaceRepository {
   Future<dynamic> fetchPlace(var placeID) async {
     try {
       var pref = await SharedPreferences.getInstance();
-      String token = pref.getString("token");
+      String token = pref.getString("token") ?? '-1';
       var response = await Dio().get(Api.place_index + "/$placeID",
           options: Options(
             headers: {"Authorization": "Bearer " + token},
@@ -48,7 +48,7 @@ class PlaceRepository {
           ) // options.headers["Authorization"] = "Bearer " + token;
           );
       var data = response.data;
-      Place place;
+      Place? place;
       for (var jsonPlace in data['data']) {
         place = Place.fromJson(jsonPlace);
       }
@@ -59,14 +59,14 @@ class PlaceRepository {
   }
 
   Future<dynamic> search(
-      {@required String query,
+      {required String query,
       int page = 1,
-      @required SearchFilter filter,
+      SearchFilter? filter,
       tagId = ''}) async {
     try {
       var pref = await SharedPreferences.getInstance();
       print("?query=$query&page=$page&${filter.toString()}&tag=${tagId ?? ''}");
-      String token = pref.getString("token");
+      String token = pref.getString("token") ?? '-1';
       var response = await Dio().get(
           Api.search_places +
               "?query=$query&page=$page&${filter.toString()}&tag=${tagId ?? ''}",
@@ -101,7 +101,7 @@ class PlaceRepository {
   Future<dynamic> autocomplete(String pattern) async {
     try {
       var pref = await SharedPreferences.getInstance();
-      String token = pref.getString("token");
+      String token = pref.getString("token") ?? '-1';
       var response = await Dio().get(Api.autocomplete + "?query=$pattern",
           options: Options(
             headers: {"Authorization": "Bearer " + token},
@@ -115,39 +115,33 @@ class PlaceRepository {
       for (var jsonPlace in data['data']) {
         var suggestion;
         if (jsonPlace["model"] == "place") {
-          print("its a place");
-
           suggestion = Place.fromJson(jsonPlace);
         } else if (jsonPlace["model"] == "tag") {
-          print("its a tag");
-
           suggestion = Tag.fromJson(jsonPlace);
         }
         suggestions.add(suggestion);
       }
-
       return suggestions;
     } catch (e) {
-      print(e);
       throw (e.toString());
     }
   }
 
   Future<dynamic> add({
-    String title,
-    String description,
-    List<File> pictures,
-    int municipalID,
-    double latitude,
-    double longitude,
-    List<Tag> tags,
+    String? title,
+    String? description,
+    required List<File> pictures,
+    int? municipalID,
+    double? latitude,
+    double? longitude,
+    required List<Tag> tags,
   }) async {
     try {
       var jsonTags = tags.map((t) => t.toJson()).toList();
       print(jsonTags);
       print("json");
       var pref = await SharedPreferences.getInstance();
-      String token = pref.getString("token");
+      String token = pref.getString("token")!;
       var formData = FormData.fromMap({
         'data': {
           "title": title,
@@ -155,7 +149,7 @@ class PlaceRepository {
           "latitude": latitude,
           "longitude": longitude,
           "municipal_id": municipalID,
-          "tags": jsonTags ?? "[]"
+          "tags": jsonTags.isEmpty ? "[]" : jsonTags
         },
         'file[]': await _picturesToMultipartFile(pictures)
       });
@@ -165,7 +159,7 @@ class PlaceRepository {
         "latitude": latitude,
         "longitude": longitude,
         "municipal_id": municipalID,
-        "tags": jsonTags ?? "[]"
+        "tags": jsonTags.isEmpty ? "[]" : jsonTags
       });
       var response = await Dio().post(Api.add_place, data: formData,
           onReceiveProgress: (int count, int total) {
@@ -195,15 +189,15 @@ class PlaceRepository {
   }
 
   Future<dynamic> update({
-    String title,
-    String description,
-    List<File> pictures,
-    int municipalID,
+    String? title,
+    String? description,
+    List<File>? pictures,
+    int? municipalID,
     var placeId,
   }) async {
     try {
       var pref = await SharedPreferences.getInstance();
-      String token = pref.getString("token");
+      String token = pref.getString("token")!;
       var formData = FormData.fromMap({
         'data': {
           "title": title,
@@ -246,7 +240,7 @@ class PlaceRepository {
   Future<dynamic> fetchWishListPlaces(var page) async {
     try {
       var pref = await SharedPreferences.getInstance();
-      String token = pref.getString("token");
+      String token = pref.getString("token")!;
       var response = await Dio().get(Api.wishes + "?page=$page",
           options: Options(
             headers: {"Authorization": "Bearer " + token},
@@ -268,10 +262,10 @@ class PlaceRepository {
     }
   }
 
-  Future<dynamic> addToWishList({@required var placeId}) async {
+  Future<dynamic> addToWishList({required placeId}) async {
     try {
       var pref = await SharedPreferences.getInstance();
-      String token = pref.getString("token");
+      String token = pref.getString("token") ?? '-1';
       var formData = FormData.fromMap({'place_id': placeId});
 
       var response = await Dio().post(Api.add_to_wishlist,
@@ -293,10 +287,10 @@ class PlaceRepository {
     }
   }
 
-  Future<dynamic> deleteFromWishList({@required var placeId}) async {
+  Future<dynamic> deleteFromWishList({required var placeId}) async {
     try {
       var pref = await SharedPreferences.getInstance();
-      String token = pref.getString("token");
+      String token = pref.getString("token")!;
       var response = await Dio().delete(Api.remove_from_wishlist + "/$placeId",
           options: Options(
             headers: {

@@ -16,9 +16,9 @@ class SignUPScreen extends StatefulWidget {
 }
 
 class _SignUPScreenState extends State<SignUPScreen> {
-  SignupBloc _signupBloc;
-  AuthenticationBloc _authenticationBloc;
-  UserRepository userRepository;
+  SignupBloc? _signupBloc;
+  late AuthenticationBloc _authenticationBloc;
+  late UserRepository userRepository;
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -40,23 +40,23 @@ class _SignUPScreenState extends State<SignUPScreen> {
 
   @override
   void dispose() {
-    _signupBloc.close();
+    _signupBloc!.close();
     super.dispose();
   }
 
   void _onWidgetDidBuild(Function callback) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       callback();
     });
   }
 
   _onSignupButtonPressed() {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       FocusScopeNode currentFocus = FocusScope.of(context);
       if (!currentFocus.hasPrimaryFocus) {
         currentFocus.unfocus();
       }
-      _signupBloc.add(SignupButtonPressed(
+      _signupBloc!.add(SignupButtonPressed(
         username: _usernameController.text,
         email: _emailController.text,
         password: _passwordController.text,
@@ -65,12 +65,11 @@ class _SignUPScreenState extends State<SignUPScreen> {
   }
 
   _onGoogleButtonPressed() {
-    _signupBloc.add(GoogleButtonPressed());
+    _signupBloc!.add(GoogleButtonPressed());
   }
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
     return HideKeyboardOnTap(
         child: Scaffold(
             resizeToAvoidBottomInset: false,
@@ -83,7 +82,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
               ) {
                 if (state is SignupFailure) {
                   _onWidgetDidBuild(() {
-                    Scaffold.of(context).showSnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('${state.error}'),
                         backgroundColor: Colors.red,
@@ -110,7 +109,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                 suffix: Icon(Icons.person_outline,
                                     color: MyColors.lightGreen),
                                 validator: qValidator([
-                                  IsRequired(msg: 'username is required'),
+                                  IsRequired('username is required'),
                                   MinLength(3),
                                 ]),
                               ),
@@ -123,7 +122,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                 suffix: Icon(Icons.mail_outlined,
                                     color: MyColors.lightGreen),
                                 validator: qValidator([
-                                  IsRequired(msg: 'emil is required'),
+                                  IsRequired('emil is required'),
                                   IsEmail(),
                                 ]),
                               ),
@@ -147,7 +146,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                 ),
                                 obscured: obscured,
                                 validator: qValidator([
-                                  IsRequired(msg: 'password is required'),
+                                  IsRequired('password is required'),
                                   MinLength(6),
                                 ]),
                                 onEditingComplete: state is! SignupLoading

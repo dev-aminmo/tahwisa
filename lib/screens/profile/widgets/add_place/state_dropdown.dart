@@ -5,15 +5,15 @@ import 'package:tahwisa/repositories/models/state.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 class StateDropdown extends StatelessWidget {
-  const StateDropdown({
-    Key key,
-    @required DropDownStateBloc dropDownStateBloc,
-    this.hint="State"
-  })  : _dropDownStateBloc = dropDownStateBloc,
+  const StateDropdown(
+      {Key? key,
+      required DropDownStateBloc? dropDownStateBloc,
+      this.hint = "State"})
+      : _dropDownStateBloc = dropDownStateBloc,
         super(key: key);
 
-  final DropDownStateBloc _dropDownStateBloc;
-  final String hint;
+  final DropDownStateBloc? _dropDownStateBloc;
+  final String? hint;
 
   @override
   Widget build(BuildContext context) {
@@ -21,16 +21,16 @@ class StateDropdown extends StatelessWidget {
       alignment: Alignment.topCenter,
       child: BlocBuilder(
           bloc: _dropDownStateBloc,
-          builder: (context, state) {
+          builder: (context, dynamic state) {
             if (state is DropDownsStatesSuccess)
-              return StreamBuilder<MyState>(
-                  stream: _dropDownStateBloc.selectedState,
+              return StreamBuilder<MyState?>(
+                  stream: _dropDownStateBloc!.selectedState,
                   builder: (context, item) {
                     return DropdownButton(
                       itemHeight: 72,
                       isExpanded: true,
                       hint: Text(
-                        hint,
+                        hint!,
                       ),
                       value: item.data,
                       icon: Icon(
@@ -43,14 +43,14 @@ class StateDropdown extends StatelessWidget {
                         height: 2,
                         color: MyColors.greenBorder,
                       ),
-                      onChanged: (state) =>
-                          _dropDownStateBloc.add(StateChosen(state: state)),
+                      onChanged: (dynamic state) =>
+                          _dropDownStateBloc!.add(StateChosen(state: state)),
                       items: state.states?.map<DropdownMenuItem<MyState>>((e) {
                         return DropdownMenuItem<MyState>(
                           value: e,
-                          child: Text(e.name),
+                          child: Text(e.name!),
                         );
-                      })?.toList(),
+                      }).toList(),
                     );
                   });
             else {

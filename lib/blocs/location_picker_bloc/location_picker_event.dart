@@ -16,8 +16,8 @@ class LocationChosen extends LocationPickerEvent {
   final double latitude;
   final double longitude;
   const LocationChosen({
-    @required this.latitude,
-    @required this.longitude,
+    required this.latitude,
+    required this.longitude,
   });
 
   @override

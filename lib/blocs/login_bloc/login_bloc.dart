@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:meta/meta.dart';
 
 import '../authentication_bloc/bloc.dart';
 import 'bloc.dart';
@@ -12,14 +11,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final authenticationBloc;
 
   LoginBloc({
-    @required this.userRepository,
-    @required this.authenticationBloc,
+    required this.userRepository,
+    required this.authenticationBloc,
   })  : assert(userRepository != null),
         assert(authenticationBloc != null),
         super(LoginInitial());
-
-  @override
-  LoginState get initialState => LoginInitial();
 
   @override
   Stream<LoginState> mapEventToState(
@@ -47,7 +43,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginLoading();
       try {
         var _googleSignIn = GoogleSignIn();
-        var user = await _googleSignIn.signIn();
+        var user =
+            await (_googleSignIn.signIn() as FutureOr<GoogleSignInAccount>);
         var authenticated_user = await user.authentication;
         if (authenticated_user == null) {
           throw ("cannot log in with this account");

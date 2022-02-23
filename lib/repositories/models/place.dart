@@ -15,13 +15,13 @@ class Place extends Equatable {
   var reviewsAverage;
   var reviewsCount;
   var wished;
-  List<Tag> tags;
-  User user;
-  List<String> pictures;
+  List<Tag>? tags;
+  User? user;
+  List<String?>? pictures;
 
   Place({
-    @required this.id,
-    @required this.title,
+    required this.id,
+    required this.title,
     this.description,
     this.latitude,
     this.longitude,
@@ -54,14 +54,14 @@ class Place extends Equatable {
     if (json['tags'] != null) {
       this.tags = [];
       json['tags'].forEach((tag) {
-        tags.add(Tag.fromJson(tag));
+        tags!.add(Tag.fromJson(tag));
       });
     }
     // this.pictures = json['pictures'];
     if (json['pictures'] != null) {
       pictures = [];
       json['pictures'].forEach((p) {
-        pictures.add(p['path']);
+        pictures!.add(p['path']);
       });
     }
   }
@@ -77,9 +77,9 @@ class Place extends Equatable {
         this.reviewsAverage,
         this.reviewsCount,
         this.wished,
-        this.pictures,
-        this.tags,
-        this.user,
+        this.pictures!,
+        this.tags!,
+        this.user!,
       ];
 
   @override

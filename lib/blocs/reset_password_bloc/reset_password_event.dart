@@ -9,7 +9,7 @@ abstract class ResetPasswordEvent extends Equatable {
 class ResetPasswordButtonPressed extends ResetPasswordEvent {
   final String email;
 
-  ResetPasswordButtonPressed({@required this.email});
+  ResetPasswordButtonPressed({required this.email});
 
   @override
   List<Object> get props => [email];

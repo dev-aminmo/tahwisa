@@ -1,12 +1,9 @@
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
-import 'bloc.dart';
 import 'package:equatable/equatable.dart';
-
+import 'package:meta/meta.dart';
 
 @immutable
-abstract class PlaceUploadState extends Equatable{
-const PlaceUploadState();
+abstract class PlaceUploadState extends Equatable {
+  const PlaceUploadState();
   @override
   List<Object> get props => [];
 }
@@ -20,7 +17,7 @@ class PlaceUploadSuccess extends PlaceUploadState {}
 class PlaceUploadFailure extends PlaceUploadState {
   final String error;
 
-  const PlaceUploadFailure({@required this.error});
+  const PlaceUploadFailure({required this.error});
 
   @override
   List<Object> get props => [error];

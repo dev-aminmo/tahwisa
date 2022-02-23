@@ -16,14 +16,14 @@ class FetchNotifications extends NotificationEvent {
 class PushNotification extends NotificationEvent {
   final Notification notification;
 
-  PushNotification({@required this.notification});
+  PushNotification({required this.notification});
   @override
   List<Object> get props => [notification];
 }
 
 class ReadNotification extends NotificationEvent {
   final id;
-  ReadNotification({@required this.id});
+  ReadNotification({required this.id});
   @override
   List<Object> get props => [id];
 }

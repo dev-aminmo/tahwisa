@@ -8,8 +8,8 @@ import 'add_review.dart';
 
 class UserReviewBlocBuilder extends StatefulWidget {
   const UserReviewBlocBuilder({
-    Key key,
-    @required UserReviewCubit userReviewCubit,
+    Key? key,
+    required UserReviewCubit userReviewCubit,
   })  : _userReviewCubit = userReviewCubit,
         super(key: key);
 
@@ -67,7 +67,7 @@ class _UserReviewBlocBuilderState extends State<UserReviewBlocBuilder> {
                               minRadius: 22,
                               backgroundColor: MyColors.gray,
                               backgroundImage: NetworkImage(
-                                state.review.user.profilePicture
+                                state.review.user!.profilePicture!
                                     .replaceFirstMapped(
                                         "image/upload/",
                                         (match) =>
@@ -81,7 +81,7 @@ class _UserReviewBlocBuilderState extends State<UserReviewBlocBuilder> {
                               children: [
                                 Flexible(
                                   child: Text(
-                                    state.review.user.name,
+                                    state.review.user!.name!,
                                     textAlign: TextAlign.left,
                                     softWrap: true,
                                     style: TextStyle(
@@ -119,7 +119,7 @@ class _UserReviewBlocBuilderState extends State<UserReviewBlocBuilder> {
                                 color: MyColors.white,
                                 icon: Icon(Icons.more_vert_outlined,
                                     color: MyColors.darkBlue),
-                                onSelected: (value) {
+                                onSelected: (dynamic value) {
                                   if (value == 1) {
                                     widget._userReviewCubit.deleteReview(
                                         reviewID: state.review.id);

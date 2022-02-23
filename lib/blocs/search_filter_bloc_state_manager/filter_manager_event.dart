@@ -8,22 +8,22 @@ abstract class FilterManagerEvent extends Equatable {
 }
 
 class SaveFilterState extends FilterManagerEvent {
-  final DropDownsMunicipalBloc dropDownsMunicipalBloc;
-  final DropDownStateBloc dropDownStateBloc;
-  final RangeValues ratingRangeValues;
+  final DropDownsMunicipalBloc? dropDownsMunicipalBloc;
+  final DropDownStateBloc? dropDownStateBloc;
+  final RangeValues? ratingRangeValues;
 
   SaveFilterState({
-    @required this.dropDownsMunicipalBloc,
-    @required this.dropDownStateBloc,
-    @required this.ratingRangeValues,
+    required this.dropDownsMunicipalBloc,
+    required this.dropDownStateBloc,
+    required this.ratingRangeValues,
   });
 
   @override
-  List<Object> get props => [
-        dropDownsMunicipalBloc,
-        dropDownStateBloc,
-        ratingRangeValues?.start,
-        ratingRangeValues?.end
+  get props => [
+        dropDownsMunicipalBloc!,
+        dropDownStateBloc!,
+      //  ratingRangeValues?.start,
+       // ratingRangeValues?.end
       ];
 
   @override

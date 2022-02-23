@@ -13,7 +13,7 @@ class ResetPasswordPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<ResetPasswordPage> {
-  UserRepository userRepository;
+  late UserRepository userRepository;
   var _resetPasswordBloc;
   final _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -37,7 +37,7 @@ class _LoginPageState extends State<ResetPasswordPage> {
       ) {
         if (state is ResetPasswordFailure) {
           _onWidgetDidBuild(() {
-            Scaffold.of(context).showSnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('${state.error}'),
                 backgroundColor: Colors.red,
@@ -47,7 +47,7 @@ class _LoginPageState extends State<ResetPasswordPage> {
         }
         if (state is ResetPasswordSuccess) {
           _onWidgetDidBuild(() {
-            Scaffold.of(context).showSnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('We have emailed your password reset link!'),
                 backgroundColor: Colors.green,
@@ -97,13 +97,13 @@ class _LoginPageState extends State<ResetPasswordPage> {
   }
 
   void _onWidgetDidBuild(Function callback) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       callback();
     });
   }
 
   _onLoginButtonPressed() {
-    if (_formKey.currentState.validate())
+    if (_formKey.currentState!.validate())
       _resetPasswordBloc.add(ResetPasswordButtonPressed(
         email: _emailController.text,
       ));

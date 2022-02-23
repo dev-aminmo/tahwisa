@@ -24,8 +24,8 @@ class NotificationPlaceAdded extends StatefulWidget {
   static const String routeName = '/notification/place_added';
 
   static Route route(
-      {@required NotificationBloc notificationBloc,
-      My.Notification notification}) {
+      {required NotificationBloc? notificationBloc,
+      My.Notification? notification}) {
     return MaterialPageRoute(
       builder: (_) => NotificationPlaceAdded(
         notificationBloc: notificationBloc,
@@ -35,8 +35,8 @@ class NotificationPlaceAdded extends StatefulWidget {
     );
   }
 
-  final NotificationBloc notificationBloc;
-  final My.Notification notification;
+  final NotificationBloc? notificationBloc;
+  final My.Notification? notification;
 
   const NotificationPlaceAdded({this.notificationBloc, this.notification});
   @override
@@ -44,11 +44,11 @@ class NotificationPlaceAdded extends StatefulWidget {
 }
 
 class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
-  PlaceDetailsCubit _placeDetailsCubit;
-  My.Notification notification;
-  PlaceAvailabilityCubit _placeAvailabilityCubit;
-  AdminCubit _adminCubit;
-  RefusePlaceMessagesCubit _refusePlaceMessagesCubit;
+  PlaceDetailsCubit? _placeDetailsCubit;
+  My.Notification? notification;
+  PlaceAvailabilityCubit? _placeAvailabilityCubit;
+  AdminCubit? _adminCubit;
+  RefusePlaceMessagesCubit? _refusePlaceMessagesCubit;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -57,9 +57,9 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
     notification = widget.notification;
     var _adminRepository = context.read<AdminRepository>();
     _placeAvailabilityCubit = PlaceAvailabilityCubit(_adminRepository)
-      ..checkIfPlaceIsAvailable(notification.placeId);
+      ..checkIfPlaceIsAvailable(notification!.placeId);
     _placeDetailsCubit = PlaceDetailsCubit(
-        placeID: notification.placeId,
+        placeID: notification!.placeId,
         placeRepository: context.read<PlaceRepository>());
     _adminCubit = AdminCubit(_adminRepository);
     _refusePlaceMessagesCubit =
@@ -68,10 +68,10 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
 
   @override
   void dispose() {
-    _placeDetailsCubit.close();
-    _placeAvailabilityCubit.close();
-    _adminCubit.close();
-    _refusePlaceMessagesCubit.close();
+    _placeDetailsCubit!.close();
+    _placeAvailabilityCubit!.close();
+    _adminCubit!.close();
+    _refusePlaceMessagesCubit!.close();
     super.dispose();
   }
 
@@ -126,9 +126,9 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
                           if (state is RefusePlaceMessagesSuccess) {
                             List<RefusePlaceMessage> _userChecked = [];
                             var _errorMessage = '';
-                            String _description;
+                            String? _description;
                             void _onSelected(
-                                bool selected, RefusePlaceMessage message) {
+                                bool? selected, RefusePlaceMessage message) {
                               if (selected == true) {
                                 setState(() {
                                   _userChecked.add(message);
@@ -208,8 +208,8 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
                                                   if (_userChecked.length > 0) {
                                                     _errorMessage = '';
                                                     Navigator.pop(context);
-                                                    _adminCubit.refusePlace(
-                                                        placeId: notification
+                                                    _adminCubit!.refusePlace(
+                                                        placeId: notification!
                                                             .placeId,
                                                         messages: _userChecked,
                                                         description:
@@ -295,7 +295,6 @@ class _NotificationPlaceAddedState extends State<NotificationPlaceAdded> {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      backwardsCompatibility: false,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light,

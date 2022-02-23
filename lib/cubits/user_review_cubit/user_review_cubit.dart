@@ -7,17 +7,18 @@ import 'package:tahwisa/repositories/review_repository.dart';
 part 'user_review_state.dart';
 
 class UserReviewCubit extends Cubit<UserReviewState> {
-  final ReviewRepository repository;
+  final ReviewRepository? repository;
   final placeID;
 
-  UserReviewCubit({@required this.repository, @required this.placeID})
+  UserReviewCubit({required this.repository, required this.placeID})
       : super(UserReviewLoading()) {
     fetchUserReview();
   }
   void fetchUserReview() async {
     emit(UserReviewLoading());
 
-    Review review = await repository.fetchUserReview(placeID);
+    Review? review =
+        await (repository!.fetchUserReview(placeID) as Future<Review?>);
     if (review != null) {
       emit(UserReviewLoaded(review));
     } else {
@@ -25,12 +26,12 @@ class UserReviewCubit extends Cubit<UserReviewState> {
     }
   }
 
-  Future<void> postReview({@required var rating, var comment}) async {
+  Future<void> postReview({required var rating, var comment}) async {
     emit(UserReviewPostLoading());
 
     try {
-      var response = await repository.postReview(
-          rating: rating, comment: comment, placeId: placeID);
+      var response = await repository!
+          .postReview(rating: rating, comment: comment, placeId: placeID);
       print("response");
       print((response) ? true : false);
       print(response);
@@ -45,10 +46,10 @@ class UserReviewCubit extends Cubit<UserReviewState> {
     }
   }
 
-  void deleteReview({@required var reviewID}) async {
+  void deleteReview({required var reviewID}) async {
     emit(UserReviewLoading());
     try {
-      var response = await repository.deleteUserReview(reviewID);
+      var response = await repository!.deleteUserReview(reviewID);
       if (response) {
         emit(UserReviewEmpty());
       } else {

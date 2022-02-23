@@ -14,17 +14,17 @@ class DropDownStateInitial extends DropDownState {}
 class DropDownsStateLoading extends DropDownState {}
 
 class DropDownsStatesSuccess extends DropDownState {
-  final List<MyState> states;
+  final List<MyState>? states;
   DropDownsStatesSuccess({this.states});
   @override
-  List<Object> get props => [states];
+  List<Object> get props => [states!];
 }
 
 class DropDownStateFailure extends DropDownState {
   final String error;
 
   const DropDownStateFailure({
-    @required this.error,
+    required this.error,
   });
 
   @override

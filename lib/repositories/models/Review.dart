@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 
 import 'user.dart';
 
@@ -8,12 +7,12 @@ class Review extends Equatable {
   var rating;
   var comment;
   var placeId;
-  User user;
+  User? user;
   var createdAt;
 
   Review({
-    @required this.id,
-    @required this.rating,
+    this.id,
+    this.rating,
     this.comment,
     this.placeId,
     this.user,
@@ -34,7 +33,7 @@ class Review extends Equatable {
         this.rating,
         this.comment,
         this.placeId,
-        this.user,
+      //  this.user,
         this.createdAt,
       ];
 

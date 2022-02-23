@@ -16,18 +16,14 @@ class ImagePickerInitial extends ImagePickerState {}
 class ImagesPicked extends ImagePickerState {
   final List<File> images;
   final List<Asset> assets;
-  ImagesPicked({@required this.images,
-  @required this.assets
-  }) {
-    print("${images.length}***************************");
-  }
+  ImagesPicked({required this.images, required this.assets});
   @override
   List<Object> get props => [images];
 }
 
 class AssetsPicked extends ImagePickerState {
   final List<File> images;
-  AssetsPicked({@required this.images});
+  AssetsPicked({required this.images});
   @override
   List<Object> get props => [images];
 }
@@ -36,7 +32,7 @@ class ImagePickerFailure extends ImagePickerState {
   final String error;
 
   const ImagePickerFailure({
-    @required this.error,
+    required this.error,
   });
 
   @override

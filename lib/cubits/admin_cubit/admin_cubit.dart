@@ -20,9 +20,9 @@ class AdminCubit extends Cubit<AdminState> {
   }
 
   refusePlace(
-      {@required var placeId,
-      @required List<RefusePlaceMessage> messages,
-      @required var description}) async {
+      {required var placeId,
+      required List<RefusePlaceMessage> messages,
+      required var description}) async {
     // try {
     emit(AdminLoading());
     var ids = [];

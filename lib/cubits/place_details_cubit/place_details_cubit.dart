@@ -11,7 +11,7 @@ class PlaceDetailsCubit extends Cubit<PlaceDetailsState> {
   final place;
   final PlaceRepository placeRepository;
 
-  PlaceDetailsCubit({this.place, this.placeID, @required this.placeRepository})
+  PlaceDetailsCubit({this.place, this.placeID, required this.placeRepository})
       : super(PlaceDetailsProgress()) {
     fetchPlaceDetails();
   }

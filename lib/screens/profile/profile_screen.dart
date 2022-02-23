@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,15 +24,15 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen>
     with WidgetsBindingObserver {
-  AuthenticationBloc authenticationBloc;
-  PlaceRepository placeRepository;
-  PageController _pageController;
-  int _currentIndex;
-  List<Widget> children;
-  UserRepository userRepository;
-  UserCubit _userCubit;
-  FcmCubit fcmCubit;
-  NotificationBloc notificationBloc;
+  late AuthenticationBloc authenticationBloc;
+  PlaceRepository? placeRepository;
+  PageController? _pageController;
+  late int _currentIndex;
+  late List<Widget> children;
+  UserRepository? userRepository;
+  UserCubit? _userCubit;
+  late FcmCubit fcmCubit;
+  NotificationBloc? notificationBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -62,13 +60,13 @@ class _ProfileScreenState extends State<ProfileScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   UserAccountsDrawerHeader(
-                    accountName: Text(state.user.name),
-                    accountEmail: Text(state.user.email),
+                    accountName: Text(state.user.name!),
+                    accountEmail: Text(state.user.email!),
                     decoration: BoxDecoration(color: MyColors.darkBlue),
                     currentAccountPicture: CircleAvatar(
                       radius: 152,
                       backgroundImage: NetworkImage(
-                        state.user.profilePicture.replaceFirstMapped(
+                        state.user.profilePicture!.replaceFirstMapped(
                             "image/upload/",
                             (match) => "image/upload/w_150,f_auto/"),
                       ),
@@ -115,7 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   Future<void> setupInteractedMessage() async {
-    RemoteMessage initialMessage =
+    RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
       _handleMessage(initialMessage);
@@ -133,7 +131,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       type: message.data['type'],
     );
     if (notification.type == 'place_added') {
-      notificationBloc.add(ReadNotification(id: notification.id));
+      notificationBloc!.add(ReadNotification(id: notification.id));
 
       Navigator.of(context).pushNamed(
         '/notification/place_added',
@@ -144,7 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       );
     }
     if (notification.type == 'place_refused') {
-      notificationBloc.add(ReadNotification(id: notification.id));
+      notificationBloc!.add(ReadNotification(id: notification.id));
 
       Navigator.of(context).pushNamed(
         '/notification/place_refused',
@@ -152,7 +150,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       );
     }
     if (notification.type == 'place_approved') {
-      notificationBloc.add(ReadNotification(id: notification.id));
+      notificationBloc!.add(ReadNotification(id: notification.id));
 
       Navigator.of(context).pushNamed(
         '/place_details',
@@ -166,7 +164,7 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
     super.initState();
     setupInteractedMessage();
     _currentIndex = 0;
@@ -180,7 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       Container(),
       WishList(),
       BlocProvider<NotificationBloc>.value(
-        value: notificationBloc,
+        value: notificationBloc!,
         child: Notifications(),
       )
     ];
@@ -194,10 +192,10 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    _userCubit.close();
+    WidgetsBinding.instance!.removeObserver(this);
+    _userCubit!.close();
     fcmCubit.close();
-    notificationBloc.close();
+    notificationBloc!.close();
     super.dispose();
   }
 
@@ -205,14 +203,14 @@ class _ProfileScreenState extends State<ProfileScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       print("hey resumed **********");
-      notificationBloc.add(FetchNotifications(loading: false));
+      notificationBloc!.add(FetchNotifications(loading: false));
     }
   }
 
   void _selectItem(int value) {
     setState(() {
       _currentIndex = value;
-      _pageController.jumpToPage(_currentIndex);
+      _pageController!.jumpToPage(_currentIndex);
     });
   }
 
@@ -262,7 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         ),
         BottomNavigationBarItem(
           icon: StreamBuilder<int>(
-              stream: notificationBloc.unreadNotifications,
+              stream: notificationBloc!.unreadNotifications,
               builder: (context, snapshot) {
                 return (snapshot.hasData && snapshot.data != 0)
                     ? Stack(

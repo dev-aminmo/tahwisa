@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rating_bar/rating_bar.dart';
-import 'package:tahwisa/cubits/user_review_cubit/user_review_cubit.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 class AddReview extends StatelessWidget {
   const AddReview({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -33,8 +30,8 @@ class AddReview extends StatelessWidget {
         ),
         const SizedBox(height: 22),
         Hero(
-          tag: "rate",
-          child: RatingBar(
+            tag: "rate",
+            child: /* RatingBar(
             onRatingChanged: (rating) {
               Navigator.pushNamed(
                 context,
@@ -55,8 +52,8 @@ class AddReview extends StatelessWidget {
             initialRating: 0.0,
             maxRating: 5,
             isHalfAllowed: true,
-          ),
-        ),
+          ),*/
+                Container()),
       ],
     );
   }

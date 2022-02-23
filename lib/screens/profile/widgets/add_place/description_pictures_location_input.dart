@@ -7,12 +7,12 @@ import 'package:tahwisa/style/my_colors.dart';
 
 class DescriptionPicturesLocationInput extends StatelessWidget {
   const DescriptionPicturesLocationInput({
-    Key key,
-    @required this.width,
-    @required TextEditingController descriptionEditingController,
-    @required this.height,
-    @required ImagePickerBloc imagePickerBloc,
-    @required LocationPickerBloc locationPickerBloc,
+    Key? key,
+    required this.width,
+    required TextEditingController descriptionEditingController,
+    required this.height,
+    required ImagePickerBloc imagePickerBloc,
+    required LocationPickerBloc locationPickerBloc,
   })  : _descriptionEditingController = descriptionEditingController,
         _imagePickerBloc = imagePickerBloc,
         _locationPickerBloc = locationPickerBloc,

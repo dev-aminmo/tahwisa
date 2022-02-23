@@ -9,14 +9,14 @@ import 'package:tahwisa/screens/profile/widgets/static_map_view.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 class LocationPage extends StatefulWidget {
-  final DropDownStateBloc dropDownStateBloc;
-  final DropDownsMunicipalBloc dropDownsMunicipalBloc;
-  final LocationPickerBloc locationPickerBloc;
+  final DropDownStateBloc? dropDownStateBloc;
+  final DropDownsMunicipalBloc? dropDownsMunicipalBloc;
+  final LocationPickerBloc? locationPickerBloc;
 
   const LocationPage(
-      {@required this.dropDownStateBloc,
-      @required this.dropDownsMunicipalBloc,
-      @required this.locationPickerBloc});
+      {required this.dropDownStateBloc,
+      required this.dropDownsMunicipalBloc,
+      required this.locationPickerBloc});
 
   @override
   _LocationPageState createState() => _LocationPageState();
@@ -50,7 +50,7 @@ class _LocationPageState extends State<LocationPage>
                   MaterialButton(
                     color: MyColors.lightGreen,
                     onPressed: () {
-                      widget.locationPickerBloc.add(PickLocation());
+                      widget.locationPickerBloc!.add(PickLocation());
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -65,7 +65,7 @@ class _LocationPageState extends State<LocationPage>
               );
             }
             return GestureDetector(
-              onTap: () => widget.locationPickerBloc.add(PickLocation()),
+              onTap: () => widget.locationPickerBloc!.add(PickLocation()),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -75,7 +75,7 @@ class _LocationPageState extends State<LocationPage>
                   MaterialButton(
                     color: MyColors.darkBlue,
                     onPressed: () {
-                      widget.locationPickerBloc.add(PickLocation());
+                      widget.locationPickerBloc!.add(PickLocation());
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(12),

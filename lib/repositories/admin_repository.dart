@@ -9,10 +9,10 @@ import 'api/api_endpoints.dart';
 
 class AdminRepository {
   Future<dynamic> checkIfPlaceIsAvailable({
-    @required var placeId,
+    required var placeId,
   }) async {
     var pref = await SharedPreferences.getInstance();
-    String token = pref.getString("token");
+    String token = pref.getString("token")!;
     var response =
         await Dio().get(Api.check_if_place_is_available + "/$placeId",
             options: Options(
@@ -26,10 +26,10 @@ class AdminRepository {
   }
 
   Future<dynamic> approvePlace({
-    @required var placeId,
+    required var placeId,
   }) async {
     var pref = await SharedPreferences.getInstance();
-    String token = pref.getString("token");
+    String token = pref.getString("token")!;
     var response = await Dio().post(Api.approve_place + "/$placeId",
         options: Options(
           headers: {"Authorization": "Bearer " + token},
@@ -42,9 +42,9 @@ class AdminRepository {
   }
 
   Future<dynamic> refusePlace(
-      {@required var placeId, @required var messages, var description}) async {
+      {required var placeId, required var messages, var description}) async {
     var pref = await SharedPreferences.getInstance();
-    String token = pref.getString("token");
+    String token = pref.getString("token")!;
     var formData = {"messages": messages, "description": description};
     var response = await Dio().post(
       Api.refuse_place + "/$placeId",

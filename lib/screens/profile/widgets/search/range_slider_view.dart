@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tahwisa/style/my_colors.dart';
 
 class RangeSliderView extends StatelessWidget {
-  const RangeSliderView({Key key, this.values, this.onChangeRangeValues})
+  const RangeSliderView({Key? key, this.values, this.onChangeRangeValues})
       : super(key: key);
 
-  final Function(RangeValues) onChangeRangeValues;
-  final RangeValues values;
+  final Function(RangeValues)? onChangeRangeValues;
+  final RangeValues? values;
 
 /*
   @override
@@ -26,18 +26,18 @@ class RangeSliderView extends StatelessWidget {
               Row(
                 children: <Widget>[
                   Expanded(
-                    flex: values.start.round(),
+                    flex: values!.start.round(),
                     child: const SizedBox(),
                   ),
                   Container(
                     width: 54,
                     child: Text(
-                      values.start.toStringAsFixed(1),
+                      values!.start.toStringAsFixed(1),
                       textAlign: TextAlign.center,
                     ),
                   ),
                   Expanded(
-                    flex: 5 - values.start.round(),
+                    flex: 5 - values!.start.round(),
                     child: const SizedBox(),
                   ),
                 ],
@@ -45,18 +45,18 @@ class RangeSliderView extends StatelessWidget {
               Row(
                 children: <Widget>[
                   Expanded(
-                    flex: values.end.round(),
+                    flex: values!.end.round(),
                     child: const SizedBox(),
                   ),
                   Container(
                     width: 54,
                     child: Text(
-                      values.end.toStringAsFixed(1),
+                      values!.end.toStringAsFixed(1),
                       textAlign: TextAlign.center,
                     ),
                   ),
                   Expanded(
-                    flex: 5 - values.end.round(),
+                    flex: 5 - values!.end.round(),
                     child: const SizedBox(),
                   ),
                 ],
@@ -71,7 +71,7 @@ class RangeSliderView extends StatelessWidget {
               //disabledActiveTrackColor: MyColors.gray,
             ),
             child: RangeSlider(
-                values: values,
+                values: values!,
                 min: 0.0,
                 max: 5.0,
                 activeColor: MyColors.lightGreen,
@@ -112,13 +112,13 @@ class CustomRangeThumbShape extends RangeSliderThumbShape {
   void paint(
     PaintingContext context,
     Offset center, {
-    @required Animation<double> activationAnimation,
-    @required Animation<double> enableAnimation,
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
     bool isDiscrete = false,
     bool isEnabled = false,
-    bool isOnTop,
-    bool isPressed,
-    @required SliderThemeData sliderTheme,
+    bool? isOnTop,
+    bool? isPressed,
+    required SliderThemeData sliderTheme,
     TextDirection textDirection = TextDirection.ltr,
     Thumb thumb = Thumb.start,
   }) {
@@ -129,7 +129,7 @@ class CustomRangeThumbShape extends RangeSliderThumbShape {
     );
 
     final double size = _thumbSize * sizeTween.evaluate(enableAnimation);
-    Path thumbPath;
+    late Path thumbPath;
     switch (textDirection) {
       case TextDirection.rtl:
         switch (thumb) {
@@ -167,7 +167,7 @@ class CustomRangeThumbShape extends RangeSliderThumbShape {
     cPaint..color = Colors.white;
     cPaint..strokeWidth = 14 / 2;
     canvas.drawCircle(Offset(center.dx, center.dy), 12, cPaint);
-    cPaint..color = colorTween.evaluate(enableAnimation);
+    cPaint..color = colorTween.evaluate(enableAnimation)!;
     canvas.drawCircle(Offset(center.dx, center.dy), 10, cPaint);
     canvas.drawPath(thumbPath, Paint()..color = Colors.white);
   }

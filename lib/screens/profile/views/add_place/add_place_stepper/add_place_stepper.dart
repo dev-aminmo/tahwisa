@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -16,7 +15,7 @@ import 'package:tahwisa/style/my_colors.dart';
 import './views/views.dart';
 
 class AddPlaceStepper extends StatefulWidget {
-  const AddPlaceStepper({Key key}) : super(key: key);
+  const AddPlaceStepper({Key? key}) : super(key: key);
   @override
   _AddPlaceStepperState createState() {
     return _AddPlaceStepperState();
@@ -26,19 +25,19 @@ class AddPlaceStepper extends StatefulWidget {
 class _AddPlaceStepperState extends State<AddPlaceStepper> {
   var _children;
   int _position = 0;
-  PageController _pageController;
+  PageController? _pageController;
 
-  PlaceUploadBloc _placeUploadBloc;
-  PlaceRepository _placeRepository;
-  TagRepository _tagRepository;
-  DropDownStateBloc _dropDownStateBloc;
-  DropDownsMunicipalBloc _dropDownsMunicipalBloc;
-  ImagePickerBloc _imagePickerBloc;
-  LocationPickerBloc _locationPickerBloc;
-  TextEditingController _titleEditingController;
-  TextEditingController _descriptionEditingController;
+  PlaceUploadBloc? _placeUploadBloc;
+  late PlaceRepository _placeRepository;
+  TagRepository? _tagRepository;
+  DropDownStateBloc? _dropDownStateBloc;
+  DropDownsMunicipalBloc? _dropDownsMunicipalBloc;
+  ImagePickerBloc? _imagePickerBloc;
+  LocationPickerBloc? _locationPickerBloc;
+  TextEditingController? _titleEditingController;
+  TextEditingController? _descriptionEditingController;
   final _formKey = GlobalKey<FormState>();
-  List<Tag> _selectedTags;
+  List<Tag>? _selectedTags;
 
   @override
   void initState() {
@@ -82,20 +81,20 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
 
   @override
   void dispose() {
-    _selectedTags.clear();
-    _titleEditingController.dispose();
-    _descriptionEditingController.dispose();
-    _placeUploadBloc.close();
-    _dropDownsMunicipalBloc.close();
-    _imagePickerBloc.close();
-    _dropDownStateBloc.close();
-    _locationPickerBloc.close();
-    _pageController.dispose();
+    _selectedTags!.clear();
+    _titleEditingController!.dispose();
+    _descriptionEditingController!.dispose();
+    _placeUploadBloc!.close();
+    _dropDownsMunicipalBloc!.close();
+    _imagePickerBloc!.close();
+    _dropDownStateBloc!.close();
+    _locationPickerBloc!.close();
+    _pageController!.dispose();
     super.dispose();
   }
 
   Future<bool> _onWillPop() async {
-    return (await showDialog(
+    return (await (showDialog(
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('Are you sure?'),
@@ -111,7 +110,7 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
               ),
             ],
           ),
-        )) ??
+        ))) ??
         false;
   }
 
@@ -295,22 +294,22 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
     FocusScope.of(context).requestFocus(FocusNode());
 
     void _goToNextPage() {
-      _pageController.animateToPage(++_position,
+      _pageController!.animateToPage(++_position,
           duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
     }
 
     switch (_position) {
       case 0:
-        if (_formKey.currentState.validate()) {
-          _formKey.currentState.save();
+        if (_formKey.currentState!.validate()) {
+          _formKey.currentState!.save();
           _goToNextPage();
         }
         break;
       case 1:
-        if (_dropDownsMunicipalBloc.currentMunicipal == null) {
+        if (_dropDownsMunicipalBloc!.currentMunicipal == null) {
           showErrorSnackBar("Select the state and municipal of the place");
         } else {
-          if (_locationPickerBloc.state is! LocationPicked) {
+          if (_locationPickerBloc!.state is! LocationPicked) {
             showErrorSnackBar("Pick Location of the place");
           } else {
             _goToNextPage();
@@ -318,17 +317,17 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
         }
         break;
       case 2:
-        if (_imagePickerBloc.state is! ImagesPicked) {
+        if (_imagePickerBloc!.state is! ImagesPicked) {
           showErrorSnackBar("Pick images of the place");
         } else {
-          _placeUploadBloc.add(UploadPlaceButtonPressed(
-              title: _titleEditingController.value.text,
-              description: _descriptionEditingController.value.text,
-              picture: (_imagePickerBloc.state as ImagesPicked).images,
-              latitude: (_locationPickerBloc.state as LocationPicked).latitude,
+          _placeUploadBloc!.add(UploadPlaceButtonPressed(
+              title: _titleEditingController!.value.text,
+              description: _descriptionEditingController!.value.text,
+              picture: (_imagePickerBloc!.state as ImagesPicked).images,
+              latitude: (_locationPickerBloc!.state as LocationPicked).latitude,
               longitude:
-                  (_locationPickerBloc.state as LocationPicked).longitude,
-              municipalID: _dropDownsMunicipalBloc.currentMunicipal.id,
+                  (_locationPickerBloc!.state as LocationPicked).longitude,
+              municipalID: _dropDownsMunicipalBloc!.currentMunicipal!.id,
               tags: _selectedTags));
         }
         break;
@@ -339,7 +338,7 @@ class _AddPlaceStepperState extends State<AddPlaceStepper> {
 
   void _precedentPage() {
     if (_canGoBack()) {
-      _pageController.animateToPage(--_position,
+      _pageController!.animateToPage(--_position,
           duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
     }
   }

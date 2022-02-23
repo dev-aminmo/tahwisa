@@ -14,13 +14,13 @@ abstract class DropDownStateEvent extends Equatable {
 class FetchStates extends DropDownStateEvent {}
 
 class StateChosen extends DropDownStateEvent {
-  final MyState state;
+  final MyState? state;
   const StateChosen({
-    @required this.state,
+    required this.state,
   });
 
   @override
-  List<Object> get props => [state];
+  List<Object> get props => [state!];
 
   @override
   String toString() => 'StateChosen { state: $state }';
@@ -29,15 +29,15 @@ class StateChosen extends DropDownStateEvent {
 class ClearState extends DropDownStateEvent {}
 
 class LoadState extends DropDownStateEvent {
-  final MyState selectedState;
-  final DropDownsStatesSuccess dropDownsStatesSuccess;
+  final MyState? selectedState;
+  final DropDownsStatesSuccess? dropDownsStatesSuccess;
   const LoadState({
-    @required this.dropDownsStatesSuccess,
-    @required this.selectedState,
+    required this.dropDownsStatesSuccess,
+    required this.selectedState,
   });
 
   @override
-  List<Object> get props => [selectedState, dropDownsStatesSuccess];
+  List<Object> get props => [selectedState!, dropDownsStatesSuccess!];
 
   @override
   String toString() => 'StateLoaded { state: $selectedState }';

@@ -10,7 +10,7 @@ class PlaceUploadBloc extends Bloc<PlaceUploadEvent, PlaceUploadState> {
   final PlaceRepository placeRepository;
 
   PlaceUploadBloc({
-    @required this.placeRepository,
+    required this.placeRepository,
   })  : assert(placeRepository != null),
         super(PlaceUploadInitial());
 
@@ -28,7 +28,7 @@ class PlaceUploadBloc extends Bloc<PlaceUploadEvent, PlaceUploadState> {
             municipalID: event.municipalID,
             latitude: event.latitude,
             longitude: event.longitude,
-            tags: event.tags);
+            tags: event.tags!);
         if (response) {
           yield (PlaceUploadSuccess());
         } else {

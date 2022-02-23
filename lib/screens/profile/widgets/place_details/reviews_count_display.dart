@@ -6,7 +6,7 @@ import 'rating_bar_read_only.dart';
 class ReviewsCountDisplay extends StatelessWidget {
   final place;
 
-  ReviewsCountDisplay({@required this.place});
+  ReviewsCountDisplay({required this.place});
 
   @override
   Widget build(BuildContext context) {

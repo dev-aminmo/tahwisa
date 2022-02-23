@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tahwisa/style/my_colors.dart';
-import 'package:rating_bar/rating_bar.dart';
 
 class WishCard extends StatelessWidget {
   const WishCard({
-    Key key,
-    @required this.height,
-    @required this.width,
-    @required this.index,
+    Key? key,
+    required this.height,
+    required this.width,
+    required this.index,
   }) : super(key: key);
 
   final double height;
@@ -171,7 +170,7 @@ class WishCard extends StatelessWidget {
   }
 
   Widget buildRating(double x) {
-    return RatingBar.readOnly(
+    return /*RatingBar.readOnly(
       filledIcon: Icons.star,
       emptyIcon: Icons.star_border,
       halfFilledIcon: Icons.star_half,
@@ -180,6 +179,7 @@ class WishCard extends StatelessWidget {
       halfFilledColor: MyColors.white,
       initialRating: x,
       isHalfAllowed: true,
-    );
+    );*/
+        Container();
   }
 }

@@ -3,10 +3,10 @@ import 'package:tahwisa/style/my_colors.dart';
 
 class TitleTextField extends StatelessWidget {
   const TitleTextField(
-      {Key key,
-      @required TextEditingController titleEditingController,
+      {Key? key,
+      required TextEditingController? titleEditingController,
       String hint = "enter title of the place",
-      Function onEditingComplete,
+      Function? onEditingComplete,
       var validator})
       : _titleEditingController = titleEditingController,
         hint = hint,
@@ -14,9 +14,9 @@ class TitleTextField extends StatelessWidget {
         validator = validator,
         super(key: key);
 
-  final TextEditingController _titleEditingController;
+  final TextEditingController? _titleEditingController;
   final String hint;
-  final Function onEditingComplete;
+  final Function? onEditingComplete;
   final validator;
 
   @override
@@ -24,7 +24,7 @@ class TitleTextField extends StatelessWidget {
     return TextFormField(
       controller: _titleEditingController,
       textInputAction: TextInputAction.done,
-      onEditingComplete: onEditingComplete,
+      onEditingComplete: onEditingComplete as void Function()?,
       maxLines: 2,
       keyboardType: TextInputType.text,
       validator: validator,

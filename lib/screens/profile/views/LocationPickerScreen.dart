@@ -14,10 +14,10 @@ class LocationPickerScreen extends StatefulWidget {
 }
 
 class LocationPickerScreenState extends State<LocationPickerScreen> {
-  LocationPickerBloc _locationPickerBloc;
+  late LocationPickerBloc _locationPickerBloc;
   Completer<GoogleMapController> _controller = Completer();
-  Marker _marker;
-  MapsRepository _mapsRepository;
+  Marker? _marker;
+  late MapsRepository _mapsRepository;
   bool _textFieldHasFocus = false;
   static final CameraPosition _initialPosition = CameraPosition(
     target: LatLng(36.73838289080758, 3.0847137703306404),
@@ -76,10 +76,10 @@ class LocationPickerScreenState extends State<LocationPickerScreen> {
       suggestionsCallback: (pattern) async {
         print(pattern);
         return (pattern.length > 1)
-            ? await _mapsRepository.autocomplete(pattern)
+            ? await (_mapsRepository.autocomplete(pattern))
             : [];
       },
-      onSuggestionSelected: (suggestion) async {
+      onSuggestionSelected: (dynamic suggestion) async {
         var location =
             await _mapsRepository.getLocationByPlaceId(suggestion?.placeId);
         if (location != null) {
@@ -93,7 +93,7 @@ class LocationPickerScreenState extends State<LocationPickerScreen> {
           controller.animateCamera(CameraUpdate.newLatLng(latLng));
         }
       },
-      itemBuilder: (context, suggestion) {
+      itemBuilder: (context, dynamic suggestion) {
         return suggestion != null
             ? Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -116,7 +116,7 @@ class LocationPickerScreenState extends State<LocationPickerScreen> {
     ));
   }
 
-  Focus buildTextFieldFocusMonitor({@required child}) {
+  Focus buildTextFieldFocusMonitor({required child}) {
     return Focus(
       onFocusChange: (focus) {
         print(focus);
@@ -151,8 +151,8 @@ class LocationPickerScreenState extends State<LocationPickerScreen> {
                         ));
               } else {
                 _locationPickerBloc.add(LocationChosen(
-                  latitude: _marker.position.latitude,
-                  longitude: _marker.position.longitude,
+                  latitude: _marker!.position.latitude,
+                  longitude: _marker!.position.longitude,
                 ));
               }
             },
@@ -163,7 +163,7 @@ class LocationPickerScreenState extends State<LocationPickerScreen> {
 
   GoogleMap buildGoogleMap() {
     return GoogleMap(
-      markers: (_marker != null) ? {_marker} : {},
+      markers: (_marker != null) ? {_marker!} : {},
       mapType: MapType.normal,
       initialCameraPosition: _initialPosition,
       onTap: (latLng) {
@@ -196,11 +196,10 @@ class LocationPickerScreenState extends State<LocationPickerScreen> {
 
 class GoogleMapsAutoCompleteTextField extends StatelessWidget {
   final Function suggestionsCallback;
-  final Function onSuggestionSelected;
+  final void Function(dynamic) onSuggestionSelected;
 
   const GoogleMapsAutoCompleteTextField(
-      {@required this.suggestionsCallback,
-      @required this.onSuggestionSelected});
+      {required this.suggestionsCallback, required this.onSuggestionSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -222,10 +221,10 @@ class GoogleMapsAutoCompleteTextField extends StatelessWidget {
         style: DefaultTextStyle.of(context).style.copyWith(
             color: MyColors.white, fontWeight: FontWeight.w400, fontSize: 16),
       ),
-      suggestionsCallback: (pattern) async =>
-          await suggestionsCallback(pattern),
+      suggestionsCallback: ((pattern) async =>
+          await suggestionsCallback(pattern)),
       onSuggestionSelected: onSuggestionSelected,
-      itemBuilder: (context, suggestion) {
+      itemBuilder: (context, dynamic suggestion) {
         return suggestion != null
             ? Padding(
                 padding: const EdgeInsets.all(16.0),

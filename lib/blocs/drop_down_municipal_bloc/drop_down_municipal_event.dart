@@ -13,18 +13,18 @@ abstract class DropDownMunicipalEvent extends Equatable {
 }
 
 class FetchMuniciaples extends DropDownMunicipalEvent {
-  final MyState state;
+  final MyState? state;
 
-  FetchMuniciaples({@required this.state});
+  FetchMuniciaples({required this.state});
 
   @override
-  List<Object> get props => [state];
+  List<Object> get props => [state!];
 }
 
 class MunicipalChosen extends DropDownMunicipalEvent {
   final Municipal municipal;
   const MunicipalChosen({
-    @required this.municipal,
+    required this.municipal,
   });
 
   @override
@@ -35,15 +35,15 @@ class MunicipalChosen extends DropDownMunicipalEvent {
 }
 
 class LoadMunicipalState extends DropDownMunicipalEvent {
-  final Municipal selectedMunicipal;
-  final DropDownsMunicipalSuccess dropDownsMunicipalSuccess;
+  final Municipal? selectedMunicipal;
+  final DropDownsMunicipalSuccess? dropDownsMunicipalSuccess;
   const LoadMunicipalState({
-    @required this.selectedMunicipal,
-    @required this.dropDownsMunicipalSuccess,
+    required this.selectedMunicipal,
+    required this.dropDownsMunicipalSuccess,
   });
 
   @override
-  List<Object> get props => [selectedMunicipal, dropDownsMunicipalSuccess];
+  List<Object> get props => [selectedMunicipal!, dropDownsMunicipalSuccess!];
 
   @override
   String toString() => 'Municipal Loaded { municipal: $selectedMunicipal }';

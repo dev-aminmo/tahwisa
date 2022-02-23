@@ -6,19 +6,19 @@ import 'package:tahwisa/style/my_colors.dart';
 
 class TagPicker extends StatelessWidget {
   const TagPicker({
-    Key key,
-    @required List<Tag> selectedTags,
-    @required TagRepository tagRepository,
+    Key? key,
+    required List<Tag>? selectedTags,
+    required TagRepository? tagRepository,
   })  : _selectedTags = selectedTags,
         _tagRepository = tagRepository,
         super(key: key);
 
-  final List<Tag> _selectedTags;
-  final TagRepository _tagRepository;
+  final List<Tag>? _selectedTags;
+  final TagRepository? _tagRepository;
   @override
   Widget build(BuildContext context) {
     return FlutterTagging<Tag>(
-      initialItems: _selectedTags,
+      initialItems: _selectedTags!,
       emptyBuilder: (ctx) {
         return Padding(
             padding: EdgeInsets.all(16), child: Text("No tags found"));
@@ -33,15 +33,14 @@ class TagPicker extends StatelessWidget {
           labelText: 'Select Tags',
         ),
       ),
-      findSuggestions: _tagRepository.getTags,
+      findSuggestions: _tagRepository!.getTags,
       additionCallback: (value) {
         return Tag(
           name: value,
         );
       },
       onAdded: (tag) {
-        print(tag);
-        return Tag(id: tag?.id, name: tag.name);
+        return Tag(id: tag.id, name: tag.name);
       },
       configureSuggestion: (tag) {
         return SuggestionConfiguration(
@@ -74,7 +73,7 @@ class TagPicker extends StatelessWidget {
       },
       onChanged: () {
         print(_selectedTags);
-        var jsonTags = _selectedTags.map((t) => t.toJson()).toList();
+        var jsonTags = _selectedTags!.map((t) => t.toJson()).toList();
         print(jsonTags);
       },
     );

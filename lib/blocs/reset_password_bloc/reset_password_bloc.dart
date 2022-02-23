@@ -9,7 +9,7 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
   final userRepository;
 
   ResetPasswordBloc({
-    @required this.userRepository,
+    required this.userRepository,
   })  : assert(userRepository != null),
         super(ResetPasswordInitial());
 

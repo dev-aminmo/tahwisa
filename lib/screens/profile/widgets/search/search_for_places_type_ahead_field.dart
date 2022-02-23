@@ -6,21 +6,21 @@ import 'package:tahwisa/style/my_colors.dart';
 
 class SearchForPlacesTypeAheadField extends StatelessWidget {
   const SearchForPlacesTypeAheadField({
-    Key key,
-    @required TextEditingController searchEditingController,
-    @required this.width,
-    @required this.height,
-    @required this.onEditingComplete,
-    @required this.onSuggestionSelected,
-    @required this.suggestionsCallback,
+    Key? key,
+    required TextEditingController? searchEditingController,
+    required this.width,
+    required this.height,
+    required this.onEditingComplete,
+    required this.onSuggestionSelected,
+    required this.suggestionsCallback,
   })  : _searchEditingController = searchEditingController,
         super(key: key);
 
-  final TextEditingController _searchEditingController;
-  final double width;
-  final double height;
+  final TextEditingController? _searchEditingController;
+  final double? width;
+  final double? height;
   final Function onEditingComplete;
-  final Function onSuggestionSelected;
+  final void Function(dynamic) onSuggestionSelected;
   final Function suggestionsCallback;
 
   @override
@@ -32,13 +32,13 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
         hideOnError: true,
         textFieldConfiguration: TextFieldConfiguration(
           textInputAction: TextInputAction.search,
-          onEditingComplete: onEditingComplete,
+          onEditingComplete: onEditingComplete as void Function()?,
           controller: _searchEditingController,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.only(
-                left: width * 0.07,
-                top: height * 0.025,
-                bottom: height * 0.025,
+                left: width! * 0.07,
+                top: height! * 0.025,
+                bottom: height! * 0.025,
               ),
               hintText: "search for a place",
               counterText: "",
@@ -49,11 +49,11 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
                   fontSize: 20),
               border: OutlineInputBorder(),
               enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(width * 0.1),
+                  borderRadius: BorderRadius.circular(width! * 0.1),
                   borderSide: BorderSide(
                       color: Colors.grey.withOpacity(0.8), width: 1.5)),
               focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(width * 0.1),
+                  borderRadius: BorderRadius.circular(width! * 0.1),
                   borderSide: BorderSide(
                       color: Colors.grey.withOpacity(0.8), width: 2.5))),
           cursorColor: MyColors.lightGreen,
@@ -65,7 +65,7 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
         suggestionsCallback: (pattern) async {
           return await suggestionsCallback(pattern);
         },
-        itemBuilder: (context, suggestion) {
+        itemBuilder: (context, dynamic suggestion) {
           if (suggestion is Place) {
             return Padding(
               padding: const EdgeInsets.all(16.0),
@@ -75,7 +75,7 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
                   SizedBox(width: 20),
                   Flexible(
                       child: Text(
-                    suggestion?.title ?? '',
+                    suggestion.title ?? '',
                     softWrap: true,
                   )),
                   SizedBox(width: 5),
@@ -92,7 +92,7 @@ class SearchForPlacesTypeAheadField extends StatelessWidget {
                   SizedBox(width: 20),
                   Flexible(
                       child: Text(
-                    suggestion?.name ?? '',
+                    suggestion.name ?? '',
                     softWrap: true,
                   )),
                   SizedBox(width: 5),

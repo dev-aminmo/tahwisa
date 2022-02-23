@@ -19,7 +19,7 @@ class ReviewBlocBuilder extends StatefulWidget {
 }
 
 class _UserReviewBlocBuilderState extends State<ReviewBlocBuilder> {
-  ReviewsCubit _reviewsCubit;
+  ReviewsCubit? _reviewsCubit;
 
   @override
   void initState() {
@@ -29,7 +29,7 @@ class _UserReviewBlocBuilderState extends State<ReviewBlocBuilder> {
 
   @override
   void dispose() {
-    _reviewsCubit.close();
+    _reviewsCubit!.close();
     super.dispose();
   }
 

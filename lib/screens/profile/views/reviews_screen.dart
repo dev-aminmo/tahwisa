@@ -8,7 +8,7 @@ import 'package:tahwisa/screens/profile/widgets/place_details/review_item.dart';
 class ReviewsScreen extends StatefulWidget {
   static const String routeName = '/reviews';
 
-  static Route route({ReviewsCubit reviewsCubit}) {
+  static Route route({required ReviewsCubit reviewsCubit}) {
     return MaterialPageRoute(
       builder: (_) => ReviewsScreen(
         reviewsCubit: reviewsCubit,
@@ -17,9 +17,9 @@ class ReviewsScreen extends StatefulWidget {
     );
   }
 
-  final ReviewsCubit reviewsCubit;
+  late final ReviewsCubit reviewsCubit;
   ReviewsScreen({
-    @required this.reviewsCubit,
+    required this.reviewsCubit,
   });
 
   @override
@@ -41,7 +41,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          brightness: Brightness.dark,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
           title: Text(
             "Reviews",
           ),
@@ -78,9 +78,9 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                                 ),
                                 //shrinkWrap: true,
                                 physics: BouncingScrollPhysics(),
-                                itemCount: snapshot.data.length + 1,
+                                itemCount: snapshot.data!.length + 1,
                                 itemBuilder: (context, index) {
-                                  if (index == snapshot.data.length) {
+                                  if (index == snapshot.data!.length) {
                                     return (widget.reviewsCubit.canLoadMore)
                                         ? Container(
                                             padding: const EdgeInsets.all(25),
@@ -89,7 +89,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                                                     CircularProgressIndicator()))
                                         : const SizedBox();
                                   }
-                                  return ReviewItem(snapshot.data[index]);
+                                  return ReviewItem(snapshot.data![index]);
                                 });
                           } else {
                             return SizedBox();

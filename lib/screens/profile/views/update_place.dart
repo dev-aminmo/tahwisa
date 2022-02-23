@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:queen_validators/queen_validators.dart';
 import 'package:tahwisa/blocs/drop_down_municipal_bloc/bloc.dart';
@@ -30,13 +29,13 @@ class UpdatePlaceScreen extends StatefulWidget {
 }
 
 class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
-  PlaceDetailsCubit _placeDetailsCubit;
-  DropDownStateBloc _dropDownStateBloc;
-  DropDownsMunicipalBloc _dropDownsMunicipalBloc;
-  TextEditingController _titleEditingController;
-  TextEditingController _descriptionEditingController;
-  ImagePickerBloc _imagePickerBloc;
-  PlaceUploadBloc _placeUploadBloc;
+  PlaceDetailsCubit? _placeDetailsCubit;
+  DropDownStateBloc? _dropDownStateBloc;
+  DropDownsMunicipalBloc? _dropDownsMunicipalBloc;
+  TextEditingController? _titleEditingController;
+  TextEditingController? _descriptionEditingController;
+  ImagePickerBloc? _imagePickerBloc;
+  PlaceUploadBloc? _placeUploadBloc;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -67,14 +66,14 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
 
   @override
   void dispose() {
-    _placeDetailsCubit.close();
+    _placeDetailsCubit!.close();
 
-    _titleEditingController.dispose();
-    _descriptionEditingController.dispose();
-    _dropDownsMunicipalBloc.close();
-    _dropDownStateBloc.close();
-    _imagePickerBloc.close();
-    _placeUploadBloc.close();
+    _titleEditingController!.dispose();
+    _descriptionEditingController!.dispose();
+    _dropDownsMunicipalBloc!.close();
+    _dropDownStateBloc!.close();
+    _imagePickerBloc!.close();
+    _placeUploadBloc!.close();
     super.dispose();
   }
 
@@ -190,15 +189,15 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
                   bloc: _placeDetailsCubit,
                   listener: (context, state) {
                     if (state is PlaceDetailsSuccess) {
-                      final _titleValue = state.place.title;
-                      final _descriptionValue = state.place.description;
-                      _titleEditingController.value = TextEditingValue(
+                      final _titleValue = state.place!.title;
+                      final _descriptionValue = state.place!.description;
+                      _titleEditingController!.value = TextEditingValue(
                         text: _titleValue,
                         selection: TextSelection.fromPosition(
                           TextPosition(offset: _titleValue.length),
                         ),
                       );
-                      _descriptionEditingController.value = TextEditingValue(
+                      _descriptionEditingController!.value = TextEditingValue(
                         text: _descriptionValue,
                         selection: TextSelection.fromPosition(
                           TextPosition(offset: _descriptionValue.length),
@@ -222,7 +221,7 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
                                 }
                               },
                               validator: qValidator([
-                                IsRequired(msg: 'title is required'),
+                                IsRequired('title is required'),
                                 MaxLength(191),
                                 MinLength(5),
                               ]),
@@ -257,7 +256,7 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
                                             physics: BouncingScrollPhysics(),
                                             shrinkWrap: true,
                                             itemCount:
-                                                imagePickerState.images?.length,
+                                                imagePickerState.images.length,
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 16),
                                             gridDelegate:
@@ -282,7 +281,7 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
                                         MaterialButton(
                                           color: MyColors.lightGreen,
                                           onPressed: () {
-                                            _imagePickerBloc.add(PickImages());
+                                            _imagePickerBloc!.add(PickImages());
                                           },
                                           child: Padding(
                                             padding: const EdgeInsets.symmetric(
@@ -300,7 +299,7 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
                                   }
                                   return GestureDetector(
                                     onTap: () =>
-                                        _imagePickerBloc.add(PickImages()),
+                                        _imagePickerBloc!.add(PickImages()),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -308,7 +307,7 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
                                             physics: BouncingScrollPhysics(),
                                             shrinkWrap: true,
                                             itemCount:
-                                                state.place.pictures?.length,
+                                                state.place!.pictures?.length,
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 16),
                                             gridDelegate:
@@ -319,7 +318,7 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
                                                     mainAxisSpacing: 16),
                                             itemBuilder: (context, index) {
                                               return Image.network(
-                                                state.place.pictures[index]
+                                                state.place!.pictures![index]!
                                                     .replaceFirstMapped(
                                                         "image/upload/",
                                                         (match) =>
@@ -332,7 +331,7 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
                                         MaterialButton(
                                           color: MyColors.lightGreen,
                                           onPressed: () {
-                                            _imagePickerBloc.add(PickImages());
+                                            _imagePickerBloc!.add(PickImages());
                                           },
                                           child: Padding(
                                             padding: const EdgeInsets.all(8),
@@ -353,7 +352,7 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
                             ),
                             StateDropdown(
                               dropDownStateBloc: _dropDownStateBloc,
-                              hint: state.place.state,
+                              hint: state.place!.state,
                             ),
                             MunicipalDropDown(
                               dropDownsMunicipalBloc: _dropDownsMunicipalBloc,
@@ -365,25 +364,28 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
                               minWidth: double.infinity,
                               color: MyColors.darkBlue,
                               onPressed: () {
-                                if (_formKey.currentState.validate()) {
-                                  _formKey.currentState.save();
-                                  _placeUploadBloc.add(UpdatePlaceButtonPressed(
-                                      title: _titleEditingController.value.text,
-                                      description: _descriptionEditingController
-                                          .value.text,
-                                      pictures: (_imagePickerBloc.state
-                                              is ImagesPicked)
-                                          ? (_imagePickerBloc.state
-                                                  as ImagesPicked)
-                                              .images
-                                          : null,
-                                      municipalID: (_dropDownsMunicipalBloc
-                                                  .currentMunicipal !=
-                                              null)
-                                          ? _dropDownsMunicipalBloc
-                                              .currentMunicipal?.id
-                                          : null,
-                                      placeId: state.place.id));
+                                if (_formKey.currentState!.validate()) {
+                                  _formKey.currentState!.save();
+                                  _placeUploadBloc!.add(
+                                      UpdatePlaceButtonPressed(
+                                          title: _titleEditingController!
+                                              .value.text,
+                                          description:
+                                              _descriptionEditingController!
+                                                  .value.text,
+                                          pictures: (_imagePickerBloc!.state
+                                                  is ImagesPicked)
+                                              ? (_imagePickerBloc!.state
+                                                      as ImagesPicked)
+                                                  .images
+                                              : null,
+                                          municipalID: (_dropDownsMunicipalBloc!
+                                                      .currentMunicipal !=
+                                                  null)
+                                              ? _dropDownsMunicipalBloc!
+                                                  .currentMunicipal?.id
+                                              : null,
+                                          placeId: state.place!.id));
                                 }
                               },
                               child: Padding(

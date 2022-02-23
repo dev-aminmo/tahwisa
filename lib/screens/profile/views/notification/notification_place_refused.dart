@@ -11,7 +11,7 @@ import 'package:tahwisa/style/my_colors.dart';
 class NotificationPlaceRefused extends StatefulWidget {
   static const String routeName = '/notification/place_refused';
 
-  static Route route({My.Notification notification}) {
+  static Route route({My.Notification? notification}) {
     return MaterialPageRoute(
       builder: (_) => NotificationPlaceRefused(
         notification: notification,
@@ -20,7 +20,7 @@ class NotificationPlaceRefused extends StatefulWidget {
     );
   }
 
-  final My.Notification notification;
+  final My.Notification? notification;
 
   const NotificationPlaceRefused({this.notification});
 
@@ -30,8 +30,8 @@ class NotificationPlaceRefused extends StatefulWidget {
 }
 
 class _NotificationPlaceRefusedState extends State<NotificationPlaceRefused> {
-  RefusePlaceMessagesCubit _refusePlaceMessagesCubit;
-  PlaceAvailabilityCubit _placeAvailabilityCubit;
+  RefusePlaceMessagesCubit? _refusePlaceMessagesCubit;
+  PlaceAvailabilityCubit? _placeAvailabilityCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +87,7 @@ class _NotificationPlaceRefusedState extends State<NotificationPlaceRefused> {
                               SizedBox(
                                 height: 16,
                               ),
-                              if ((widget.notification.description?.length ??
+                              if ((widget.notification!.description?.length ??
                                       0) >
                                   0)
                                 Row(
@@ -99,7 +99,7 @@ class _NotificationPlaceRefusedState extends State<NotificationPlaceRefused> {
                                           fontSize: 14,
                                           color: MyColors.darkBlue),
                                     ),
-                                    Text(widget.notification.description)
+                                    Text(widget.notification!.description)
                                   ],
                                 ),
                               Container(
@@ -124,7 +124,7 @@ class _NotificationPlaceRefusedState extends State<NotificationPlaceRefused> {
                                   Navigator.of(context).pushNamed(
                                     '/place/update',
                                     arguments: {
-                                      'placeId': widget.notification.placeId
+                                      'placeId': widget.notification!.placeId
                                     },
                                   );
                                 },
@@ -168,16 +168,16 @@ class _NotificationPlaceRefusedState extends State<NotificationPlaceRefused> {
 
     _placeAvailabilityCubit =
         PlaceAvailabilityCubit(context.read<AdminRepository>())
-          ..checkIfPlaceIsAvailable(widget.notification.placeId, update: true);
+          ..checkIfPlaceIsAvailable(widget.notification!.placeId, update: true);
     _refusePlaceMessagesCubit =
         RefusePlaceMessagesCubit(context.read<RefusePlaceMessageRepository>());
-    _refusePlaceMessagesCubit.getRefusePlaceMessages(widget.notification.id);
+    _refusePlaceMessagesCubit!.getRefusePlaceMessages(widget.notification!.id);
   }
 
   @override
   void dispose() {
-    _placeAvailabilityCubit.close();
-    _refusePlaceMessagesCubit.close();
+    _placeAvailabilityCubit!.close();
+    _refusePlaceMessagesCubit!.close();
 
     super.dispose();
   }

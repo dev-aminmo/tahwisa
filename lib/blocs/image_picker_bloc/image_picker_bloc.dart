@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 
 import 'bloc.dart';
@@ -20,10 +19,11 @@ class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
   }
 
   Future<File> _castAssetToFile(Asset imageAsset) async {
-    final filePath =
-        await FlutterAbsolutePath.getAbsolutePath(imageAsset.identifier);
+/*    final filePath =
+        await FlutterAbsolutePath(imageAsset.identifier!);
     var file = File(filePath);
-    return file;
+    return file;*/
+    return File('-1');
   }
 
   @override
@@ -50,9 +50,7 @@ class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
           ),
         );
         var _fileImageArray = await _castAssetsToFiles(resultList);
-        yield (ImagesPicked(images: _fileImageArray,
-            assets:resultList
-        ));
+        yield (ImagesPicked(images: _fileImageArray, assets: resultList));
       } on Exception catch (e) {
         yield (ImagePickerFailure(error: e.toString()));
       }

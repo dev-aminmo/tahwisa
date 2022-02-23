@@ -12,13 +12,13 @@ import 'package:tahwisa/style/my_colors.dart';
 import 'reset_password.dart';
 
 class LoginForm extends StatefulWidget {
-  final LoginBloc loginBloc;
-  final AuthenticationBloc authenticationBloc;
+  final LoginBloc? loginBloc;
+  final AuthenticationBloc? authenticationBloc;
 
   LoginForm({
-    Key key,
-    @required this.loginBloc,
-    @required this.authenticationBloc,
+    Key? key,
+    required this.loginBloc,
+    required this.authenticationBloc,
   }) : super(key: key);
 
   @override
@@ -29,7 +29,7 @@ class _LoginFormState extends State<LoginForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  LoginBloc get _loginBloc => widget.loginBloc;
+  LoginBloc? get _loginBloc => widget.loginBloc;
   bool obscured = true;
   final _formKey = GlobalKey<FormState>();
 
@@ -43,7 +43,7 @@ class _LoginFormState extends State<LoginForm> {
       ) {
         if (state is LoginFailure) {
           _onWidgetDidBuild(() {
-            Scaffold.of(context).showSnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('${state.error}'),
                 backgroundColor: Colors.red,
@@ -66,7 +66,7 @@ class _LoginFormState extends State<LoginForm> {
                     controller: _emailController,
                     hint: "email",
                     validator: qValidator([
-                      IsRequired(msg: 'email is required'),
+                      IsRequired('email is required'),
                       IsEmail(),
                       //  MinLength(3),
                     ]),
@@ -150,18 +150,18 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _onWidgetDidBuild(Function callback) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       callback();
     });
   }
 
   _onLoginButtonPressed() {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       FocusScopeNode currentFocus = FocusScope.of(context);
       if (!currentFocus.hasPrimaryFocus) {
         currentFocus.unfocus();
       }
-      _loginBloc.add(LoginButtonPressed(
+      _loginBloc!.add(LoginButtonPressed(
         email: _emailController.text,
         password: _passwordController.text,
       ));
@@ -171,7 +171,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   _onGoogleButtonPressed() {
-    _loginBloc.add(GoogleButtonPressed());
+    _loginBloc!.add(GoogleButtonPressed());
   }
 }
 
@@ -181,9 +181,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  LoginBloc _loginBloc;
-  AuthenticationBloc _authenticationBloc;
-  UserRepository userRepository;
+  LoginBloc? _loginBloc;
+  AuthenticationBloc? _authenticationBloc;
+  late UserRepository userRepository;
   @override
   void initState() {
     super.initState();
@@ -212,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    _loginBloc.close();
+    _loginBloc!.close();
     super.dispose();
   }
 }

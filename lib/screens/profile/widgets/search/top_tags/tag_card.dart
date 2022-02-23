@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:tahwisa/repositories/models/tag.dart';
 import 'package:tahwisa/style/my_colors.dart';
@@ -12,7 +10,7 @@ class TagCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: onTap as void Function()?,
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(8)),
         child: Container(

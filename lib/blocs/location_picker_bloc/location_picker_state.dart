@@ -16,7 +16,7 @@ class LocationPicked extends LocationPickerState {
   final double latitude;
   final double longitude;
 
-  LocationPicked({@required this.latitude, @required this.longitude});
+  LocationPicked({required this.latitude, required this.longitude});
 
   @override
   List<Object> get props => [latitude, longitude];
@@ -26,7 +26,7 @@ class LocationPickerFailure extends LocationPickerState {
   final String error;
 
   const LocationPickerFailure({
-    @required this.error,
+    required this.error,
   });
 
   @override

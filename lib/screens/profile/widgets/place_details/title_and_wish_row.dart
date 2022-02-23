@@ -4,15 +4,15 @@ import 'package:tahwisa/style/my_colors.dart';
 
 class TitleAndWishRow extends StatefulWidget {
   const TitleAndWishRow({
-    Key key,
-    @required this.title,
-    @required this.placeId,
-    @required this.wished,
-    @required this.wishPlaceCubit,
+    Key? key,
+    required this.title,
+    required this.placeId,
+    required this.wished,
+    required this.wishPlaceCubit,
   }) : super(key: key);
 
-  final String title;
-  final bool wished;
+  final String? title;
+  final bool? wished;
   final WishPlaceCubit wishPlaceCubit;
   final placeId;
 
@@ -21,7 +21,7 @@ class TitleAndWishRow extends StatefulWidget {
 }
 
 class _TitleAndWishRowState extends State<TitleAndWishRow> {
-  bool wished;
+  bool? wished;
 
   @override
   void initState() {
@@ -37,7 +37,7 @@ class _TitleAndWishRowState extends State<TitleAndWishRow> {
       children: <Widget>[
         Flexible(
           child: Text(
-            widget.title,
+            widget.title!,
             textAlign: TextAlign.left,
             softWrap: true,
             style: TextStyle(
@@ -56,7 +56,7 @@ class _TitleAndWishRowState extends State<TitleAndWishRow> {
               Radius.circular(32.0),
             ),
             onTap: () {
-              if (!wished) {
+              if (!wished!) {
                 setState(() {
                   wished = true;
                 });
@@ -70,7 +70,7 @@ class _TitleAndWishRowState extends State<TitleAndWishRow> {
             },
             child: Icon(
               //Icons.favorite_outlined,
-              (wished) ? Icons.favorite_outlined : Icons.favorite_border,
+              wished! ? Icons.favorite_outlined : Icons.favorite_border,
               color: MyColors.lightGreen,
               size: 32,
             ),

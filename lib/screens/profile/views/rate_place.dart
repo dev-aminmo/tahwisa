@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rating_bar/rating_bar.dart';
 import 'package:tahwisa/cubits/user_review_cubit/user_review_cubit.dart';
 import 'package:tahwisa/screens/profile/widgets/add_place/title_text_field.dart';
 import 'package:tahwisa/style/my_colors.dart';
@@ -10,9 +9,9 @@ class RatePlaceScreen extends StatefulWidget {
   static const String routeName = '/rate_place';
 
   static Route route(
-      {double initialRate,
-      UserReviewCubit userReviewCubit,
-      String initialComment}) {
+      {double? initialRate,
+      required UserReviewCubit userReviewCubit,
+      String? initialComment}) {
     return MaterialPageRoute(
       builder: (_) => RatePlaceScreen(
           initialRate: initialRate,
@@ -22,12 +21,12 @@ class RatePlaceScreen extends StatefulWidget {
     );
   }
 
-  final double initialRate;
-  final UserReviewCubit userReviewCubit;
-  final String initialComment;
+  final double? initialRate;
+  late final UserReviewCubit userReviewCubit;
+  final String? initialComment;
   RatePlaceScreen(
-      {@required this.initialRate,
-      @required this.userReviewCubit,
+      {required this.initialRate,
+      required this.userReviewCubit,
       this.initialComment});
 
   @override
@@ -36,7 +35,7 @@ class RatePlaceScreen extends StatefulWidget {
 
 class _RatePlaceScreenState extends State<RatePlaceScreen> {
   var initialRate;
-  TextEditingController _textEditingController;
+  TextEditingController? _textEditingController;
 
   @override
   void initState() {
@@ -49,7 +48,7 @@ class _RatePlaceScreenState extends State<RatePlaceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          brightness: Brightness.dark,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
           title: Text(
             "Rate this place",
           ),
@@ -106,7 +105,7 @@ class _RatePlaceScreenState extends State<RatePlaceScreen> {
                     ),
                     Hero(
                       tag: "rate",
-                      child: RatingBar(
+                      child: /* RatingBar(
                         onRatingChanged: (rating) {
                           setState(() {
                             initialRate = rating;
@@ -122,7 +121,8 @@ class _RatePlaceScreenState extends State<RatePlaceScreen> {
                         initialRating: initialRate,
                         maxRating: 5,
                         isHalfAllowed: true,
-                      ),
+                      )*/
+                          Container(),
                     ),
                     SizedBox(
                       height: 32,
@@ -158,8 +158,8 @@ class _RatePlaceScreenState extends State<RatePlaceScreen> {
                                     : () {
                                         widget.userReviewCubit.postReview(
                                           rating: initialRate,
-                                          comment:
-                                              _textEditingController.value.text,
+                                          comment: _textEditingController!
+                                              .value.text,
                                         );
                                       },
                                 child: (state is UserReviewPostLoading)

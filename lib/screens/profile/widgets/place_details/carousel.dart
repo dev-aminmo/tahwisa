@@ -10,7 +10,7 @@ class Carousel extends StatefulWidget {
   final place;
   final heroAnimationTag;
 
-  Carousel({@required this.place, @required this.heroAnimationTag});
+  Carousel({required this.place, required this.heroAnimationTag});
 
   @override
   _CarouselState createState() => _CarouselState();
@@ -19,7 +19,7 @@ class Carousel extends StatefulWidget {
 class _CarouselState extends State<Carousel> {
   var currentPosition = 0;
 
-  Place place;
+  Place? place;
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _CarouselState extends State<Carousel> {
                     });
                   },
                   viewportFraction: 1),
-              itemCount: place.pictures.length,
+              itemCount: place!.pictures!.length,
               itemBuilder: (context, index, realIndex) {
                 return GestureDetector(
                     onTap: () => Navigator.push(
@@ -59,15 +59,15 @@ class _CarouselState extends State<Carousel> {
                               builder: (context) => FullScreenImage(
                                       child: PhotoView(
                                     imageProvider:
-                                        NetworkImage(place.pictures[index]),
+                                        NetworkImage(place!.pictures![index]!),
                                   ))),
                         ),
                     child: SizedBox(
                       width: double.infinity,
                       child: Hero(
-                        tag: 'place_tag_${place.id}_${widget.heroAnimationTag}',
+                        tag: 'place_tag_${place!.id}_${widget.heroAnimationTag}',
                         child: Image.network(
-                          place.pictures[index].replaceFirstMapped(
+                          place!.pictures![index]!.replaceFirstMapped(
                               "image/upload/",
                               (match) =>
                                   "image/upload/w_${(width).round()},f_auto/"),
@@ -79,8 +79,8 @@ class _CarouselState extends State<Carousel> {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: place.pictures.map((picture) {
-            int index = place.pictures.indexOf(picture);
+          children: place!.pictures!.map((picture) {
+            int index = place!.pictures!.indexOf(picture);
             return Container(
               width: 12.0,
               height: 12.0,

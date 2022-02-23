@@ -11,7 +11,7 @@ import 'package:tahwisa/repositories/place_repository.dart';
 import 'bloc.dart';
 
 class WishListBloc extends Bloc<WishListEvent, WishListState> {
-  final PlaceRepository placeRepository;
+  final PlaceRepository? placeRepository;
   final _places$ = BehaviorSubject<List<Place>>();
   Stream<List<Place>> get places => _places$;
   final _places = <Place>[];
@@ -19,16 +19,16 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
   int _page = 1;
   int get page => _page;
   final WishPlaceCubit wishPlaceCubit;
-  StreamSubscription _wishPlaceSubscription;
+  late StreamSubscription _wishPlaceSubscription;
 
   @override
-  Future<Function> close() {
+  Future<Function?> close() {
     _wishPlaceSubscription.cancel();
     _places$.close();
-    return super.close();
+    return super.close().then((value) => value as Function?);
   }
 
-  WishListBloc({@required this.placeRepository, @required this.wishPlaceCubit})
+  WishListBloc({required this.placeRepository, required this.wishPlaceCubit})
       : super(WishListInitial()) {
     _monitorWishPlaceCubit();
   }
@@ -43,7 +43,7 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
         if (event.loading) yield WishListProgress();
         _places.clear();
         final QueryResponse _queryResponse =
-            await placeRepository.fetchWishListPlaces(1);
+            await (placeRepository!.fetchWishListPlaces(1) as FutureOr<QueryResponse>);
         _places.addAll(_queryResponse.results);
         _places$.add(_places);
         yield WishListSuccess(
@@ -57,7 +57,7 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
     if (event is FetchWishListPageRequested) {
       _page++;
       final QueryResponse _queryResponse =
-          await placeRepository.fetchWishListPlaces(_page);
+          await (placeRepository!.fetchWishListPlaces(_page) as FutureOr<QueryResponse>);
       _places.addAll(_queryResponse.results);
       _places$.add(_places);
       yield WishListSuccess(

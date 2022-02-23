@@ -10,14 +10,14 @@ import 'bloc.dart';
 class DropDownsMunicipalBloc
     extends Bloc<DropDownMunicipalEvent, DropDownMunicipalState> {
   final dropDownsRepository;
-  final _selectedMunicipal$ = BehaviorSubject<Municipal>();
+  final _selectedMunicipal$ = BehaviorSubject<Municipal?>();
 
-  void selectedStateEvent(Municipal state) => _selectedMunicipal$.add(state);
-  Stream<Municipal> get selectedMunicipal => _selectedMunicipal$;
-  Municipal get currentMunicipal => _selectedMunicipal$.value;
+  void selectedStateEvent(Municipal? state) => _selectedMunicipal$.add(state);
+  Stream<Municipal?> get selectedMunicipal => _selectedMunicipal$;
+  Municipal? get currentMunicipal => _selectedMunicipal$.value;
 
   DropDownsMunicipalBloc({
-    @required this.dropDownsRepository,
+    required this.dropDownsRepository,
   }) : super(DropDownMunicipalInitial()) {
     _selectedMunicipal$.add(null);
   }
@@ -32,7 +32,7 @@ class DropDownsMunicipalBloc
       yield DropDownsMunicipalLoading();
       try {
         final municipales =
-            await dropDownsRepository.fetchMunicipales(stateId: event.state.id);
+            await dropDownsRepository.fetchMunicipales(stateId: event.state!.id);
         yield DropDownsMunicipalSuccess(municipales: municipales);
       } catch (error) {
         yield DropDownMunicipalFailure(error: error.toString());
@@ -45,7 +45,7 @@ class DropDownsMunicipalBloc
     if (event is LoadMunicipalState) {
       _selectedMunicipal$.add(event.selectedMunicipal);
 
-      yield (event.dropDownsMunicipalSuccess);
+      yield event.dropDownsMunicipalSuccess!;
     }
 
     if (event is ClearMunicipal) {

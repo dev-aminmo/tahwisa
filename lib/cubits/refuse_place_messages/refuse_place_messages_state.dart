@@ -10,7 +10,7 @@ class RefusePlaceMessagesLoading extends RefusePlaceMessagesState {}
 class RefusePlaceMessagesSuccess extends RefusePlaceMessagesState {
   final List<RefusePlaceMessage> refusePlaceMessages;
 
-  RefusePlaceMessagesSuccess({@required this.refusePlaceMessages});
+  RefusePlaceMessagesSuccess({required this.refusePlaceMessages});
 }
 
 class RefusePlaceMessagesError extends RefusePlaceMessagesState {}

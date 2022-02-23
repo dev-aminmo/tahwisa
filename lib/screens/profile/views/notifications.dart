@@ -10,7 +10,7 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> {
-  NotificationBloc _notificationBloc;
+  NotificationBloc? _notificationBloc;
   @override
   void initState() {
     super.initState();
@@ -27,11 +27,11 @@ class _NotificationsState extends State<Notifications> {
         return Center(child: CircularProgressIndicator());
       }
       if (state is NotificationSuccess) {
-        return StreamBuilder<List<my.Notification>>(
-            stream: _notificationBloc.notifications,
+        return StreamBuilder<List<my.Notification>?>(
+            stream: _notificationBloc!.notifications,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                if (snapshot.data.length == 0) {
+                if (snapshot.data!.length == 0) {
                   return Center(
                       child: SizedBox.expand(
                           child: Column(
@@ -61,7 +61,7 @@ class _NotificationsState extends State<Notifications> {
                 return RefreshIndicator(
                     strokeWidth: 3,
                     onRefresh: () async {
-                      _notificationBloc.add(FetchNotifications());
+                      _notificationBloc!.add(FetchNotifications());
                     },
                     child: ListView.separated(
                       separatorBuilder: (ctx, index) {
@@ -75,53 +75,53 @@ class _NotificationsState extends State<Notifications> {
                       physics: AlwaysScrollableScrollPhysics(
                         parent: BouncingScrollPhysics(),
                       ),
-                      itemCount: snapshot.data.length,
+                      itemCount: snapshot.data!.length,
                       itemBuilder: (ctx, index) {
                         return ListTile(
                           title: Text(
-                            snapshot.data[index].title,
+                            snapshot.data![index].title,
                             style: TextStyle(fontWeight: FontWeight.w700),
                           ),
-                          subtitle: Text(snapshot.data[index].body),
-                          tileColor: snapshot.data[index].read
+                          subtitle: Text(snapshot.data![index].body),
+                          tileColor: snapshot.data![index].read!
                               ? Colors.grey.shade400.withOpacity(0.4)
                               : Colors.transparent,
                           onTap: () {
-                            if (snapshot.data[index].type == 'place_added') {
-                              if (!snapshot.data[index].read)
-                                _notificationBloc.add(ReadNotification(
-                                    id: snapshot.data[index].id));
+                            if (snapshot.data![index].type == 'place_added') {
+                              if (!snapshot.data![index].read!)
+                                _notificationBloc!.add(ReadNotification(
+                                    id: snapshot.data![index].id));
 
                               Navigator.of(context).pushNamed(
                                 '/notification/place_added',
                                 arguments: {
                                   'notificationBloc': _notificationBloc,
-                                  'notification': snapshot.data[index]
+                                  'notification': snapshot.data![index]
                                 },
                               );
                             }
-                            if (snapshot.data[index].type == 'place_refused') {
-                              if (!snapshot.data[index].read)
-                                _notificationBloc.add(ReadNotification(
-                                    id: snapshot.data[index].id));
+                            if (snapshot.data![index].type == 'place_refused') {
+                              if (!snapshot.data![index].read!)
+                                _notificationBloc!.add(ReadNotification(
+                                    id: snapshot.data![index].id));
 
                               Navigator.of(context).pushNamed(
                                 '/notification/place_refused',
                                 arguments: {
-                                  'notification': snapshot.data[index]
+                                  'notification': snapshot.data![index]
                                 },
                               );
                             }
-                            if (snapshot.data[index].type == 'place_approved') {
-                              if (!snapshot.data[index].read)
-                                _notificationBloc.add(ReadNotification(
-                                    id: snapshot.data[index].id));
+                            if (snapshot.data![index].type == 'place_approved') {
+                              if (!snapshot.data![index].read!)
+                                _notificationBloc!.add(ReadNotification(
+                                    id: snapshot.data![index].id));
 
                               Navigator.of(context).pushNamed(
                                 '/place_details',
                                 arguments: {
                                   'heroAnimationTag': "notification",
-                                  'placeId': snapshot.data[index].placeId,
+                                  'placeId': snapshot.data![index].placeId,
                                 },
                               );
                             }
@@ -147,7 +147,7 @@ class _NotificationsState extends State<Notifications> {
               MaterialButton(
                 color: MyColors.greenBorder,
                 onPressed: () {
-                  _notificationBloc.add(FetchNotifications());
+                  _notificationBloc!.add(FetchNotifications());
                 },
                 child: Padding(
                   padding:

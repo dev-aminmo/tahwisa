@@ -13,15 +13,15 @@ class LocationDisplayScreen extends StatefulWidget {
   State<LocationDisplayScreen> createState() => LocationDisplayScreenState();
 
   LocationDisplayScreen(
-      {@required this.latitude,
-      @required this.longitude,
-      @required this.title});
+      {required this.latitude,
+      required this.longitude,
+      required this.title});
 }
 
 class LocationDisplayScreenState extends State<LocationDisplayScreen> {
   Completer<GoogleMapController> _controller = Completer();
-  Marker _marker;
-  CameraPosition _initialPosition;
+  Marker? _marker;
+  late CameraPosition _initialPosition;
 
   @override
   void initState() {
@@ -83,7 +83,7 @@ class LocationDisplayScreenState extends State<LocationDisplayScreen> {
         ),
       ),
       body: GoogleMap(
-        markers: (_marker != null) ? {_marker} : {},
+        markers: (_marker != null) ? {_marker!} : {},
         mapType: MapType.normal,
         initialCameraPosition: _initialPosition,
         zoomControlsEnabled: false,

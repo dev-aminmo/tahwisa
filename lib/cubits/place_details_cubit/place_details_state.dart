@@ -14,19 +14,19 @@ class PlaceDetailsProgress extends PlaceDetailsState {}
 class PlaceDetailsEmpty extends PlaceDetailsState {}
 
 class PlaceDetailsSuccess extends PlaceDetailsState {
-  final Place place;
-  PlaceDetailsSuccess({@required this.place});
+  final Place? place;
+  PlaceDetailsSuccess({required this.place});
   @override
-  List<Object> get props => [place];
+  List<Object> get props => [place!];
 }
 
 class PlaceDetailsFailure extends PlaceDetailsState {
-  final String error;
+  final String? error;
 
-  const PlaceDetailsFailure({@required this.error});
+  const PlaceDetailsFailure({required this.error});
 
   @override
-  List<Object> get props => [error];
+  List<Object> get props => [error!];
 
   @override
   String toString() => 'PlaceDetailsFailure { error: $error }';

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tahwisa/blocs/drop_down_municipal_bloc/bloc.dart';
 import 'package:tahwisa/blocs/drop_down_state_bloc/bloc.dart';
@@ -13,15 +12,15 @@ import 'range_slider_view.dart';
 class FiltersScreen extends StatefulWidget {
   @override
   _FiltersScreenState createState() => _FiltersScreenState();
-  final FilterManagerBloc _filterManagerBloc;
+  final FilterManagerBloc? _filterManagerBloc;
 
   const FiltersScreen(this._filterManagerBloc);
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
-  RangeValues _values;
-  DropDownStateBloc _dropDownStateBloc;
-  DropDownsMunicipalBloc _dropDownsMunicipalBloc;
+  RangeValues? _values;
+  DropDownStateBloc? _dropDownStateBloc;
+  DropDownsMunicipalBloc? _dropDownsMunicipalBloc;
 
   @override
   void initState() {
@@ -32,43 +31,43 @@ class _FiltersScreenState extends State<FiltersScreen> {
     _dropDownStateBloc = DropDownStateBloc(
         municipalBloc: _dropDownsMunicipalBloc,
         dropDownsRepository: dropDownsRepository);
-    if (widget._filterManagerBloc.state is FilterManagerLoadedState) {
-      _dropDownStateBloc.add(LoadState(
+    if (widget._filterManagerBloc!.state is FilterManagerLoadedState) {
+      _dropDownStateBloc!.add(LoadState(
         dropDownsStatesSuccess:
-            ((widget._filterManagerBloc.state) as FilterManagerLoadedState)
+            ((widget._filterManagerBloc!.state) as FilterManagerLoadedState)
                 .dropDownsStatesSuccess,
         selectedState:
-            ((widget._filterManagerBloc.state) as FilterManagerLoadedState)
+            ((widget._filterManagerBloc!.state) as FilterManagerLoadedState)
                 .selectedState,
       ));
 
-      if ((widget._filterManagerBloc.state as FilterManagerLoadedState)
+      if ((widget._filterManagerBloc!.state as FilterManagerLoadedState)
               .dropDownsMunicipalSuccess !=
           null) {
         print("siiiii municipal success");
-        _dropDownsMunicipalBloc.add(LoadMunicipalState(
+        _dropDownsMunicipalBloc!.add(LoadMunicipalState(
           dropDownsMunicipalSuccess:
-              ((widget._filterManagerBloc.state) as FilterManagerLoadedState)
+              ((widget._filterManagerBloc!.state) as FilterManagerLoadedState)
                   .dropDownsMunicipalSuccess,
           selectedMunicipal:
-              ((widget._filterManagerBloc.state) as FilterManagerLoadedState)
+              ((widget._filterManagerBloc!.state) as FilterManagerLoadedState)
                   .selectedMunicipal,
         ));
       }
     } else {
-      _dropDownStateBloc.add(FetchStates());
+      _dropDownStateBloc!.add(FetchStates());
     }
     _initSliderValues();
   }
 
   @override
   void dispose() {
-    _dropDownStateBloc.close();
-    _dropDownsMunicipalBloc.close();
+    _dropDownStateBloc!.close();
+    _dropDownsMunicipalBloc!.close();
     super.dispose();
   }
 
-  Widget makeDismissible({Widget child}) => GestureDetector(
+  Widget makeDismissible({Widget? child}) => GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => Navigator.of(context).pop(),
       child: GestureDetector(
@@ -102,7 +101,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                               flex: 9,
                               child: ApplyButton(
                                 callback: () {
-                                  widget._filterManagerBloc.add(SaveFilterState(
+                                  widget._filterManagerBloc!.add(SaveFilterState(
                                       dropDownsMunicipalBloc:
                                           _dropDownsMunicipalBloc,
                                       dropDownStateBloc: _dropDownStateBloc,
@@ -118,8 +117,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                   setState(() {
                                     _values = const RangeValues(0, 5);
                                   });
-                                  _dropDownStateBloc.add(ClearState());
-                                  widget._filterManagerBloc
+                                  _dropDownStateBloc!.add(ClearState());
+                                  widget._filterManagerBloc!
                                       .add(ClearFilterState());
                                 },
                               ),
@@ -164,11 +163,10 @@ class _FiltersScreenState extends State<FiltersScreen> {
                   fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
                   fontWeight: FontWeight.normal),
             ),
-            StateDropdown(
-                dropDownStateBloc: _dropDownStateBloc),
+            StateDropdown(dropDownStateBloc: _dropDownStateBloc),
             Center(
               child: MunicipalDropDown(
-                  dropDownsMunicipalBloc: _dropDownsMunicipalBloc,
+                dropDownsMunicipalBloc: _dropDownsMunicipalBloc,
               ),
             ),
           ],
@@ -209,13 +207,13 @@ class _FiltersScreenState extends State<FiltersScreen> {
   }
 
   void _initSliderValues() {
-    if (widget._filterManagerBloc.state is FilterManagerLoadedState) {
+    if (widget._filterManagerBloc!.state is FilterManagerLoadedState) {
       _values = RangeValues(
-        ((widget._filterManagerBloc.state) as FilterManagerLoadedState)
-            .ratingRangeValues
+        ((widget._filterManagerBloc!.state) as FilterManagerLoadedState)
+            .ratingRangeValues!
             .start,
-        ((widget._filterManagerBloc.state) as FilterManagerLoadedState)
-            .ratingRangeValues
+        ((widget._filterManagerBloc!.state) as FilterManagerLoadedState)
+            .ratingRangeValues!
             .end,
       );
     } else {
@@ -231,8 +229,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
 }
 
 class ApplyButton extends StatelessWidget {
-  final Function callback;
-  const ApplyButton({Key key, this.callback}) : super(key: key);
+  final Function? callback;
+  const ApplyButton({Key? key, this.callback}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -256,7 +254,7 @@ class ApplyButton extends StatelessWidget {
           child: InkWell(
             borderRadius: const BorderRadius.all(Radius.circular(24.0)),
             highlightColor: Colors.transparent,
-            onTap: callback,
+            onTap: callback as void Function()?,
             child: Center(
               child: Text(
                 'Apply',
@@ -274,9 +272,9 @@ class ApplyButton extends StatelessWidget {
 }
 
 class ResetButton extends StatelessWidget {
-  final Function callback;
+  final Function? callback;
   const ResetButton({
-    Key key,
+    Key? key,
     this.callback,
   }) : super(key: key);
 
@@ -298,7 +296,7 @@ class ResetButton extends StatelessWidget {
           child: InkWell(
             borderRadius: const BorderRadius.all(Radius.circular(24.0)),
             highlightColor: Colors.transparent,
-            onTap: callback,
+            onTap: callback as void Function()?,
             child: Center(
               child: Text(
                 'Reset',

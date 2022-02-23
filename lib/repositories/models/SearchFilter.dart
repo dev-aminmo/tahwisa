@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 
 class SearchFilter extends Equatable {
-  final String municipalId;
-  final String stateId;
+  final String? municipalId;
+  final String? stateId;
   final double ratingMin;
   final double ratingMax;
 
@@ -12,10 +12,10 @@ class SearchFilter extends Equatable {
       this.ratingMin = 0,
       this.ratingMax = 5});
   SearchFilter copyWith(
-          {String municipalId,
-          String stateId,
-          double ratingMin,
-          double ratingMax}) =>
+          {String? municipalId,
+          String? stateId,
+          double? ratingMin,
+          double? ratingMax}) =>
       SearchFilter(
         municipalId: municipalId ?? this.municipalId,
         stateId: stateId ?? this.stateId,
@@ -23,10 +23,10 @@ class SearchFilter extends Equatable {
         ratingMax: ratingMax ?? this.ratingMax,
       );
   @override
-  List<Object> get props => [municipalId, stateId, ratingMin, ratingMax];
+  List<Object> get props => [municipalId!, stateId!, ratingMin, ratingMax];
   @override
   String toString() => "municipal=${this.municipalId ?? ''}"
       "&state=${this.stateId ?? ''}"
-      "&rating_min=${this.ratingMin ?? 0}"
-      "&rating_max=${this.ratingMax ?? 5}";
+      "&rating_min=${this.ratingMin}"
+      "&rating_max=${this.ratingMax}";
 }

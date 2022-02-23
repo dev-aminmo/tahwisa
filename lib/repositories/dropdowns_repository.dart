@@ -23,7 +23,7 @@ class DropDownsRepository {
     }
   }
 
-  Future<List<Municipal>> fetchMunicipales({@required int stateId}) async {
+  Future<List<Municipal>> fetchMunicipales({required int stateId}) async {
     try {
       var response = await Dio().get(
         Api.municipales + "/$stateId",

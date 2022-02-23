@@ -18,7 +18,7 @@ class PlaceDetailsScreen extends StatefulWidget {
   static const String routeName = '/place_details';
 
   static Route route(
-      {Place place, String heroAnimationTag = "explore", var placeId}) {
+      {Place? place, String? heroAnimationTag = "explore", var placeId}) {
     return MaterialPageRoute(
       builder: (_) => PlaceDetailsScreen(
           place: place, heroAnimationTag: heroAnimationTag, placeId: placeId),
@@ -26,8 +26,8 @@ class PlaceDetailsScreen extends StatefulWidget {
     );
   }
 
-  final Place place;
-  final String heroAnimationTag;
+  final Place? place;
+  final String? heroAnimationTag;
   final placeId;
   const PlaceDetailsScreen({this.place, this.heroAnimationTag, this.placeId});
 
@@ -36,9 +36,9 @@ class PlaceDetailsScreen extends StatefulWidget {
 }
 
 class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
-  UserReviewCubit _userReviewCubit;
-  ReviewRepository _reviewRepository;
-  PlaceDetailsCubit _detailsCubit;
+  late UserReviewCubit _userReviewCubit;
+  ReviewRepository? _reviewRepository;
+  PlaceDetailsCubit? _detailsCubit;
 
   @override
   void initState() {
@@ -61,7 +61,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
   @override
   void dispose() {
     _userReviewCubit.close();
-    _detailsCubit.close();
+    _detailsCubit!.close();
     super.dispose();
   }
 
@@ -70,7 +70,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
     return RefreshIndicator(
       strokeWidth: 3,
       onRefresh: () async {
-        _detailsCubit.refresh();
+        _detailsCubit!.refresh();
       },
       child: Scaffold(
           appBar: buildAppBar(),
@@ -78,7 +78,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
           backgroundColor: MyColors.white,
           body: BlocBuilder(
             bloc: _detailsCubit,
-            builder: (context, state) {
+            builder: (context, dynamic state) {
               if (state is PlaceDetailsSuccess) {
                 return ListView(
                     padding: EdgeInsets.zero,
@@ -87,7 +87,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                       Carousel(
                           place: state.place,
                           heroAnimationTag: widget.heroAnimationTag),
-                      buildPlaceDetails(state.place),
+                      buildPlaceDetails(state.place!),
                     ] //]),
                     );
               } else {
@@ -194,7 +194,6 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      backwardsCompatibility: false,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light,

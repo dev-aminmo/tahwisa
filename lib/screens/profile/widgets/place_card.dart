@@ -6,16 +6,16 @@ import 'rating_bar_stars_read_only.dart';
 
 class PlaceCard extends StatelessWidget {
   const PlaceCard(
-      {Key key,
-      @required this.place,
+      {Key? key,
+      required this.place,
       this.callback,
       this.width,
       this.heroAnimationTag})
       : super(key: key);
 
-  final VoidCallback callback;
+  final VoidCallback? callback;
   final Place place;
-  final String heroAnimationTag;
+  final String? heroAnimationTag;
   final width;
 
   @override
@@ -58,7 +58,7 @@ class PlaceCard extends StatelessWidget {
                         child: Hero(
                           tag: '${place.id}_$heroAnimationTag',
                           child: Image.network(
-                            place.pictures[0].replaceFirstMapped(
+                            place.pictures![0]!.replaceFirstMapped(
                                 "image/upload/",
                                 (match) =>
                                     "image/upload/w_${(width).round()},f_auto/"),

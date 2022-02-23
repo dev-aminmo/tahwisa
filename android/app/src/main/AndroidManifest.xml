@@ -13,9 +13,14 @@
         android:name="android.permission.ACCESS_MEDIA_LOCATION"
         tools:node="remove"
         />
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="geo" />
+        </intent>
+    </queries>
 
     <application
-        android:name="io.flutter.app.FlutterApplication"
         android:label="tahwisa"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"

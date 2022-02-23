@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
 
 class User {
-  String profilePicture;
-  int id;
-  String name;
-  String email;
+  String? profilePicture;
+  int? id;
+  String? name;
+  String? email;
 
   User(
       {this.profilePicture,
-      @required this.id,
-      @required this.name,
+      required this.id,
+      required this.name,
       this.email});
 
   User.fromJson(Map<String, dynamic> json) {
