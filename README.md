@@ -6,6 +6,7 @@ A Flutter application that promotes to tourism in Algeria.
 
 Tahwisa is an app that users can share places they have visited and explore the beauty of Algeria.
 
+you can try it <a href"https://www.mediafire.com/file/lvfgaayqa8fzthq/app-release.apk/file">Download for Android</a>
 
 ## Get Started
  
