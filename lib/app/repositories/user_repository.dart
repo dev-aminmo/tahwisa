@@ -1,6 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tahwisa/app/repositories/models/user.dart';
+import 'package:tahwisa/app/utilities/dio_http_client.dart';
 
 import 'api/api_endpoints.dart';
 
@@ -10,11 +10,10 @@ class UserRepository {
     required String password,
   }) async {
     try {
-      var response = await Dio().post(
+      var response = await DioHttpClient.post(
         Api.login,
-        data: {"email": email, "password": password},
+        body: {"email": email, "password": password},
       );
-      //print(response.data["token"]);
       return response.data["token"];
     } catch (e) {
       throw ("Incorrect email and password");
@@ -27,12 +26,11 @@ class UserRepository {
     required String password,
   }) async {
     try {
-      var response = await Dio().post(
+      var response = await DioHttpClient.post(
         Api.register,
-        data: {"username": username, "email": email, "password": password},
+        body: {"username": username, "email": email, "password": password},
       );
       if (response.statusCode != 201) {
-        print(response.toString());
         throw ("verify  your data");
       }
       return response.data["token"];
@@ -45,9 +43,9 @@ class UserRepository {
     required String accessToken,
   }) async {
     try {
-      var response = await Dio().post(
+      var response = await DioHttpClient.post(
         Api.social,
-        data: {"access_token": accessToken},
+        body: {"access_token": accessToken},
       );
       if (response.statusCode != 201) {
         print(response.toString());
@@ -63,12 +61,11 @@ class UserRepository {
     required String email,
   }) async {
     try {
-      var response = await Dio().post(
+      var response = await DioHttpClient.post(
         Api.resetPassword,
-        data: {"email": email},
+        body: {"email": email},
       );
       if (response.statusCode == 200) return true;
-
       return false;
     } catch (e) {
       //throw ("Could not found an account with that email address");
@@ -93,16 +90,10 @@ class UserRepository {
 
   Future<dynamic> user() async {
     try {
-      var pref = await SharedPreferences.getInstance();
-      String token = pref.getString("token")!;
-      var response = await Dio().get(Api.user,
-          options: Options(
-            headers: {"Authorization": "Bearer " + token},
-            validateStatus: (status) => true,
-          ) // options.headers["Authorization"] = "Bearer " + token;
-          );
+      var response = await DioHttpClient.getWithHeader(
+        Api.user,
+      );
       var data = response.data;
-
       User user = User.fromJson(data['data']);
       return user;
     } catch (e) {

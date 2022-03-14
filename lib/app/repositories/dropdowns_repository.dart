@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+import 'package:tahwisa/app/utilities/dio_http_client.dart';
 
 import 'api/api_endpoints.dart';
 import 'models/municipal.dart';
@@ -7,8 +7,7 @@ import 'models/state.dart';
 class DropDownsRepository {
   Future<List<MyState>> fetchStates() async {
     try {
-      var response = await Dio().get(
-          Api.states); // options.headers["Authorization"] = "Bearer " + token;;
+      var response = await DioHttpClient.getWithHeader(Api.states);
       var data = response.data;
       List<MyState> states = [];
       for (var jsonState in data['data']) {
@@ -24,7 +23,7 @@ class DropDownsRepository {
 
   Future<List<Municipal>> fetchMunicipales({required int stateId}) async {
     try {
-      var response = await Dio().get(
+      var response = await DioHttpClient.getWithHeader(
         Api.municipales + "/$stateId",
       );
       var data = response.data;

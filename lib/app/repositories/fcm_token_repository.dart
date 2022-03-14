@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tahwisa/app/utilities/dio_http_client.dart';
+
 import 'api/api_endpoints.dart';
 
 class FcmTokenRepository {
@@ -8,19 +10,9 @@ class FcmTokenRepository {
     required String fcmToken,
   }) async {
     try {
-      var pref = await SharedPreferences.getInstance();
-      String token = pref.getString("token")!;
       var formData = FormData.fromMap({"token": fcmToken});
-      var response = await Dio().post(Api.add_fcm_token,
-          data: formData,
-          options: Options(
-            headers: {
-              "Authorization": "Bearer " + token,
-            },
-            validateStatus: (status) => true,
-          ));
-      var data = response.data;
-      print(data);
+      var response =
+          await DioHttpClient.postWithHeader(Api.add_fcm_token, body: formData);
       if (response.statusCode == 201) {
         await SharedPreferences.getInstance()
           ..setString("api_fcm_token", fcmToken);
@@ -36,7 +28,8 @@ class FcmTokenRepository {
     try {
       FirebaseMessaging messaging = FirebaseMessaging.instance;
       await messaging.deleteToken();
-    } catch (e) {} finally {
+    } catch (e) {
+    } finally {
       var pref = await SharedPreferences.getInstance();
       await pref.remove("api_fcm_token");
       await pref.remove("fcm_token");

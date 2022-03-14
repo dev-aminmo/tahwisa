@@ -125,22 +125,9 @@ class PlaceRepository {
         },
         'file[]': await _picturesToMultipartFile(pictures)
       });
-      print({
-        "title": title,
-        "description": description,
-        "latitude": latitude,
-        "longitude": longitude,
-        "municipal_id": municipalID,
-        "tags": jsonTags.isEmpty ? "[]" : jsonTags
-      });
-      var response = await Dio().post(Api.add_place, data: formData,
-          onReceiveProgress: (int count, int total) {
-        print('count: $count');
-        print('total: $total');
-      }, onSendProgress: (int count, int total) {
-        print('send count: $count');
-        print('send total: $total');
-      },
+
+      var response = await Dio().post(Api.add_place,
+          data: formData,
           options: Options(
             headers: {
               "Authorization": "Bearer " + token,

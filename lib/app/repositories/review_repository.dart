@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tahwisa/app/repositories/models/Review.dart';
+import 'package:tahwisa/app/utilities/dio_http_client.dart';
 
 import 'api/api_endpoints.dart';
 import 'models/reviews_response.dart';
@@ -12,12 +12,8 @@ class ReviewRepository {
     required var placeId,
     int page = 1,
   }) async {
-    var pref = await SharedPreferences.getInstance();
-    String token = pref.getString("token")!;
-    var response = await Dio().get(Api.reviews + "/$placeId?page=$page",
-        options: Options(
-          headers: {"Authorization": "Bearer " + token},
-        ));
+    var response =
+        await DioHttpClient.getWithHeader(Api.reviews + "/$placeId?page=$page");
     var data = response.data;
     List<Review> reviews = [];
     if (response.statusCode == 200) {
@@ -35,12 +31,8 @@ class ReviewRepository {
   }
 
   Future<dynamic> fetchUserReview(var placeId) async {
-    var pref = await SharedPreferences.getInstance();
-    String token = pref.getString("token")!;
-    var response = await Dio().get(Api.user_review + "/$placeId",
-        options: Options(
-          headers: {"Authorization": "Bearer " + token},
-        ));
+    var response =
+        await DioHttpClient.getWithHeader(Api.user_review + "/$placeId");
     var data = await response.data;
     Review? review;
     if ((response.statusCode == 200) && data != null) {
@@ -50,12 +42,8 @@ class ReviewRepository {
   }
 
   Future<dynamic> deleteUserReview(var reviewID) async {
-    var pref = await SharedPreferences.getInstance();
-    String token = pref.getString("token")!;
-    var response = await Dio().delete(Api.delete_user_review + "/$reviewID",
-        options: Options(
-          headers: {"Authorization": "Bearer " + token},
-        ));
+    var response = await DioHttpClient.deleteWithHeader(
+        Api.delete_user_review + "/$reviewID");
     if (response.statusCode == 201) {
       return true;
     }
@@ -68,20 +56,10 @@ class ReviewRepository {
     int? placeId,
   }) async {
     try {
-      var pref = await SharedPreferences.getInstance();
-      String token = pref.getString("token")!;
       var formData = FormData.fromMap(
           {"vote": rating, "comment": comment, "place_id": placeId});
-      var response = await Dio().post(Api.post_review,
-          data: formData,
-          options: Options(
-            headers: {
-              "Authorization": "Bearer " + token,
-            },
-            validateStatus: (status) => true,
-          ));
-      var data = response.data;
-      print(data);
+      var response =
+          await DioHttpClient.postWithHeader(Api.post_review, body: formData);
       if (response.statusCode == 201) {
         return true;
       }

@@ -1,17 +1,13 @@
-import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tahwisa/app/repositories/models/notification.dart';
+import 'package:tahwisa/app/utilities/dio_http_client.dart';
 
 import 'api/api_endpoints.dart';
 
 class NotificationRepository {
   Future<List<Notification>> fetchNotifications() async {
-    var pref = await SharedPreferences.getInstance();
-    String token = pref.getString("token")!;
-    var response = await Dio().get(Api.get_notifications,
-        options: Options(
-          headers: {"Authorization": "Bearer " + token},
-        ));
+    var response = await DioHttpClient.getWithHeader(
+      Api.get_notifications,
+    );
     var data = await response.data;
     List<Notification> notifications = [];
     if (response.statusCode == 200) {
@@ -25,12 +21,8 @@ class NotificationRepository {
   }
 
   Future<dynamic> readNotification({var id}) async {
-    var pref = await SharedPreferences.getInstance();
-    String token = pref.getString("token")!;
-    var response = await Dio().put(Api.read_notification + "/$id",
-        options: Options(
-          headers: {"Authorization": "Bearer " + token},
-        ));
+    var response =
+        await DioHttpClient.getWithHeader(Api.read_notification + "/$id");
     if (response.statusCode == 201) {
       return true;
     }
