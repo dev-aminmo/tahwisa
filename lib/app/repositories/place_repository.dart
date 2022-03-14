@@ -196,7 +196,7 @@ class PlaceRepository {
     return list;
   }
 
-  Future<dynamic> fetchWishListPlaces(var page) async {
+  Future<QueryResponse> fetchWishListPlaces(var page) async {
     try {
       var pref = await SharedPreferences.getInstance();
       String token = pref.getString("token")!;

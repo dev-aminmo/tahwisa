@@ -23,7 +23,8 @@ class SearchFilter extends Equatable {
         ratingMax: ratingMax ?? this.ratingMax,
       );
   @override
-  List<Object> get props => [municipalId!, stateId!, ratingMin, ratingMax];
+  List<Object> get props =>
+      [if (municipalId != null) municipalId!, stateId!, ratingMin, ratingMax];
   @override
   String toString() => "municipal=${this.municipalId ?? ''}"
       "&state=${this.stateId ?? ''}"

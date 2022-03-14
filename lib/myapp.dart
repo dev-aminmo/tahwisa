@@ -39,7 +39,6 @@ class _MyAppState extends State<MyApp> {
     fcmTokenRepository = FcmTokenRepository();
     authenticationBloc = AuthenticationBloc(
         userRepository: userRepository, fcmTokenRepository: fcmTokenRepository);
-
     DioHttpClient.initialDio(authenticationBloc);
     authenticationBloc.add(AppStarted());
   }
@@ -76,45 +75,50 @@ class _MyAppState extends State<MyApp> {
                 navigatorKey: _navigatorKey,
                 title: 'Tahwisa',
                 debugShowCheckedModeBanner: false,
-                theme: ThemeData(
-                    textTheme: GoogleFonts.latoTextTheme(
-                      Theme.of(context).textTheme,
-                    ),
-                    primaryColor: MyColors.darkBlue,
-                    indicatorColor: MyColors.lightGreen,
-                    scaffoldBackgroundColor: MyColors.white,
-                    backgroundColor: MyColors.white,
-                    appBarTheme: AppBarTheme(
-                      systemOverlayStyle: SystemUiOverlayStyle.light,
-                    )),
+                theme: _getTheme(),
                 builder: (context, child) {
                   return RepositoryProvider(
                     create: (_) => userRepository,
-                    child:
-                        BlocListener<AuthenticationBloc, AuthenticationState>(
-                      listener: (context, state) {
-                        if (state is AuthenticationAuthenticated) {
-                          _navigator?.pushAndRemoveUntil<void>(
-                            MaterialPageRoute<void>(
-                                builder: (context) => ProfileScreen()),
-                            (route) => false,
-                          );
-                        } else if (state is AuthenticationUnauthenticated) {
-                          _navigator?.pushAndRemoveUntil<void>(
-                            MaterialPageRoute<void>(
-                                builder: (context) => WelcomeScreen()),
-                            (route) => false,
-                          );
-                        }
-                      },
-                      child: child,
-                    ),
+                    child: _buildAuthenticationBlocListener(child),
                   );
                 },
                 onGenerateRoute: MyRouter.getRoute,
               ),
             ),
           ),
+        ));
+  }
+
+  BlocListener _buildAuthenticationBlocListener(child) {
+    return BlocListener<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state) {
+        if (state is AuthenticationAuthenticated) {
+          _navigator?.pushAndRemoveUntil<void>(
+            MaterialPageRoute<void>(builder: (context) => ProfileScreen()),
+            (route) => false,
+          );
+        } else if (state is AuthenticationUnauthenticated) {
+          _navigator?.pushAndRemoveUntil<void>(
+            MaterialPageRoute<void>(builder: (context) => WelcomeScreen()),
+            (route) => false,
+          );
+        }
+      },
+      child: child,
+    );
+  }
+
+  ThemeData _getTheme() {
+    return ThemeData(
+        textTheme: GoogleFonts.latoTextTheme(
+          Theme.of(context).textTheme,
+        ),
+        primaryColor: MyColors.darkBlue,
+        indicatorColor: MyColors.lightGreen,
+        scaffoldBackgroundColor: MyColors.white,
+        backgroundColor: MyColors.white,
+        appBarTheme: AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle.light,
         ));
   }
 }

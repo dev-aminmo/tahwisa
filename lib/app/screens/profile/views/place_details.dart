@@ -37,8 +37,8 @@ class PlaceDetailsScreen extends StatefulWidget {
 
 class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
   late UserReviewCubit _userReviewCubit;
-  ReviewRepository? _reviewRepository;
-  PlaceDetailsCubit? _detailsCubit;
+  late ReviewRepository _reviewRepository;
+  late PlaceDetailsCubit _detailsCubit;
 
   @override
   void initState() {
@@ -61,7 +61,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
   @override
   void dispose() {
     _userReviewCubit.close();
-    _detailsCubit!.close();
+    _detailsCubit.close();
     super.dispose();
   }
 
@@ -70,7 +70,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
     return RefreshIndicator(
       strokeWidth: 3,
       onRefresh: () async {
-        _detailsCubit!.refresh();
+        _detailsCubit.refresh();
       },
       child: Scaffold(
           appBar: buildAppBar(),

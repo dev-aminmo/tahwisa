@@ -41,8 +41,8 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
 
         if (event.loading) yield WishListProgress();
         _places.clear();
-        final QueryResponse _queryResponse = await (placeRepository!
-            .fetchWishListPlaces(1) as Future<QueryResponse>);
+        final QueryResponse _queryResponse =
+            await placeRepository!.fetchWishListPlaces(1);
         _places.addAll(_queryResponse.results);
         _places$.add(_places);
         yield WishListSuccess(

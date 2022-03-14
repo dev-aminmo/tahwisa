@@ -28,7 +28,7 @@ class FilterManagerLoadedState extends FilterManagerState {
         dropDownsStatesSuccess!,
         selectedState!,
         dropDownsMunicipalSuccess!,
-        selectedMunicipal!,
+        if (selectedMunicipal != null) selectedMunicipal!,
         ratingRangeValues!
       ];
 }

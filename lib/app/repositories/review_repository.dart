@@ -30,7 +30,7 @@ class ReviewRepository {
     return false;
   }
 
-  Future<dynamic> fetchUserReview(var placeId) async {
+  Future<Review?> fetchUserReview(var placeId) async {
     var response =
         await DioHttpClient.getWithHeader(Api.user_review + "/$placeId");
     var data = await response.data;
