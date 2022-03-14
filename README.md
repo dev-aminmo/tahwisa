@@ -37,7 +37,7 @@ Tahwisa is an app that users can share places they have visited and explore the 
    Firebase push notifications
   </li>
   </ul>
-<img src="https://res.cloudinary.com/dtvc2pr8i/image/upload/v1647300288/Web_1280_1_g81ksx.png" height="50%" width="50%">
-<img src="https://res.cloudinary.com/dtvc2pr8i/image/upload/v1647300289/Web_1280_2_xj3dqs.png" height="50%" width="50%">
-<img src="https://res.cloudinary.com/dtvc2pr8i/image/upload/v1647300287/Web_1280_4_pgvwez.png" height="50%" width="50%">
+<img src="https://res.cloudinary.com/dtvc2pr8i/image/upload/v1647300288/Web_1280_1_g81ksx.png">
+<img src="https://res.cloudinary.com/dtvc2pr8i/image/upload/v1647300289/Web_1280_2_xj3dqs.png" height="80%" width="100%">
+<img src="https://res.cloudinary.com/dtvc2pr8i/image/upload/v1647300287/Web_1280_4_pgvwez.png" height="80%" width="80%">
 <img src="https://res.cloudinary.com/dtvc2pr8i/image/upload/v1647300287/Web_1280_3_l48aql.png" height="50%" width="50%">
