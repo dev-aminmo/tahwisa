@@ -1,16 +1,39 @@
 # tahwisa
 
-A new Flutter application.
+A Flutter application that promotes to tourism in Algeria.
 
-## Getting Started
+## Introduction
 
-This project is a starting point for a Flutter application.
+Tahwisa is an app that users can share places they have visited and explore the beauty of Algeria.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Get Started
+ 
+- I have used Bloc state management in this project
+  <ul>
+  This app includes the following features:
+  <li>
+   Google auth.
+  </li>
+  <li>
+   Adding places.
+  </li>
+   <li>
+   Reviewing places.
+  </li>
+  <li>
+   Searching and Filtering places.
+  </li>
+  <li>
+   Searching and Filtering places.
+  </li>
+  <li>
+   AutoComplete Search
+  </li>
+  <li>
+   Wish list
+  </li>
+  <li>
+   Firebase push notifications
+  </li>
+  </ul>
