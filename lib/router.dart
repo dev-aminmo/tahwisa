@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:tahwisa/app/repositories/models/place.dart';
-import 'package:tahwisa/app/screens/auth/login.dart';
-import 'package:tahwisa/app/screens/auth/signup.dart';
-import 'package:tahwisa/app/screens/profile/views/add_place/add_place_navigator.dart';
-import 'package:tahwisa/app/screens/profile/views/notification/notification_place_added.dart';
-import 'package:tahwisa/app/screens/profile/views/notification/notification_place_refused.dart';
-import 'package:tahwisa/app/screens/profile/views/place_details.dart';
-import 'package:tahwisa/app/screens/profile/views/rate_place.dart';
-import 'package:tahwisa/app/screens/profile/views/reviews_screen.dart';
-import 'package:tahwisa/app/screens/profile/views/update_place.dart';
-import 'package:tahwisa/app/screens/welcome.dart';
+import 'package:tahwisa/src/repositories/models/place.dart';
+import 'package:tahwisa/src/screens/auth/login.dart';
+import 'package:tahwisa/src/screens/auth/signup.dart';
+import 'package:tahwisa/src/screens/profile/views/add_place/add_place_navigator.dart';
+import 'package:tahwisa/src/screens/profile/views/notification/notification_place_added.dart';
+import 'package:tahwisa/src/screens/profile/views/notification/notification_place_refused.dart';
+import 'package:tahwisa/src/screens/profile/views/place_details.dart';
+import 'package:tahwisa/src/screens/profile/views/rate_place.dart';
+import 'package:tahwisa/src/screens/profile/views/reviews_screen.dart';
+import 'package:tahwisa/src/screens/profile/views/update_place.dart';
+import 'package:tahwisa/src/screens/welcome.dart';
 
 class MyRouter {
   static Route getRoute(RouteSettings settings) {

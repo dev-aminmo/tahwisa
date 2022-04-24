@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tahwisa/app/blocs/authentication_bloc/bloc.dart';
-import 'package:tahwisa/app/cubits/wish_place_cubit/wish_place_cubit.dart';
-import 'package:tahwisa/app/repositories/admin_repository.dart';
-import 'package:tahwisa/app/repositories/dropdowns_repository.dart';
-import 'package:tahwisa/app/repositories/fcm_token_repository.dart';
-import 'package:tahwisa/app/repositories/maps_repository.dart';
-import 'package:tahwisa/app/repositories/notification_repository.dart';
-import 'package:tahwisa/app/repositories/place_repository.dart';
-import 'package:tahwisa/app/repositories/refuse_place_message_repository.dart';
-import 'package:tahwisa/app/repositories/review_repository.dart';
-import 'package:tahwisa/app/repositories/user_repository.dart';
-import 'package:tahwisa/app/screens/profile/profile_screen.dart';
-import 'package:tahwisa/app/screens/welcome.dart';
-import 'package:tahwisa/app/style/my_colors.dart';
-import 'package:tahwisa/app/utilities/dio_http_client.dart';
 import 'package:tahwisa/router.dart';
+import 'package:tahwisa/src/blocs/authentication_bloc/bloc.dart';
+import 'package:tahwisa/src/cubits/wish_place_cubit/wish_place_cubit.dart';
+import 'package:tahwisa/src/repositories/admin_repository.dart';
+import 'package:tahwisa/src/repositories/dropdowns_repository.dart';
+import 'package:tahwisa/src/repositories/fcm_token_repository.dart';
+import 'package:tahwisa/src/repositories/maps_repository.dart';
+import 'package:tahwisa/src/repositories/notification_repository.dart';
+import 'package:tahwisa/src/repositories/place_repository.dart';
+import 'package:tahwisa/src/repositories/refuse_place_message_repository.dart';
+import 'package:tahwisa/src/repositories/review_repository.dart';
+import 'package:tahwisa/src/repositories/user_repository.dart';
+import 'package:tahwisa/src/screens/profile/profile_screen.dart';
+import 'package:tahwisa/src/screens/welcome.dart';
+import 'package:tahwisa/src/style/my_colors.dart';
+import 'package:tahwisa/src/utilities/dio_http_client.dart';
 
 class MyApp extends StatefulWidget {
   @override
