@@ -1,7 +1,7 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_maps_webservice/staticmap.dart';
 import 'package:uuid/uuid.dart';
-
 
 class MapsRepository {
   GoogleMapsPlaces? _places;
@@ -9,10 +9,7 @@ class MapsRepository {
   var key;
   var _sessionToken;
   _init() async {
-    //TODO get key from config file
- /*  this.key = await FlutterNativeConfig.getConfig<String>(
-        android: 'com.google.android.geo.API_KEY', ios: '');*/
-    this.key = "-1";
+    this.key = dotenv.env['geo.API_KEY'];
     this._sessionToken = uuid.v4();
     return _places = GoogleMapsPlaces(apiKey: key);
   }
