@@ -6,7 +6,7 @@ import 'api/api_endpoints.dart';
 class NotificationRepository {
   Future<List<Notification>> fetchNotifications() async {
     var response = await DioHttpClient.getWithHeader(
-      Api.get_notifications,
+      Api.getNotifications,
     );
     var data = await response.data;
     List<Notification> notifications = [];
@@ -22,7 +22,7 @@ class NotificationRepository {
 
   Future<dynamic> readNotification({var id}) async {
     var response =
-        await DioHttpClient.getWithHeader(Api.read_notification + "/$id");
+        await DioHttpClient.getWithHeader(Api.readNotification + "/$id");
     if (response.statusCode == 201) {
       return true;
     }

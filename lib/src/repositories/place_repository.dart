@@ -14,7 +14,7 @@ class PlaceRepository {
   Future<QueryResponse> fetchPlaces(int page) async {
     try {
       var response =
-          await DioHttpClient.getWithHeader(Api.all_places + "?page=$page");
+          await DioHttpClient.getWithHeader(Api.allPlaces + "?page=$page");
       var data = response.data;
       List<Place> places = [];
       for (var jsonPlace in data['data']['data']) {
@@ -34,7 +34,7 @@ class PlaceRepository {
   Future<dynamic> fetchPlace(var placeID) async {
     try {
       var response =
-          await DioHttpClient.getWithHeader(Api.place_index + "/$placeID");
+          await DioHttpClient.getWithHeader(Api.placeIndex + "/$placeID");
       var data = response.data;
       Place? place;
       for (var jsonPlace in data['data']) {
@@ -53,7 +53,7 @@ class PlaceRepository {
       tagId = ''}) async {
     try {
       print("?query=$query&page=$page&${filter.toString()}&tag=${tagId ?? ''}");
-      var response = await DioHttpClient.getWithHeader(Api.search_places +
+      var response = await DioHttpClient.getWithHeader(Api.searchPlaces +
           "?query=$query&page=$page&${filter.toString()}&tag=${tagId ?? ''}");
       var data = response.data;
       List<Place> places = [];
@@ -126,7 +126,7 @@ class PlaceRepository {
         'file[]': await _picturesToMultipartFile(pictures)
       });
 
-      var response = await Dio().post(Api.add_place,
+      var response = await Dio().post(Api.addPlace,
           data: formData,
           options: Options(
             headers: {
@@ -167,7 +167,7 @@ class PlaceRepository {
             pictures != null ? await _picturesToMultipartFile(pictures) : null
       });
 
-      var response = await Dio().post(Api.update_place + "/$placeId",
+      var response = await Dio().post(Api.updatePlace + "/$placeId",
           data: formData,
           options: Options(
             headers: {
@@ -227,7 +227,7 @@ class PlaceRepository {
       String token = pref.getString("token") ?? '-1';
       var formData = FormData.fromMap({'place_id': placeId});
 
-      var response = await Dio().post(Api.add_to_wishlist,
+      var response = await Dio().post(Api.addToWishlist,
           data: formData,
           options: Options(
             headers: {
@@ -250,7 +250,7 @@ class PlaceRepository {
     try {
       var pref = await SharedPreferences.getInstance();
       String token = pref.getString("token")!;
-      var response = await Dio().delete(Api.remove_from_wishlist + "/$placeId",
+      var response = await Dio().delete(Api.removeFromWishlist + "/$placeId",
           options: Options(
             headers: {
               "Authorization": "Bearer " + token,

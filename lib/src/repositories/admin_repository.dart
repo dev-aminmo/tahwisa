@@ -9,7 +9,7 @@ class AdminRepository {
     required var placeId,
   }) async {
     var response = await DioHttpClient.getWithHeader(
-        Api.check_if_place_is_available + "/$placeId");
+        Api.checkIfPlaceIsStillAvailable + "/$placeId");
     print("check if is available ${response.statusCode}");
     if (response.statusCode == 200) {
       return true;
@@ -21,7 +21,7 @@ class AdminRepository {
     required var placeId,
   }) async {
     var response =
-        await DioHttpClient.postWithHeader(Api.approve_place + "/$placeId");
+        await DioHttpClient.postWithHeader(Api.approvePlace + "/$placeId");
     print("approve place ${response.statusCode}");
     if (response.statusCode == 201) {
       return true;
@@ -33,7 +33,7 @@ class AdminRepository {
       {required var placeId, required var messages, var description}) async {
     var formData = {"messages": messages, "description": description};
     var response = await DioHttpClient.postWithHeader(
-      Api.refuse_place + "/$placeId",
+      Api.refusePlace + "/$placeId",
       body: jsonEncode(formData),
     );
     if (response.statusCode == 201) {

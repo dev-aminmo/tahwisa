@@ -12,7 +12,7 @@ class FcmTokenRepository {
     try {
       var formData = FormData.fromMap({"token": fcmToken});
       var response =
-          await DioHttpClient.postWithHeader(Api.add_fcm_token, body: formData);
+          await DioHttpClient.postWithHeader(Api.addFcmToken, body: formData);
       if (response.statusCode == 201) {
         await SharedPreferences.getInstance()
           ..setString("api_fcm_token", fcmToken);

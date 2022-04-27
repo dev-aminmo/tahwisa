@@ -32,7 +32,7 @@ class ReviewRepository {
 
   Future<Review?> fetchUserReview(var placeId) async {
     var response =
-        await DioHttpClient.getWithHeader(Api.user_review + "/$placeId");
+        await DioHttpClient.getWithHeader(Api.userReview + "/$placeId");
     var data = await response.data;
     Review? review;
     if ((response.statusCode == 200) && data != null) {
@@ -43,7 +43,7 @@ class ReviewRepository {
 
   Future<dynamic> deleteUserReview(var reviewID) async {
     var response = await DioHttpClient.deleteWithHeader(
-        Api.delete_user_review + "/$reviewID");
+        Api.deleteUserReview + "/$reviewID");
     if (response.statusCode == 201) {
       return true;
     }
@@ -59,7 +59,7 @@ class ReviewRepository {
       var formData = FormData.fromMap(
           {"vote": rating, "comment": comment, "place_id": placeId});
       var response =
-          await DioHttpClient.postWithHeader(Api.post_review, body: formData);
+          await DioHttpClient.postWithHeader(Api.postReview, body: formData);
       if (response.statusCode == 201) {
         return true;
       }

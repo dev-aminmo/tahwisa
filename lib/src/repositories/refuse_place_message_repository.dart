@@ -8,7 +8,7 @@ class RefusePlaceMessageRepository {
     required var notificationId,
   }) async {
     var response = await DioHttpClient.getWithHeader(
-        Api.get_refuse_messages + "/$notificationId");
+        Api.getRefuseMessages + "/$notificationId");
     var data = await response.data;
     print(data);
     List<RefusePlaceMessage> messages = [];
@@ -24,7 +24,7 @@ class RefusePlaceMessageRepository {
 
   Future<dynamic> getAdminRefusePlaceMessages() async {
     var response =
-        await DioHttpClient.getWithHeader(Api.get_admin_refuse_messages);
+        await DioHttpClient.getWithHeader(Api.getAdminRefusePlaceMessages);
     var data = await response.data;
     List<RefusePlaceMessage> messages = [];
     if (response.statusCode == 200) {
